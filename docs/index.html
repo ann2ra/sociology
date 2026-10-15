@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Гроші чи освіта?</title>
+<meta name="description" content="Інтерактивна карта PISA 2025: як освіта батьків, достаток і книжки вдома пов'язані з балом дитини з математики.">
+<style>
+:root {
+  --bg: #f6f5f2;
+  --surface: #fcfcfb;
+  --border: #e2e0da;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --muted: #8a8984;
+  --accent: #2a78d6;
+  --bad: #d03b3b;
+  --mid: #f0efec;
+  --good: #1f8a3b;
+  --warn-bg: #fff4d6;
+  --warn-text: #6b4e00;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121211; --surface: #1a1a19; --border: #33332f;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e86; --accent: #3987e5;
+    --mid: #383835; --warn-bg: #3a2f10; --warn-text: #f3d48a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121211; --surface: #1a1a19; --border: #33332f;
+  --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e86; --accent: #3987e5;
+  --mid: #383835; --warn-bg: #3a2f10; --warn-text: #f3d48a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+header h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 8px; }
+header p { color: var(--text-2); margin: 0; max-width: 760px; }
+.grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; margin-top: 24px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.card h2 { font-size: 15px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-2); }
+label.ctl { display: block; margin-bottom: 18px; }
+label.ctl .row { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--text-2); }
+label.ctl .val { color: var(--text); font-weight: 600; text-align: right; }
+input[type=range] { width: 100%; accent-color: var(--accent); margin-top: 6px; }
+select { width: 100%; font: inherit; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+.toggle { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--text-2); margin-bottom: 14px; }
+.seg { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+.seg button { flex: 1; font: inherit; font-size: 14px; padding: 8px; border: 0; background: transparent; color: var(--text-2); cursor: pointer; }
+.seg button.on { background: var(--accent); color: #fff; }
+#map { width: 100%; height: 470px; }
+@media (max-width: 600px) { #map { height: 300px; } }
+.hint { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+.big { font-size: 56px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.big small { font-size: 16px; font-weight: 400; color: var(--text-2); }
+.country-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.country-head h3 { margin: 0; font-size: 24px; }
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 13px; background: var(--mid); color: var(--text-2); }
+.compare { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+@media (max-width: 600px) { .compare { grid-template-columns: 1fr; } }
+.compare div { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+.compare b { display: block; font-size: 26px; font-variant-numeric: tabular-nums; }
+.compare span { font-size: 13px; color: var(--text-2); }
+.warn { background: var(--warn-bg); color: var(--warn-text); border-radius: 8px; padding: 8px 12px; font-size: 14px; margin-top: 12px; }
+.detail { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+@media (max-width: 900px) { .detail { grid-template-columns: 1fr; } }
+table.heat { border-collapse: separate; border-spacing: 2px; width: 100%; font-variant-numeric: tabular-nums; }
+table.heat th { font-size: 12px; font-weight: 500; color: var(--text-2); padding: 4px; }
+table.heat td { text-align: center; font-weight: 600; padding: 12px 4px; border-radius: 6px; cursor: pointer; }
+table.heat td.sel { outline: 3px solid var(--text); outline-offset: -3px; }
+table.heat th.rowh { text-align: right; white-space: nowrap; }
+.legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); margin-top: 8px; }
+.legend .bar { flex: 1; height: 10px; border-radius: 5px; }
+section.text { margin-top: 16px; }
+section.text h2 { text-transform: none; letter-spacing: 0; font-size: 22px; color: var(--text); }
+section.text p, section.text li { color: var(--text-2); }
+.todo { border: 2px dashed var(--border); border-radius: 10px; padding: 12px; color: var(--muted); }
+footer { margin-top: 32px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Гроші чи освіта: що важливіше для успіху дитини в школі?</h1>
+    <p>Оберіть умови життя 15-річного школяра: освіту батьків, достаток сім'ї та кількість книжок удома. Карта покаже, який бал з математики PISA 2025 в середньому отримують діти з такими умовами в кожній країні.</p>
+  </header>
+
+  <div class="grid">
+    <aside class="card" id="controls">
+      <h2>Умови дитини</h2>
+      <label class="ctl">
+        <div class="row">Освіта батьків <span class="val" id="eduVal"></span></div>
+        <input type="range" id="edu" min="0" max="2" step="1" value="1">
+      </label>
+      <label class="ctl">
+        <div class="row">Достаток сім'ї <span class="val" id="wealthVal"></span></div>
+        <input type="range" id="wealth" min="0" max="3" step="1" value="1">
+      </label>
+      <label class="ctl" id="booksCtl">
+        <div class="row">Книжки вдома <span class="val" id="booksVal"></span></div>
+        <input type="range" id="books" min="0" max="2" step="1" value="1">
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="useBooks" checked>
+        <span>Враховувати книжки окремо. Якщо вимкнути, книжки рахуються як частина достатку (так їх враховує індекс PISA HOMEPOS).</span>
+      </label>
+
+      <h2>Що показує карта</h2>
+      <div class="seg" role="group" aria-label="Режим карти">
+        <button id="modePred" class="on">Прогноз для умов</button>
+        <button id="modeMean">Середній бал країни</button>
+      </div>
+
+      <h2>Країна</h2>
+      <select id="countrySel" aria-label="Обрати країну"></select>
+      <p class="hint">Або натисніть на країну на карті. Малі країни (Сінгапур, Макао, Мальта…) зручніше обрати зі списку.</p>
+    </aside>
+
+    <main class="card">
+      <div id="map" role="img" aria-label="Карта світу з прогнозованими балами"></div>
+      <div class="legend">
+        <span>350</span><div class="bar" id="legendBar"></div><span>550</span>
+      </div>
+      <p class="hint" id="mapHint"></p>
+    </main>
+  </div>
+
+  <div class="card" style="margin-top:16px" id="countryCard"></div>
+
+  <section class="card text">
+    <h2>Що ми знайшли</h2>
+    <div id="findings"></div>
+  </section>
+
+  <section class="card text">
+    <h2>Що з цим робити: рішення</h2>
+    <div class="todo">Цей блок заповнює група. Ідеї: безкоштовне репетиторство для дітей з бідних сімей; фінансування шкіл за потребою; шкільні та публічні бібліотеки й програми «книжка в кожен дім»; приклади країн, де розрив між багатими і бідними найменший (знайдіть їх на карті).</div>
+  </section>
+
+  <section class="card text">
+    <h2>Як ми рахували і чого дані не кажуть</h2>
+    <ul>
+      <li><b>Дані:</b> OECD PISA 2025, 747 068 учнів з 89 країн і регіонів.</li>
+      <li><b>Модель:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·достаток + b3·книжки</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT.</li>
+      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED): базова = до 9 класів, середня = школа / коледж, вища = університет. <b>Достаток</b> — квартилі індексу домашнього майна HOMEPOS у межах країни. <b>Книжки</b> — відповідь учня, скільки книжок удома.</li>
+      <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Розкид усередині кожної групи великий: модель пояснює лише 10–40% різниці між учнями (R²).</li>
+      <li><b>Кореляція ≠ причинність.</b> Книжки не «роблять» дитину розумнішою: вони показують культурний капітал сім'ї (П. Бурдьє), тобто звичку читати, цінність освіти тощо.</li>
+      <li><b>HOMEPOS сам включає книжки</b>, тому коли книжки враховано окремо, «достаток» означає решту майна: кімнату, комп'ютер, машину тощо.</li>
+      <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Ріки немає даних про освіту / достаток, тож для них показано лише середній бал.</li>
+    </ul>
+  </section>
+
+  <footer>Соціологія, груповий проєкт. Дані: OECD PISA 2025. Код аналізу: <code>analysis/analyze.py</code>.</footer>
+</div>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script>
+const D = window.PISA;
+const L = D.levels;
+const MIN_C = 350, MAX_C = 550;
+
+const NAMES = {
+  ALB:"Албанія", ARE:"ОАЕ", ARG:"Аргентина", ARM:"Вірменія", AUS:"Австралія", AUT:"Австрія",
+  AZE:"Азербайджан", BEL:"Бельгія", BGR:"Болгарія", BRA:"Бразилія", BRN:"Бруней", CAN:"Канада",
+  CHE:"Швейцарія", CHL:"Чилі", COL:"Колумбія", CRI:"Коста-Рика", CZE:"Чехія", DEU:"Німеччина",
+  DNK:"Данія", DOM:"Домініканська Республіка", ECU:"Еквадор", ESP:"Іспанія", EST:"Естонія",
+  FIN:"Фінляндія", FRA:"Франція", GBR:"Велика Британія", GEO:"Грузія", GRC:"Греція",
+  GTM:"Гватемала", HKG:"Гонконг", HRV:"Хорватія", HUN:"Угорщина", IDN:"Індонезія",
+  IRL:"Ірландія", ISL:"Ісландія", ISR:"Ізраїль", ITA:"Італія", JOR:"Йорданія", JPN:"Японія",
+  KAZ:"Казахстан", KEN:"Кенія", KGZ:"Киргизстан", KHM:"Камбоджа", KOR:"Південна Корея",
+  KSV:"Косово", LBN:"Ліван", LTU:"Литва", LUX:"Люксембург", LVA:"Латвія", MAC:"Макао",
+  MAR:"Марокко", MDA:"Молдова", MEX:"Мексика", MKD:"Північна Македонія", MLT:"Мальта",
+  MNE:"Чорногорія", MNG:"Монголія", MUS:"Маврикій", MYS:"Малайзія", NLD:"Нідерланди",
+  NOR:"Норвегія", NZL:"Нова Зеландія", PER:"Перу", PHL:"Філіппіни", POL:"Польща",
+  PRT:"Португалія", PRY:"Парагвай", PSE:"Палестина", QAT:"Катар",
+  QCI:"Китай (окремі регіони, QCI)", QKI:"Регіон QKI", QTJ:"Регіон QTJ",
+  QUA:"Україна (окремі регіони, QUA)", ROU:"Румунія", RWA:"Руанда", SAU:"Саудівська Аравія",
+  SGP:"Сінгапур", SLV:"Сальвадор", SRB:"Сербія", SVK:"Словаччина", SVN:"Словенія",
+  SWE:"Швеція", TAP:"Тайвань", THA:"Таїланд", TUR:"Туреччина", URY:"Уругвай", USA:"США",
+  VNM:"В'єтнам", ZMB:"Замбія"
+};
+const nm = c => NAMES[c] || c;
+
+const state = { edu: 1, wealth: 1, books: 1, useBooks: true, mode: "pred", cnt: "QUA" };
+const $ = id => document.getElementById(id);
+
+function model(c) {
+  if (!c.a) return null;
+  if (state.useBooks) return c;
+  return { ...c.nobooks, books: [0, 0, 0] };
+}
+function predict(c, edu, wealth, books) {
+  const m = model(c);
+  if (!m) return null;
+  return m.a + m.edu[edu] + m.wealth[wealth] + (state.useBooks ? m.books[books] : 0);
+}
+
+// Колір: червоний (низький бал) → нейтральний → зелений (високий)
+function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+function colorFor(score) {
+  const bad = hexToRgb(css("--bad")), mid = hexToRgb(css("--mid")), good = hexToRgb(css("--good"));
+  const mc = (MIN_C + MAX_C) / 2;
+  let t, a, b;
+  if (score < mc) { t = Math.max(0, (score - MIN_C) / (mc - MIN_C)); a = bad; b = mid; }
+  else { t = Math.min(1, (score - mc) / (MAX_C - mc)); a = mid; b = good; }
+  const rgb = a.map((x, i) => Math.round(x + (b[i] - x) * t));
+  return `rgb(${rgb.join(",")})`;
+}
+function inkFor(score) {
+  const mc = (MIN_C + MAX_C) / 2, far = Math.abs(score - mc) / ((MAX_C - MIN_C) / 2);
+  return far > 0.55 ? "#ffffff" : css("--text");
+}
+function colorscale() {
+  return [[0, css("--bad")], [0.5, css("--mid")], [1, css("--good")]];
+}
+
+const codes = Object.keys(D.countries).sort((a, b) => nm(a).localeCompare(nm(b), "uk"));
+const byMap = {};
+codes.forEach(c => { byMap[D.countries[c].map] = c; });
+
+function fillSelect() {
+  $("countrySel").innerHTML = codes.map(c => `<option value="${c}">${nm(c)}</option>`).join("");
+}
+
+function drawMap() {
+  const locs = [], z = [], text = [];
+  codes.forEach(c => {
+    const d = D.countries[c];
+    const v = state.mode === "pred" ? predict(d, state.edu, state.wealth, state.books) : d.mean;
+    if (v == null) return;
+    locs.push(d.map); z.push(v);
+    text.push(`<b>${nm(c)}</b><br>${state.mode === "pred" ? "Прогноз" : "Середній бал"}: ${Math.round(v)}`);
+  });
+  const trace = {
+    type: "choropleth", locationmode: "ISO-3", locations: locs, z, text,
+    hoverinfo: "text", zmin: MIN_C, zmax: MAX_C, colorscale: colorscale(), showscale: false,
+    marker: { line: { color: css("--surface"), width: 0.6 } },
+  };
+  const selLoc = D.countries[state.cnt].map;
+  const sel = {
+    type: "choropleth", locationmode: "ISO-3", locations: [selLoc], z: [1],
+    colorscale: [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]], showscale: false, hoverinfo: "skip",
+    marker: { line: { color: css("--text"), width: 2.5 } },
+  };
+  const layout = {
+    margin: { l: 0, r: 0, t: 0, b: 0 }, paper_bgcolor: "rgba(0,0,0,0)",
+    geo: {
+      projection: { type: "natural earth" }, showframe: false, showcoastlines: false,
+      showcountries: true, countrycolor: css("--border"), showland: true, landcolor: css("--mid"),
+      bgcolor: "rgba(0,0,0,0)", lataxis: { range: [-58, 85] }, resolution: 50,
+    },
+    hoverlabel: { bgcolor: css("--surface"), bordercolor: css("--border"), font: { color: css("--text") } },
+    dragmode: false,
+  };
+  Plotly.react("map", [trace, sel], layout, {
+    displayModeBar: false, responsive: true,
+    topojsonURL: "https://cdn.jsdelivr.net/npm/plotly.js@2.35.2/dist/topojson/",
+  });
+  $("mapHint").textContent = state.mode === "pred"
+    ? `Колір = прогнозований бал дитини з умовами: ${L.edu[state.edu]}, ${L.wealth[state.wealth]}` +
+      (state.useBooks ? `, ${L.books[state.books]}.` : ".") + " Сірі країни не брали участі в PISA або не мають даних."
+    : "Колір = фактичний середній бал з математики всіх учнів країни.";
+}
+
+function drawCountry() {
+  const c = state.cnt, d = D.countries[c], m = model(d);
+  const card = $("countryCard");
+  if (!m) {
+    card.innerHTML = `<div class="country-head"><h3>${nm(c)}</h3><span class="pill">середній бал ${Math.round(d.mean)}</span></div>
+      <p class="warn">Для цієї країни в даних немає освіти батьків або достатку, тому прогноз порахувати неможливо.</p>`;
+    return;
+  }
+  const p = predict(d, state.edu, state.wealth, state.books);
+  const wealthGap = m.wealth[3] - m.wealth[0];
+  const eduGap = m.edu[2] - m.edu[0];
+  const booksGap = state.useBooks ? m.books[2] - m.books[0] : null;
+  const fmt = v => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v));
+  const winner = wealthGap > eduGap
+    ? `У цій країні <b>достаток важить більше</b>, ніж освіта батьків.`
+    : `У цій країні <b>освіта батьків важить більше</b>, ніж достаток.`;
+
+  const warns = [];
+  if (d.edu_share[state.edu] < 0.05)
+    warns.push(`Лише ${(d.edu_share[state.edu] * 100).toFixed(1)}% учнів у цій країні мають батьків з освітою «${L.edu[state.edu]}», тому прогноз для цієї групи неточний.`);
+  if (state.useBooks && d.books_share[state.books] < 0.05)
+    warns.push(`Лише ${(d.books_share[state.books] * 100).toFixed(1)}% учнів мають «${L.books[state.books]}», тому прогноз неточний.`);
+  if (d.n_model / d.n < 0.7)
+    warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, достаток або книжки, тож результат може бути зміщеним.`);
+
+  // Теплова карта: достаток (рядки) × освіта (стовпці) при поточних книжках
+  let heat = `<table class="heat"><thead><tr><th></th>${L.edu.map(e => `<th>${e.split(" (")[0]}</th>`).join("")}</tr></thead><tbody>`;
+  for (let w = 3; w >= 0; w--) {
+    heat += `<tr><th class="rowh">${L.wealth[w]}</th>`;
+    for (let e = 0; e < 3; e++) {
+      const v = predict(d, e, w, state.books);
+      const sel = e === state.edu && w === state.wealth ? " sel" : "";
+      heat += `<td class="${sel}" data-e="${e}" data-w="${w}" style="background:${colorFor(v)};color:${inkFor(v)}" title="${L.wealth[w]}, освіта ${L.edu[e]}: ${Math.round(v)}">${Math.round(v)}</td>`;
+    }
+    heat += "</tr>";
+  }
+  heat += "</tbody></table>";
+
+  card.innerHTML = `
+    <div class="country-head">
+      <h3>${nm(c)}</h3>
+      <span class="pill">середній бал країни: ${Math.round(d.mean)}</span>
+    </div>
+    <div class="detail">
+      <div>
+        <div style="color:var(--text-2);font-size:14px;margin-top:8px">Прогнозований бал з математики</div>
+        <div class="big">${Math.round(p)} <small>балів</small></div>
+        <div class="compare">
+          <div><b>${fmt(wealthGap)}</b><span>від найбідніших 25% до найбагатших 25% (освіта та книжки ті самі)</span></div>
+          <div><b>${fmt(eduGap)}</b><span>від базової до вищої освіти батьків (достаток і книжки ті самі)</span></div>
+          ${booksGap === null ? `<div><b>—</b><span>книжки враховано всередині достатку</span></div>`
+            : `<div><b>${fmt(booksGap)}</b><span>від 0–10 до понад 100 книжок (решта та сама)</span></div>`}
+        </div>
+        <p style="margin:0">${winner}</p>
+        ${warns.map(w => `<div class="warn">${w}</div>`).join("")}
+      </div>
+      <div>
+        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Прогноз для всіх комбінацій${state.useBooks ? ` (${L.books[state.books]})` : ""}. Рядки — достаток, стовпці — освіта батьків. Натисніть клітинку, щоб обрати її.</div>
+        ${heat}
+      </div>
+    </div>`;
+  card.querySelectorAll("td[data-e]").forEach(td => td.addEventListener("click", () => {
+    state.edu = +td.dataset.e; state.wealth = +td.dataset.w; syncInputs(); update();
+  }));
+}
+
+function drawFindings() {
+  const full = codes.filter(c => D.countries[c].a);
+  const wins = (useNb) => full.filter(c => {
+    const d = D.countries[c], m = useNb ? d.nobooks : d;
+    return m.wealth[3] - m.wealth[0] > m.edu[2] - m.edu[0];
+  });
+  const w1 = wins(false), w2 = wins(true);
+  const top = [...full].sort((a, b) => (D.countries[b].wealth[3]) - (D.countries[a].wealth[3])).slice(0, 6);
+  $("findings").innerHTML = `
+    <p>Наша гіпотеза: <b>достаток батьків впливає на результати дитини сильніше, ніж їхня освіта.</b></p>
+    <p>Якщо порівнювати дітей з однаковою освітою батьків і однаковою кількістю книжок, то перехід від найбідніших 25% сімей до найбагатших 25% дає більше балів, ніж перехід від базової до вищої освіти батьків, лише у <b>${w1.length} з ${full.length}</b> країн. Якщо книжки вважати частиною достатку, таких країн <b>${w2.length}</b>.</p>
+    <p>Тобто в більшості країн гіпотеза <b>не підтверджується</b>: освіта батьків і книжки вдома (культурний капітал) пов'язані з балами сильніше, ніж речі й гроші. Але є група країн, де гроші важать найбільше: ${top.map(nm).join(", ")}. Це переважно країни з нижчим доходом, де від статків сім'ї залежить, чи є в дитини взагалі доступ до якісної школи.</p>
+    <p class="hint">Цей текст згенеровано автоматично з даних. Група може переписати висновки своїми словами.</p>`;
+}
+
+function syncInputs() {
+  ["edu", "wealth", "books"].forEach(k => { $(k).value = state[k]; });
+  $("eduVal").textContent = L.edu[state.edu];
+  $("wealthVal").textContent = L.wealth[state.wealth];
+  $("booksVal").textContent = L.books[state.books];
+  $("books").disabled = !state.useBooks;
+  $("booksCtl").style.opacity = state.useBooks ? 1 : 0.4;
+  $("countrySel").value = state.cnt;
+  $("modePred").classList.toggle("on", state.mode === "pred");
+  $("modeMean").classList.toggle("on", state.mode === "mean");
+}
+function update() { syncInputs(); drawMap(); drawCountry(); }
+
+["edu", "wealth", "books"].forEach(k => $(k).addEventListener("input", e => { state[k] = +e.target.value; update(); }));
+$("useBooks").addEventListener("change", e => { state.useBooks = e.target.checked; update(); });
+$("modePred").addEventListener("click", () => { state.mode = "pred"; update(); });
+$("modeMean").addEventListener("click", () => { state.mode = "mean"; update(); });
+$("countrySel").addEventListener("change", e => { state.cnt = e.target.value; update(); });
+
+$("legendBar").style.background = `linear-gradient(to right, ${css("--bad")}, ${css("--mid")}, ${css("--good")})`;
+fillSelect();
+drawFindings();
+update();
+$("map").on("plotly_click", ev => {
+  const loc = ev.points && ev.points[0] && ev.points[0].location;
+  if (loc && byMap[loc]) { state.cnt = byMap[loc]; update(); }
+});
+</script>
+</body>
+</html>
