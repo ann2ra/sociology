@@ -1,5 +1,5 @@
 """
-Аналіз PISA 2025: як освіта батьків, достаток і книжки вдома
+Аналіз PISA 2025: як освіта батьків, достаток і культурний капітал сім'ї
 пов'язані з балом з математики в кожній країні.
 
 Модель (для кожної країни окремо, зважена регресія з вагою W_FSTUWT):
@@ -7,22 +7,28 @@
     бал_математики = a
                      + b1[освіта]     (базова / середня / вища)
                      + b2[достаток]   (квартиль індексу WEALTH у країні: Q1..Q4)
-                     + b3[книжки]     (0–10 / 11–100 / понад 100)
+                     + b3[культура]   (квартиль індексу CULTURE у країні: Q1..Q4)
 
 Кожен фактор — категорії (dummy-змінні), базова категорія = найнижча,
-тож a = прогноз для «базова освіта + найбідніші 25% + 0–10 книжок».
-Регресію рахуємо окремо для кожного з 10 plausible values (PV1–PV10MATH)
-і усереднюємо коефіцієнти — так рекомендує методика PISA.
+тож a = прогноз для «базова освіта + найбідніші 25% + найнижчий культурний
+капітал». Регресію рахуємо окремо для кожного з 10 plausible values
+(PV1–PV10MATH) і усереднюємо коефіцієнти, як рекомендує методика PISA.
+
+Обидва індекси будуємо самі (офіційний HOMEPOS не використовуємо, бо він
+змішує гроші з книжками):
+
+  WEALTH  (економічний капітал) — автомобілі (ST251Q01JA),
+          кімнати з ванною (ST251Q03JA), кімнати з туалетом (ST251Q04JA);
+  CULTURE (культурний капітал, П. Бурдьє) — книжки (ST255Q01JA),
+          музичні інструменти (ST251Q06JA), твори мистецтва (ST251Q07JA).
+
+Такий поділ видно в самих даних: інструменти й мистецтво корелюють
+з книжками (0.28–0.30) сильніше, ніж з машинами та ваннами (0.15–0.22).
+Індекс = середнє стандартизованих (z) значень; потрібно щонайменше 2 з 3
+відповідей.
 
 Додатково рахуємо «стандартизовану» модель
-    бал = a + β1·z(PAREDINT) + β2·z(WEALTH) + β3·z(книжки)
-
-Індекс достатку WEALTH будуємо самі, бо офіційний HOMEPOS включає книжки:
-середнє стандартизованих (z) значень трьох «грошових» речей удома —
-автомобілі (ST251Q01JA), кімнати з ванною (ST251Q03JA), кімнати з туалетом
-(ST251Q04JA). Музичні інструменти й твори мистецтва (ST251Q06JA, Q07JA)
-сильніше пов'язані з книжками, ніж з цими речами, тобто міряють культурний
-капітал, а не гроші, — тому в індекс їх не беремо.
+    бал = a + β1·z(PAREDINT) + β2·z(WEALTH) + β3·z(CULTURE)
 щоб порівняти, який фактор сильніший (бали за +1 стандартне відхилення).
 
 Запуск:  python analysis/analyze.py
@@ -45,34 +51,49 @@ MIN_STUDENTS = 500  # менше учнів з повними даними — �
 #         3–5 ISCED 3–4 (старша школа, післясередня) → «середня»
 #         6–9 ISCED 5–8 (вища)                       → «вища»
 EDU_BINS = {1: 0, 2: 0, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2, 9: 2}
-# ST255Q01JA: 1–2 → 0–10 книжок, 3–4 → 11–100, 5–7 → понад 100
-BOOK_BINS = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 2, 7: 2}
+
+WEALTH_ITEMS = ["ST251Q01JA", "ST251Q03JA", "ST251Q04JA"]
+CULTURE_ITEMS = ["ST255Q01JA", "ST251Q06JA", "ST251Q07JA"]
 
 # Q-коди — це частини країн (окремі регіони), а не країни цілком.
 # Прив'язка до карти — припущення, перевірте у звіті PISA 2025.
 MAP_CODE = {"TAP": "TWN", "KSV": "XKX", "QUA": "UKR", "QCI": "CHN"}
 
 
-WEALTH_ITEMS = ["ST251Q01JA", "ST251Q03JA", "ST251Q04JA"]
+def build_index(d, items):
+    """Середнє z-значень питань.
 
-
-def build_wealth(d):
-    """WEALTH = середнє z-значень речей (потрібно щонайменше 2 з 3 відповідей)."""
+    Деякі країни не ставили частину питань (напр. у QCI немає питань про
+    інструменти й мистецтво, у Нідерландах — про машини й туалети). Тоді
+    індекс у цій країні рахуємо з тих питань, які там були, і вимагаємо
+    щонайменше 2 відповіді (або 1, якщо в країні було лише одне питання).
+    Повертає індекс і, для кожної країни, скільки питань у ньому використано."""
     z = pd.DataFrame(index=d.index)
-    for c in WEALTH_ITEMS:
-        mu = np.average(d[c].dropna(), weights=d.W_FSTUWT[d[c].notna()])
-        sd = np.sqrt(np.average((d[c].dropna() - mu) ** 2, weights=d.W_FSTUWT[d[c].notna()]))
+    for c in items:
+        ok = d[c].notna()
+        mu = np.average(d.loc[ok, c], weights=d.W_FSTUWT[ok])
+        sd = np.sqrt(np.average((d.loc[ok, c] - mu) ** 2, weights=d.W_FSTUWT[ok]))
         z[c] = (d[c] - mu) / sd
-    wealth = z.mean(axis=1)
-    wealth[z.notna().sum(axis=1) < 2] = np.nan
-    return wealth
+    index = pd.Series(np.nan, index=d.index)
+    used = {}
+    for cnt, rows in d.groupby("CNT").groups.items():
+        zc = z.loc[rows]
+        avail = [c for c in items if zc[c].notna().mean() > 0.5]
+        used[cnt] = len(avail)
+        if not avail:
+            continue
+        idx = zc[avail].mean(axis=1)
+        idx[zc[avail].notna().sum(axis=1) < min(2, len(avail))] = np.nan
+        index.loc[rows] = idx
+    return index, used
 
 
 def wquantile_bins(x, w, n=4, seed=2025):
     """Номер зваженого квартиля (0..n-1) для кожного учня.
-    Індекс має небагато різних значень (3 питання по 4 варіанти), тож багато
-    учнів мають однакове значення. Щоб групи були рівно по 25%, таких учнів
-    упорядковуємо випадково (з фіксованим seed, результат відтворюваний)."""
+    Індекс має небагато різних значень (3 питання з кількома варіантами),
+    тож багато учнів мають однакове значення. Щоб групи були рівно по 25%,
+    таких учнів упорядковуємо випадково (фіксований seed — результат
+    відтворюваний)."""
     tie = np.random.default_rng(seed).random(len(x))
     order = np.lexsort((tie, x.values))
     cw = np.cumsum(w.values[order])
@@ -102,52 +123,57 @@ def r2(X, Y, w, coefs):
     return float(np.mean(out))
 
 
+def fit(X, Y, w):
+    """Коефіцієнти, усереднені по 10 plausible values, і R²."""
+    coefs = np.array([wls(X, Y[:, j], w) for j in range(Y.shape[1])])
+    return coefs.mean(axis=0), round(r2(X, Y, w, coefs), 3)
+
+
+def levels(c, start, k):
+    return [0.0] + [round(v, 1) for v in c[start:start + k]]
+
+
 def country_model(g):
     res = {
         "n": int(len(g)),
         "mean": round(wmean(g[PV].mean(axis=1), g.W_FSTUWT), 1),
     }
-    m = g.dropna(subset=["HISCED", "WEALTH", "ST255Q01JA", "PAREDINT"]).copy()
+    m = g.dropna(subset=["HISCED", "PAREDINT", "WEALTH", "CULTURE"]).copy()
     res["n_model"] = int(len(m))
     if len(m) < MIN_STUDENTS:
         return res
 
     w = m.W_FSTUWT.values
     edu = m.HISCED.astype(int).map(EDU_BINS).values
-    books = m.ST255Q01JA.astype(int).map(BOOK_BINS).values
     wealth = wquantile_bins(m.WEALTH, m.W_FSTUWT)
+    culture = wquantile_bins(m.CULTURE, m.W_FSTUWT)
     Y = m[PV].values
 
-    # Категорійна модель: intercept, edu1, edu2, w1, w2, w3, b1, b2
+    # Категорійна модель: intercept, edu1, edu2, w1, w2, w3, c1, c2, c3
     X = np.column_stack([
         np.ones(len(m)),
         edu == 1, edu == 2,
         wealth == 1, wealth == 2, wealth == 3,
-        books == 1, books == 2,
+        culture == 1, culture == 2, culture == 3,
     ]).astype(float)
-    coefs = np.array([wls(X, Y[:, j], w) for j in range(len(PV))])
-    c = coefs.mean(axis=0)
+    c, res["r2"] = fit(X, Y, w)
     res["a"] = round(c[0], 1)
-    res["edu"] = [0.0, round(c[1], 1), round(c[2], 1)]
-    res["wealth"] = [0.0, round(c[3], 1), round(c[4], 1), round(c[5], 1)]
-    res["books"] = [0.0, round(c[6], 1), round(c[7], 1)]
-    res["r2"] = round(r2(X, Y, w, coefs), 3)
+    res["edu"] = levels(c, 1, 2)
+    res["wealth"] = levels(c, 3, 3)
+    res["culture"] = levels(c, 6, 3)
 
-    # Та сама модель БЕЗ книжок: книжки не контролюємо, тож частина їхнього
-    # зв'язку з балами «переходить» до освіти й достатку.
-    X2 = X[:, :6]
-    coefs2 = np.array([wls(X2, Y[:, j], w) for j in range(len(PV))])
-    c2 = coefs2.mean(axis=0)
-    res["nobooks"] = {
+    # Та сама модель БЕЗ культурного капіталу: його не контролюємо, тож
+    # частина його зв'язку з балами «переходить» до освіти й достатку.
+    c2, r2_2 = fit(X[:, :6], Y, w)
+    res["noculture"] = {
         "a": round(c2[0], 1),
-        "edu": [0.0, round(c2[1], 1), round(c2[2], 1)],
-        "wealth": [0.0, round(c2[3], 1), round(c2[4], 1), round(c2[5], 1)],
-        "r2": round(r2(X2, Y, w, coefs2), 3),
+        "edu": levels(c2, 1, 2),
+        "wealth": levels(c2, 3, 3),
+        "r2": r2_2,
     }
 
-    # Частка учнів у кожній групі освіти / книжок (для підказок на сайті)
+    # Частка учнів у кожній групі освіти (для попереджень на сайті)
     res["edu_share"] = [round(float(w[edu == k].sum() / w.sum()), 3) for k in range(3)]
-    res["books_share"] = [round(float(w[books == k].sum() / w.sum()), 3) for k in range(3)]
 
     # Стандартизована модель: бали за +1 SD кожного фактора
     def z(v):
@@ -156,42 +182,49 @@ def country_model(g):
         return (v - mu) / sd
 
     Xs = np.column_stack([
-        np.ones(len(m)), z(m.PAREDINT.values), z(m.WEALTH.values),
-        z(m.ST255Q01JA.values.astype(float)),
+        np.ones(len(m)), z(m.PAREDINT.values), z(m.WEALTH.values), z(m.CULTURE.values),
     ])
-    cs = np.array([wls(Xs, Y[:, j], w) for j in range(len(PV))]).mean(axis=0)
-    res["std"] = {"edu": round(cs[1], 1), "wealth": round(cs[2], 1), "books": round(cs[3], 1)}
+    cs, _ = fit(Xs, Y, w)
+    res["std"] = {"edu": round(cs[1], 1), "wealth": round(cs[2], 1), "culture": round(cs[3], 1)}
     return res
 
 
 def main():
-    cols = ["CNT", "W_FSTUWT", "HISCED", "PAREDINT", "ST255Q01JA"] + WEALTH_ITEMS + PV
+    cols = ["CNT", "W_FSTUWT", "HISCED", "PAREDINT"] + WEALTH_ITEMS + CULTURE_ITEMS + PV
     d = pd.read_csv(SRC, usecols=cols)
-    d["WEALTH"] = build_wealth(d)
+    d["WEALTH"], wealth_used = build_index(d, WEALTH_ITEMS)
+    d["CULTURE"], culture_used = build_index(d, CULTURE_ITEMS)
+
     countries = {}
     for cnt, g in d.groupby("CNT"):
         r = country_model(g)
-        print(cnt, r["mean"], "" if "a" in r else "— замало даних для моделі")
         r["map"] = MAP_CODE.get(cnt, cnt)
+        # Скільки з 3 питань увійшло в кожен індекс у цій країні
+        r["items"] = {"wealth": wealth_used[cnt], "culture": culture_used[cnt]}
         if "a" in r:
-            print(f"  із книжками: достаток {r['wealth'][3]:+.0f}, освіта {r['edu'][2]:+.0f};"
-                  f" без книжок: достаток {r['nobooks']['wealth'][3]:+.0f}, освіта {r['nobooks']['edu'][2]:+.0f}")
+            print(f"{cnt} {r['mean']:.0f}  достаток {r['wealth'][3]:+.0f}, освіта {r['edu'][2]:+.0f},"
+                  f" культура {r['culture'][3]:+.0f}")
+        else:
+            print(f"{cnt} {r['mean']:.0f}  — замало даних для моделі")
         countries[cnt] = r
 
     payload = {
         "source": "OECD PISA 2025, учні; зважена регресія, 10 plausible values",
         "wealth_items": "автомобілі, кімнати з ванною, кімнати з туалетом",
+        "culture_items": "книжки, музичні інструменти, твори мистецтва",
         "levels": {
             "edu": ["базова (до 9 класів)", "середня (школа / коледж)", "вища (університет)"],
             "wealth": ["найбідніші 25%", "нижче середнього", "вище середнього", "найбагатші 25%"],
-            "books": ["0–10 книжок", "11–100 книжок", "понад 100 книжок"],
+            "culture": ["найнижчий (25%)", "нижче середнього", "вище середнього", "найвищий (25%)"],
         },
         "countries": countries,
     }
     full = [c for c in countries.values() if "a" in c]
-    print(f"\nДостаток сильніший за освіту: із книжками у "
-          f"{sum(c['wealth'][3] > c['edu'][2] for c in full)} з {len(full)} країн, без книжок у "
-          f"{sum(c['nobooks']['wealth'][3] > c['nobooks']['edu'][2] for c in full)} з {len(full)}")
+    print(f"\nДостаток сильніший за освіту: у {sum(c['wealth'][3] > c['edu'][2] for c in full)}"
+          f" з {len(full)} країн; без культурного капіталу в моделі — у "
+          f"{sum(c['noculture']['wealth'][3] > c['noculture']['edu'][2] for c in full)}")
+    print(f"Культура сильніша за достаток: у {sum(c['culture'][3] > c['wealth'][3] for c in full)}"
+          f" з {len(full)}; за освіту: у {sum(c['culture'][3] > c['edu'][2] for c in full)}")
     OUT.write_text(
         "// Згенеровано analysis/analyze.py — не редагуйте вручну\n"
         "window.PISA = " + json.dumps(payload, ensure_ascii=False) + ";\n",

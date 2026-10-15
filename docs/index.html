@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Гроші чи освіта?</title>
-<meta name="description" content="Інтерактивна карта PISA 2025: як освіта батьків, достаток і книжки вдома пов'язані з балом дитини з математики.">
+<meta name="description" content="Інтерактивна карта PISA 2025: як освіта батьків, достаток і культурний капітал сім'ї пов'язані з балом дитини з математики.">
 <style>
 :root {
   --bg: #f6f5f2;
@@ -87,7 +87,7 @@ footer { margin-top: 32px; font-size: 13px; color: var(--muted); }
 <div class="wrap">
   <header>
     <h1>Гроші чи освіта: що важливіше для успіху дитини в школі?</h1>
-    <p>Оберіть умови життя 15-річного школяра: освіту батьків, достаток сім'ї та кількість книжок удома. Карта покаже, який бал з математики PISA 2025 в середньому отримують діти з такими умовами в кожній країні.</p>
+    <p>Оберіть умови життя 15-річного школяра: освіту батьків, достаток сім'ї та її культурний капітал (книжки, музичні інструменти, мистецтво вдома). Карта покаже, який бал з математики PISA 2025 в середньому отримують діти з такими умовами в кожній країні.</p>
   </header>
 
   <div class="grid">
@@ -101,13 +101,14 @@ footer { margin-top: 32px; font-size: 13px; color: var(--muted); }
         <div class="row">Достаток сім'ї <span class="val" id="wealthVal"></span></div>
         <input type="range" id="wealth" min="0" max="3" step="1" value="1">
       </label>
-      <label class="ctl" id="booksCtl">
-        <div class="row">Книжки вдома <span class="val" id="booksVal"></span></div>
-        <input type="range" id="books" min="0" max="2" step="1" value="1">
+      <label class="ctl" id="cultureCtl">
+        <div class="row">Культурний капітал <span class="val" id="cultureVal"></span></div>
+        <input type="range" id="culture" min="0" max="3" step="1" value="1">
+        <div class="hint">книжки, музичні інструменти, твори мистецтва вдома</div>
       </label>
       <label class="toggle">
-        <input type="checkbox" id="useBooks" checked>
-        <span>Враховувати книжки. Якщо вимкнути, модель не знає про книжки, і їхній вплив частково «переходить» до освіти й достатку.</span>
+        <input type="checkbox" id="useCulture" checked>
+        <span>Враховувати культурний капітал. Якщо вимкнути, модель про нього не знає, і його вплив частково «переходить» до освіти й достатку.</span>
       </label>
 
       <h2>Що показує карта</h2>
@@ -139,19 +140,19 @@ footer { margin-top: 32px; font-size: 13px; color: var(--muted); }
 
   <section class="card text">
     <h2>Що з цим робити: рішення</h2>
-    <div class="todo">Цей блок заповнює група. Ідеї: безкоштовне репетиторство для дітей з бідних сімей; фінансування шкіл за потребою; шкільні та публічні бібліотеки й програми «книжка в кожен дім»; приклади країн, де розрив між багатими і бідними найменший (знайдіть їх на карті).</div>
+    <div class="todo">Цей блок заповнює група. Ідеї: безкоштовне репетиторство для дітей з бідних сімей; фінансування шкіл за потребою; шкільні бібліотеки, музичні й мистецькі гуртки, програми «книжка в кожен дім» (культурний капітал можна дати дитині й поза сім'єю); приклади країн, де розрив між багатими і бідними найменший (знайдіть їх на карті).</div>
   </section>
 
   <section class="card text">
     <h2>Як ми рахували і чого дані не кажуть</h2>
     <ul>
       <li><b>Дані:</b> OECD PISA 2025, 747 068 учнів з 89 країн і регіонів.</li>
-      <li><b>Модель:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·достаток + b3·книжки</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT.</li>
-      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED): базова = до 9 класів, середня = школа / коледж, вища = університет. <b>Достаток</b> — наш індекс з трьох «грошових» речей удома: кількість автомобілів, кімнат з ванною і кімнат з туалетом (середнє стандартизованих значень), поділений на чверті (квартилі) в межах країни. <b>Книжки</b> — відповідь учня, скільки книжок удома.</li>
+      <li><b>Модель:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·достаток + b3·культура</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT.</li>
+      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED): базова = до 9 класів, середня = школа / коледж, вища = університет. <b>Достаток</b> — наш індекс з трьох «грошових» речей удома: кількість автомобілів, кімнат з ванною і кімнат з туалетом (середнє стандартизованих значень), поділений на чверті (квартилі) в межах країни. <b>Культурний капітал</b> (за П. Бурдьє) — такий самий індекс з кількості книжок, музичних інструментів і творів мистецтва вдома, теж поділений на чверті.</li>
       <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Розкид усередині кожної групи великий: модель пояснює лише 10–40% різниці між учнями (R²).</li>
       <li><b>Кореляція ≠ причинність.</b> Книжки не «роблять» дитину розумнішою: вони показують культурний капітал сім'ї (П. Бурдьє), тобто звичку читати, цінність освіти тощо.</li>
-      <li><b>Чому не офіційний індекс HOMEPOS:</b> він включає книжки, тож книжки рахувалися б двічі. Музичні інструменти й твори мистецтва ми теж не взяли: у даних вони пов'язані з книжками сильніше, ніж з машинами чи ваннами, тобто показують культурний капітал, а не гроші.</li>
-      <li><b>Індекс достатку грубий:</b> лише 3 питання по 4 варіанти відповіді. Учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Для Нідерландів та Ізраїлю питань про машини / ванни / туалети в даних немає, тому для них показано лише середній бал.</li>
+      <li><b>Чому два індекси, а не офіційний HOMEPOS:</b> HOMEPOS змішує гроші й культуру в одне число. У даних інструменти й мистецтво пов'язані з книжками (кореляція 0.28–0.30) сильніше, ніж з машинами чи ваннами (0.15–0.22), тож ми розділили речі на «грошові» й «культурні».</li>
+      <li><b>Індекси грубі:</b> лише 3 питання в кожному, тож багато учнів мають однакове значення. Учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на сайті є позначка.</li>
       <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Ріки немає даних про освіту батьків, тож для них показано лише середній бал.</li>
     </ul>
   </section>
@@ -188,18 +189,18 @@ const NAMES = {
 };
 const nm = c => NAMES[c] || c;
 
-const state = { edu: 1, wealth: 1, books: 1, useBooks: true, mode: "pred", cnt: "QUA" };
+const state = { edu: 1, wealth: 1, culture: 1, useCulture: true, mode: "pred", cnt: "QUA" };
 const $ = id => document.getElementById(id);
 
 function model(c) {
   if (!c.a) return null;
-  if (state.useBooks) return c;
-  return { ...c.nobooks, books: [0, 0, 0] };
+  if (state.useCulture) return c;
+  return { ...c.noculture, culture: [0, 0, 0, 0] };
 }
-function predict(c, edu, wealth, books) {
+function predict(c, edu, wealth, culture) {
   const m = model(c);
   if (!m) return null;
-  return m.a + m.edu[edu] + m.wealth[wealth] + (state.useBooks ? m.books[books] : 0);
+  return m.a + m.edu[edu] + m.wealth[wealth] + m.culture[culture];
 }
 
 // Колір: червоний (низький бал) → нейтральний → зелений (високий)
@@ -234,7 +235,7 @@ function drawMap() {
   const locs = [], z = [], text = [];
   codes.forEach(c => {
     const d = D.countries[c];
-    const v = state.mode === "pred" ? predict(d, state.edu, state.wealth, state.books) : d.mean;
+    const v = state.mode === "pred" ? predict(d, state.edu, state.wealth, state.culture) : d.mean;
     if (v == null) return;
     locs.push(d.map); z.push(v);
     text.push(`<b>${nm(c)}</b><br>${state.mode === "pred" ? "Прогноз" : "Середній бал"}: ${Math.round(v)}`);
@@ -266,7 +267,7 @@ function drawMap() {
   });
   $("mapHint").textContent = state.mode === "pred"
     ? `Колір = прогнозований бал дитини з умовами: ${L.edu[state.edu]}, ${L.wealth[state.wealth]}` +
-      (state.useBooks ? `, ${L.books[state.books]}.` : ".") + " Сірі країни не брали участі в PISA або не мають даних."
+      (state.useCulture ? `, культурний капітал ${L.culture[state.culture]}.` : ".") + " Сірі країни не брали участі в PISA або не мають даних."
     : "Колір = фактичний середній бал з математики всіх учнів країни.";
 }
 
@@ -278,10 +279,10 @@ function drawCountry() {
       <p class="warn">Для цієї країни в даних немає освіти батьків або достатку, тому прогноз порахувати неможливо.</p>`;
     return;
   }
-  const p = predict(d, state.edu, state.wealth, state.books);
+  const p = predict(d, state.edu, state.wealth, state.culture);
   const wealthGap = m.wealth[3] - m.wealth[0];
   const eduGap = m.edu[2] - m.edu[0];
-  const booksGap = state.useBooks ? m.books[2] - m.books[0] : null;
+  const cultureGap = state.useCulture ? m.culture[3] - m.culture[0] : null;
   const fmt = v => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v));
   const winner = wealthGap > eduGap
     ? `У цій країні <b>достаток важить більше</b>, ніж освіта батьків.`
@@ -290,17 +291,19 @@ function drawCountry() {
   const warns = [];
   if (d.edu_share[state.edu] < 0.05)
     warns.push(`Лише ${(d.edu_share[state.edu] * 100).toFixed(1)}% учнів у цій країні мають батьків з освітою «${L.edu[state.edu]}», тому прогноз для цієї групи неточний.`);
-  if (state.useBooks && d.books_share[state.books] < 0.05)
-    warns.push(`Лише ${(d.books_share[state.books] * 100).toFixed(1)}% учнів мають «${L.books[state.books]}», тому прогноз неточний.`);
+  const ITEMS = { wealth: "достатку (машини, ванни, туалети)", culture: "культурного капіталу (книжки, інструменти, мистецтво)" };
+  for (const k of ["wealth", "culture"])
+    if (d.items[k] < 3)
+      warns.push(`У цій країні в анкеті було лише ${d.items[k]} з 3 питань для індексу ${ITEMS[k]}, тож порівнювати його з іншими країнами треба обережно.`);
   if (d.n_model / d.n < 0.7)
-    warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, достаток або книжки, тож результат може бути зміщеним.`);
+    warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, достаток або культурний капітал, тож результат може бути зміщеним.`);
 
-  // Теплова карта: достаток (рядки) × освіта (стовпці) при поточних книжках
+  // Теплова карта: достаток (рядки) × освіта (стовпці) при поточному культурному капіталі
   let heat = `<table class="heat"><thead><tr><th></th>${L.edu.map(e => `<th>${e.split(" (")[0]}</th>`).join("")}</tr></thead><tbody>`;
   for (let w = 3; w >= 0; w--) {
     heat += `<tr><th class="rowh">${L.wealth[w]}</th>`;
     for (let e = 0; e < 3; e++) {
-      const v = predict(d, e, w, state.books);
+      const v = predict(d, e, w, state.culture);
       const sel = e === state.edu && w === state.wealth ? " sel" : "";
       heat += `<td class="${sel}" data-e="${e}" data-w="${w}" style="background:${colorFor(v)};color:${inkFor(v)}" title="${L.wealth[w]}, освіта ${L.edu[e]}: ${Math.round(v)}">${Math.round(v)}</td>`;
     }
@@ -318,16 +321,16 @@ function drawCountry() {
         <div style="color:var(--text-2);font-size:14px;margin-top:8px">Прогнозований бал з математики</div>
         <div class="big">${Math.round(p)} <small>балів</small></div>
         <div class="compare">
-          <div><b>${fmt(wealthGap)}</b><span>від найбідніших 25% до найбагатших 25% (освіта та книжки ті самі)</span></div>
-          <div><b>${fmt(eduGap)}</b><span>від базової до вищої освіти батьків (достаток і книжки ті самі)</span></div>
-          ${booksGap === null ? `<div><b>—</b><span>книжки зараз не враховуються</span></div>`
-            : `<div><b>${fmt(booksGap)}</b><span>від 0–10 до понад 100 книжок (решта та сама)</span></div>`}
+          <div><b>${fmt(wealthGap)}</b><span>від найбідніших 25% до найбагатших 25% (освіта й культура ті самі)</span></div>
+          <div><b>${fmt(eduGap)}</b><span>від базової до вищої освіти батьків (достаток і культура ті самі)</span></div>
+          ${cultureGap === null ? `<div><b>—</b><span>культурний капітал зараз не враховується</span></div>`
+            : `<div><b>${fmt(cultureGap)}</b><span>від найнижчого до найвищого культурного капіталу (решта та сама)</span></div>`}
         </div>
         <p style="margin:0">${winner}</p>
         ${warns.map(w => `<div class="warn">${w}</div>`).join("")}
       </div>
       <div>
-        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Прогноз для всіх комбінацій${state.useBooks ? ` (${L.books[state.books]})` : ""}. Рядки — достаток, стовпці — освіта батьків. Натисніть клітинку, щоб обрати її.</div>
+        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Прогноз для всіх комбінацій${state.useCulture ? ` (культурний капітал: ${L.culture[state.culture]})` : ""}. Рядки — достаток, стовпці — освіта батьків. Натисніть клітинку, щоб обрати її.</div>
         ${heat}
       </div>
     </div>`;
@@ -339,33 +342,35 @@ function drawCountry() {
 function drawFindings() {
   const full = codes.filter(c => D.countries[c].a);
   const wins = (useNb) => full.filter(c => {
-    const d = D.countries[c], m = useNb ? d.nobooks : d;
+    const d = D.countries[c], m = useNb ? d.noculture : d;
     return m.wealth[3] - m.wealth[0] > m.edu[2] - m.edu[0];
   });
   const w1 = wins(false), w2 = wins(true);
+  const cult = full.filter(c => D.countries[c].culture[3] > D.countries[c].wealth[3]);
   const top = w1.sort((a, b) => (D.countries[b].wealth[3] - D.countries[b].edu[2]) - (D.countries[a].wealth[3] - D.countries[a].edu[2])).slice(0, 6);
   $("findings").innerHTML = `
     <p>Наша гіпотеза: <b>достаток батьків впливає на результати дитини сильніше, ніж їхня освіта.</b></p>
-    <p>Якщо порівнювати дітей з однаковою освітою батьків і однаковою кількістю книжок, то перехід від найбідніших 25% сімей до найбагатших 25% дає більше балів, ніж перехід від базової до вищої освіти батьків, лише у <b>${w1.length} з ${full.length}</b> країн. Якщо книжки не враховувати, таких країн <b>${w2.length}</b>.</p>
-    <p>Тобто в більшості країн гіпотеза <b>не підтверджується</b>: освіта батьків і книжки вдома (культурний капітал) пов'язані з балами сильніше, ніж речі й гроші. Але є країни, де гроші важать більше за освіту: ${top.map(nm).join(", ")}. Це переважно країни з нижчим доходом, де від статків сім'ї залежить, чи є в дитини взагалі доступ до якісної школи.</p>
+    <p>Якщо порівнювати дітей з однаковою освітою батьків і однаковим культурним капіталом, то перехід від найбідніших 25% сімей до найбагатших 25% дає більше балів, ніж перехід від базової до вищої освіти батьків, лише у <b>${w1.length} з ${full.length}</b> країн. Якщо культурний капітал не враховувати, таких країн <b>${w2.length}</b>.</p>
+    <p>Натомість культурний капітал (книжки, інструменти, мистецтво) важить більше, ніж гроші, у <b>${cult.length} з ${full.length}</b> країн.</p>
+    <p>Тобто в більшості країн гіпотеза <b>не підтверджується</b>: освіта батьків і культурний капітал сім'ї пов'язані з балами сильніше, ніж речі й гроші. Але є країни, де гроші важать більше за освіту: ${top.map(nm).join(", ")}. Це переважно країни з нижчим доходом, де від статків сім'ї залежить, чи є в дитини взагалі доступ до якісної школи.</p>
     <p class="hint">Цей текст згенеровано автоматично з даних. Група може переписати висновки своїми словами.</p>`;
 }
 
 function syncInputs() {
-  ["edu", "wealth", "books"].forEach(k => { $(k).value = state[k]; });
+  ["edu", "wealth", "culture"].forEach(k => { $(k).value = state[k]; });
   $("eduVal").textContent = L.edu[state.edu];
   $("wealthVal").textContent = L.wealth[state.wealth];
-  $("booksVal").textContent = L.books[state.books];
-  $("books").disabled = !state.useBooks;
-  $("booksCtl").style.opacity = state.useBooks ? 1 : 0.4;
+  $("cultureVal").textContent = L.culture[state.culture];
+  $("culture").disabled = !state.useCulture;
+  $("cultureCtl").style.opacity = state.useCulture ? 1 : 0.4;
   $("countrySel").value = state.cnt;
   $("modePred").classList.toggle("on", state.mode === "pred");
   $("modeMean").classList.toggle("on", state.mode === "mean");
 }
 function update() { syncInputs(); drawMap(); drawCountry(); }
 
-["edu", "wealth", "books"].forEach(k => $(k).addEventListener("input", e => { state[k] = +e.target.value; update(); }));
-$("useBooks").addEventListener("change", e => { state.useBooks = e.target.checked; update(); });
+["edu", "wealth", "culture"].forEach(k => $(k).addEventListener("input", e => { state[k] = +e.target.value; update(); }));
+$("useCulture").addEventListener("change", e => { state.useCulture = e.target.checked; update(); });
 $("modePred").addEventListener("click", () => { state.mode = "pred"; update(); });
 $("modeMean").addEventListener("click", () => { state.mode = "mean"; update(); });
 $("countrySel").addEventListener("change", e => { state.cnt = e.target.value; update(); });
