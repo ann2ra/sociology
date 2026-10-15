@@ -261,7 +261,7 @@ function drawMap() {
   };
   Plotly.react("map", [trace, sel], layout, {
     displayModeBar: false, responsive: true,
-    topojsonURL: "https://cdn.jsdelivr.net/npm/plotly.js@2.35.2/dist/topojson/",
+    topojsonURL: "topojson/",
   });
   $("mapHint").textContent = state.mode === "pred"
     ? `Колір = прогнозований бал дитини з умовами: ${L.edu[state.edu]}, ${L.wealth[state.wealth]}` +
