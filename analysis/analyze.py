@@ -6,7 +6,7 @@
 
     бал_математики = a
                      + b1[освіта]     (базова / середня / вища)
-                     + b2[достаток]   (квартиль HOMEPOS у країні: Q1..Q4)
+                     + b2[достаток]   (квартиль індексу WEALTH у країні: Q1..Q4)
                      + b3[книжки]     (0–10 / 11–100 / понад 100)
 
 Кожен фактор — категорії (dummy-змінні), базова категорія = найнижча,
@@ -15,7 +15,14 @@
 і усереднюємо коефіцієнти — так рекомендує методика PISA.
 
 Додатково рахуємо «стандартизовану» модель
-    бал = a + β1·z(PAREDINT) + β2·z(HOMEPOS) + β3·z(книжки)
+    бал = a + β1·z(PAREDINT) + β2·z(WEALTH) + β3·z(книжки)
+
+Індекс достатку WEALTH будуємо самі, бо офіційний HOMEPOS включає книжки:
+середнє стандартизованих (z) значень трьох «грошових» речей удома —
+автомобілі (ST251Q01JA), кімнати з ванною (ST251Q03JA), кімнати з туалетом
+(ST251Q04JA). Музичні інструменти й твори мистецтва (ST251Q06JA, Q07JA)
+сильніше пов'язані з книжками, ніж з цими речами, тобто міряють культурний
+капітал, а не гроші, — тому в індекс їх не беремо.
 щоб порівняти, який фактор сильніший (бали за +1 стандартне відхилення).
 
 Запуск:  python analysis/analyze.py
@@ -46,9 +53,28 @@ BOOK_BINS = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 2, 7: 2}
 MAP_CODE = {"TAP": "TWN", "KSV": "XKX", "QUA": "UKR", "QCI": "CHN"}
 
 
-def wquantile_bins(x, w, n=4):
-    """Номер зваженого квартиля (0..n-1) для кожного учня."""
-    order = np.argsort(x.values)
+WEALTH_ITEMS = ["ST251Q01JA", "ST251Q03JA", "ST251Q04JA"]
+
+
+def build_wealth(d):
+    """WEALTH = середнє z-значень речей (потрібно щонайменше 2 з 3 відповідей)."""
+    z = pd.DataFrame(index=d.index)
+    for c in WEALTH_ITEMS:
+        mu = np.average(d[c].dropna(), weights=d.W_FSTUWT[d[c].notna()])
+        sd = np.sqrt(np.average((d[c].dropna() - mu) ** 2, weights=d.W_FSTUWT[d[c].notna()]))
+        z[c] = (d[c] - mu) / sd
+    wealth = z.mean(axis=1)
+    wealth[z.notna().sum(axis=1) < 2] = np.nan
+    return wealth
+
+
+def wquantile_bins(x, w, n=4, seed=2025):
+    """Номер зваженого квартиля (0..n-1) для кожного учня.
+    Індекс має небагато різних значень (3 питання по 4 варіанти), тож багато
+    учнів мають однакове значення. Щоб групи були рівно по 25%, таких учнів
+    упорядковуємо випадково (з фіксованим seed, результат відтворюваний)."""
+    tie = np.random.default_rng(seed).random(len(x))
+    order = np.lexsort((tie, x.values))
     cw = np.cumsum(w.values[order])
     cw = cw / cw[-1]
     bins = np.empty(len(x), dtype=int)
@@ -81,7 +107,7 @@ def country_model(g):
         "n": int(len(g)),
         "mean": round(wmean(g[PV].mean(axis=1), g.W_FSTUWT), 1),
     }
-    m = g.dropna(subset=["HISCED", "HOMEPOS", "ST255Q01JA", "PAREDINT"]).copy()
+    m = g.dropna(subset=["HISCED", "WEALTH", "ST255Q01JA", "PAREDINT"]).copy()
     res["n_model"] = int(len(m))
     if len(m) < MIN_STUDENTS:
         return res
@@ -89,7 +115,7 @@ def country_model(g):
     w = m.W_FSTUWT.values
     edu = m.HISCED.astype(int).map(EDU_BINS).values
     books = m.ST255Q01JA.astype(int).map(BOOK_BINS).values
-    wealth = wquantile_bins(m.HOMEPOS, m.W_FSTUWT)
+    wealth = wquantile_bins(m.WEALTH, m.W_FSTUWT)
     Y = m[PV].values
 
     # Категорійна модель: intercept, edu1, edu2, w1, w2, w3, b1, b2
@@ -107,8 +133,8 @@ def country_model(g):
     res["books"] = [0.0, round(c[6], 1), round(c[7], 1)]
     res["r2"] = round(r2(X, Y, w, coefs), 3)
 
-    # Та сама модель БЕЗ книжок: тоді «достаток» включає і книжки,
-    # бо HOMEPOS сам рахує книжки як частину домашнього майна.
+    # Та сама модель БЕЗ книжок: книжки не контролюємо, тож частина їхнього
+    # зв'язку з балами «переходить» до освіти й достатку.
     X2 = X[:, :6]
     coefs2 = np.array([wls(X2, Y[:, j], w) for j in range(len(PV))])
     c2 = coefs2.mean(axis=0)
@@ -130,7 +156,7 @@ def country_model(g):
         return (v - mu) / sd
 
     Xs = np.column_stack([
-        np.ones(len(m)), z(m.PAREDINT.values), z(m.HOMEPOS.values),
+        np.ones(len(m)), z(m.PAREDINT.values), z(m.WEALTH.values),
         z(m.ST255Q01JA.values.astype(float)),
     ])
     cs = np.array([wls(Xs, Y[:, j], w) for j in range(len(PV))]).mean(axis=0)
@@ -139,8 +165,9 @@ def country_model(g):
 
 
 def main():
-    cols = ["CNT", "W_FSTUWT", "HISCED", "PAREDINT", "ST255Q01JA", "HOMEPOS"] + PV
+    cols = ["CNT", "W_FSTUWT", "HISCED", "PAREDINT", "ST255Q01JA"] + WEALTH_ITEMS + PV
     d = pd.read_csv(SRC, usecols=cols)
+    d["WEALTH"] = build_wealth(d)
     countries = {}
     for cnt, g in d.groupby("CNT"):
         r = country_model(g)
@@ -153,6 +180,7 @@ def main():
 
     payload = {
         "source": "OECD PISA 2025, учні; зважена регресія, 10 plausible values",
+        "wealth_items": "автомобілі, кімнати з ванною, кімнати з туалетом",
         "levels": {
             "edu": ["базова (до 9 класів)", "середня (школа / коледж)", "вища (університет)"],
             "wealth": ["найбідніші 25%", "нижче середнього", "вище середнього", "найбагатші 25%"],
