@@ -2,163 +2,337 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Гроші чи освіта?</title>
-<meta name="description" content="Інтерактивна карта PISA 2025: як освіта батьків, достаток і культурний капітал сім'ї пов'язані з балом дитини з математики.">
+<meta name="description" content="Інтерактивна карта PISA 2025: як освіта батьків, економічний і культурний капітал сім'ї пов'язані з балом дитини з математики.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
+/* Макет: верхня навігація-вкладки; на «Карті» мапа на всю ширину, панель умов виїжджає зліва поверх мапи. */
 :root {
-  --bg: #f6f5f2;
-  --surface: #fcfcfb;
-  --border: #e2e0da;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --muted: #8a8984;
-  --accent: #2a78d6;
-  --bad: #d03b3b;
-  --mid: #f0efec;
-  --good: #1f8a3b;
-  --warn-bg: #fff4d6;
+  --bg: #f5f4ef;
+  --surface: #fdfdfb;
+  --border: #e3e1d8;
+  --text: #15140f;
+  --text-2: #55534a;
+  --muted: #8b897e;
+  --accent: #2c5fd4;
+  --bad: #d64541;
+  --mid: #f2c14e;
+  --good: #2e9e5b;
+  --land: #dedcd5;
+  --warn-bg: #fff3d1;
   --warn-text: #6b4e00;
+  --font-display: "Unbounded", "Manrope", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --shadow: 0 8px 28px rgba(20, 20, 10, .14);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121211; --surface: #1a1a19; --border: #33332f;
-    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e86; --accent: #3987e5;
-    --mid: #383835; --warn-bg: #3a2f10; --warn-text: #f3d48a;
+    --bg: #121210; --surface: #1b1b18; --border: #33322c;
+    --text: #f1f0ea; --text-2: #c6c4b8; --muted: #8f8d82; --accent: #6f9bff;
+    --bad: #e05a55; --mid: #e8b840; --good: #3fb06d; --land: #3a3934;
+    --warn-bg: #3a2f10; --warn-text: #f3d48a; --shadow: 0 8px 28px rgba(0, 0, 0, .5);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121211; --surface: #1a1a19; --border: #33332f;
-  --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e86; --accent: #3987e5;
-  --mid: #383835; --warn-bg: #3a2f10; --warn-text: #f3d48a;
+  --bg: #121210; --surface: #1b1b18; --border: #33322c;
+  --text: #f1f0ea; --text-2: #c6c4b8; --muted: #8f8d82; --accent: #6f9bff;
+  --bad: #e05a55; --mid: #e8b840; --good: #3fb06d; --land: #3a3934;
+  --warn-bg: #3a2f10; --warn-text: #f3d48a; --shadow: 0 8px 28px rgba(0, 0, 0, .5);
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body {
-  margin: 0; background: var(--bg); color: var(--text);
-  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font: 16px/1.55 var(--font-body); }
+.wrap {
+  max-width: 1320px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
-header h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 8px; }
-header p { color: var(--text-2); margin: 0; max-width: 760px; }
-.grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; margin-top: 24px; }
-@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.card h2 { font-size: 15px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-2); }
-label.ctl { display: block; margin-bottom: 18px; }
-label.ctl .row { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--text-2); }
-label.ctl .val { color: var(--text); font-weight: 600; text-align: right; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; letter-spacing: -.01em; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Навігація */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 15px; white-space: nowrap; }
+.brand span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 2px;
+  background: linear-gradient(90deg, var(--bad), var(--mid), var(--good)); }
+nav.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-left: auto; }
+nav.tabs a {
+  text-decoration: none; color: var(--text-2); font-weight: 600; font-size: 14px;
+  padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+}
+nav.tabs a:hover { color: var(--text); background: var(--border); }
+nav.tabs a.on { background: var(--text); color: var(--bg); }
+@media (max-width: 720px) { nav.tabs { margin-left: 0; width: 100%; } }
+
+main.page { padding-block: 28px 64px; }
+main.page[hidden] { display: none !important; }
+
+/* Вступ */
+.hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; padding-block: 24px 8px; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; gap: 24px; } }
+.hero h1 { font-size: clamp(30px, 5vw, 56px); line-height: 1.08; margin: 0 0 18px; }
+.hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--bad), var(--mid) 55%, var(--good)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p { font-size: 18px; color: var(--text-2); max-width: 60ch; margin: 0 0 24px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; font: 600 16px var(--font-body);
+  padding: 12px 20px; border-radius: 999px; border: 0; cursor: pointer; text-decoration: none;
+  background: var(--text); color: var(--bg);
+}
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
+.hero-card .lbl { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+.mini-scale { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; }
+.mini-scale div { border-radius: 10px; padding: 12px 10px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.mini-scale small { display: block; font-weight: 500; font-size: 12px; opacity: .85; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
+.step { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+.step b.n { font-family: var(--font-display); font-size: 13px; color: var(--muted); }
+.step h3 { font-size: 18px; margin: 6px 0 6px; }
+.step p { margin: 0; color: var(--text-2); }
+.capitals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+@media (max-width: 900px) { .capitals { grid-template-columns: 1fr; } }
+.cap { border-top: 3px solid var(--text); padding-top: 12px; }
+.cap h3 { font-size: 17px; margin: 0 0 4px; }
+.cap p { margin: 0; color: var(--text-2); font-size: 15px; }
+.section-title { font-size: 22px; margin: 48px 0 0; }
+
+/* Карта */
+.map-shell {
+  position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+  overflow: hidden; height: clamp(460px, 74vh, 780px);
+}
+#map { position: absolute; inset: 0; }
+.drawer {
+  position: absolute; top: 12px; left: 12px; bottom: 12px; width: 310px; z-index: 5;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow);
+  padding: 16px; overflow-y: auto; transition: transform .25s ease, opacity .25s ease;
+}
+.drawer.closed { transform: translateX(calc(-100% - 24px)); opacity: 0; pointer-events: none; }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.drawer h2, .drawer h4 { font-size: 13px; margin: 0; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); font-family: var(--font-body); font-weight: 700; }
+.drawer h4 { margin: 18px 0 10px; }
+.icon-btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 12px; font: 600 13px var(--font-body); cursor: pointer; }
+.open-btn { position: absolute; top: 12px; left: 12px; z-index: 4; box-shadow: var(--shadow); padding: 10px 16px; font-size: 14px; }
+.open-btn[hidden] { display: none; }
+label.ctl { display: block; margin-bottom: 16px; }
+label.ctl .row { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--text-2); font-weight: 600; }
+label.ctl .val { color: var(--text); font-weight: 700; text-align: right; }
+.sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
 input[type=range] { width: 100%; accent-color: var(--accent); margin-top: 6px; }
-select { width: 100%; font: inherit; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
-.toggle { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--text-2); margin-bottom: 14px; }
-.seg { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
-.seg button { flex: 1; font: inherit; font-size: 14px; padding: 8px; border: 0; background: transparent; color: var(--text-2); cursor: pointer; }
-.seg button.on { background: var(--accent); color: #fff; }
-#map { width: 100%; height: 470px; }
-@media (max-width: 600px) { #map { height: 300px; } }
-.hint { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
-.big { font-size: 56px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
-.big small { font-size: 16px; font-weight: 400; color: var(--text-2); }
+select { width: 100%; font: inherit; font-size: 15px; padding: 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+.toggle { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--text-2); line-height: 1.4; }
+.seg { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.seg button { flex: 1; font: 600 13px var(--font-body); padding: 8px 6px; border: 0; background: transparent; color: var(--text-2); cursor: pointer; }
+.seg button.on { background: var(--text); color: var(--bg); }
+.legend-box {
+  position: absolute; right: 12px; bottom: 12px; z-index: 3; width: min(320px, calc(100% - 24px));
+  background: color-mix(in srgb, var(--surface) 90%, transparent); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
+}
+.legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.legend .bar { flex: 1; height: 10px; border-radius: 5px; }
+.legend-na { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); margin-top: 6px; }
+.legend-na i { width: 14px; height: 10px; border-radius: 3px; background: var(--land); border: 1px solid var(--border); }
+.hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+@media (max-width: 760px) {
+  .map-shell { height: auto; overflow: visible; background: transparent; border: 0; }
+  .drawer { position: static; width: auto; box-shadow: none; margin-bottom: 12px; }
+  .drawer.closed { display: none; }
+  .open-btn { position: static; margin-bottom: 12px; }
+  .map-area { position: relative; height: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .legend-box { position: static; width: auto; margin-top: 8px; }
+}
+@media (min-width: 761px) { .map-area { position: absolute; inset: 0; } }
+
+/* Картка країни */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
+#countryCard { margin-top: 16px; }
+.big { font-family: var(--font-display); font-size: 56px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.big small { font-family: var(--font-body); font-size: 16px; font-weight: 500; color: var(--text-2); }
 .country-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .country-head h3 { margin: 0; font-size: 24px; }
-.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 13px; background: var(--mid); color: var(--text-2); }
-.compare { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; background: var(--bg); border: 1px solid var(--border); color: var(--text-2); }
+.compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
 @media (max-width: 600px) { .compare { grid-template-columns: 1fr; } }
-.compare div { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
-.compare b { display: block; font-size: 26px; font-variant-numeric: tabular-nums; }
-.compare span { font-size: 13px; color: var(--text-2); }
-.warn { background: var(--warn-bg); color: var(--warn-text); border-radius: 8px; padding: 8px 12px; font-size: 14px; margin-top: 12px; }
-.detail { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.compare div { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+.compare b { display: block; font-family: var(--font-display); font-size: 24px; font-variant-numeric: tabular-nums; }
+.compare span { font-size: 13px; color: var(--text-2); line-height: 1.35; display: block; }
+.warn { background: var(--warn-bg); color: var(--warn-text); border-radius: 10px; padding: 8px 12px; font-size: 14px; margin-top: 10px; }
+.detail { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 12px; }
+.detail > div { min-width: 0; }
 @media (max-width: 900px) { .detail { grid-template-columns: 1fr; } }
-table.heat { border-collapse: separate; border-spacing: 2px; width: 100%; font-variant-numeric: tabular-nums; }
-table.heat th { font-size: 12px; font-weight: 500; color: var(--text-2); padding: 4px; }
-table.heat td { text-align: center; font-weight: 600; padding: 12px 4px; border-radius: 6px; cursor: pointer; }
-table.heat td.sel { outline: 3px solid var(--text); outline-offset: -3px; }
+.heat-wrap { overflow-x: auto; }
+table.heat { border-collapse: separate; border-spacing: 3px; width: 100%; font-variant-numeric: tabular-nums; }
+table.heat th { font-size: 12px; font-weight: 600; color: var(--text-2); padding: 4px; }
+table.heat td { text-align: center; font-weight: 700; padding: 12px 4px; border-radius: 8px; cursor: pointer; }
+table.heat td.sel { box-shadow: inset 0 0 0 2px var(--text); }
 table.heat th.rowh { text-align: right; white-space: nowrap; }
-.legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); margin-top: 8px; }
-.legend .bar { flex: 1; height: 10px; border-radius: 5px; }
-section.text { margin-top: 16px; }
-section.text h2 { text-transform: none; letter-spacing: 0; font-size: 22px; color: var(--text); }
-section.text p, section.text li { color: var(--text-2); }
-.todo { border: 2px dashed var(--border); border-radius: 10px; padding: 12px; color: var(--muted); }
-footer { margin-top: 32px; font-size: 13px; color: var(--muted); }
+
+/* Текстові сторінки */
+.prose { max-width: 820px; }
+.prose h1 { font-size: clamp(26px, 4vw, 40px); margin: 0 0 16px; line-height: 1.12; }
+.prose h2 { font-size: 20px; margin: 32px 0 8px; }
+.prose p, .prose li { color: var(--text-2); }
+.prose li { margin-bottom: 8px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+@media (max-width: 700px) { .stats { grid-template-columns: 1fr; } }
+.stats div { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+.stats b { font-family: var(--font-display); font-size: 30px; display: block; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 14px; color: var(--text-2); }
+.todo { border: 2px dashed var(--border); border-radius: 14px; padding: 16px; color: var(--muted); }
+footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+@media (prefers-reduced-motion: reduce) { .drawer { transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Гроші чи освіта: що важливіше для успіху дитини в школі?</h1>
-    <p>Оберіть умови життя 15-річного школяра: освіту батьків, достаток сім'ї та її культурний капітал (книжки, музичні інструменти, мистецтво вдома). Карта покаже, який бал з математики PISA 2025 в середньому отримують діти з такими умовами в кожній країні.</p>
-  </header>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><span></span> Гроші чи освіта?</div>
+    <nav class="tabs" aria-label="Розділи сайту">
+      <a href="#intro" data-page="intro">Вступ</a>
+      <a href="#map" data-page="map">Карта</a>
+      <a href="#findings" data-page="findings">Висновки</a>
+      <a href="#solutions" data-page="solutions">Рішення</a>
+      <a href="#method" data-page="method">Методика</a>
+    </nav>
+  </div>
+</header>
 
-  <div class="grid">
-    <aside class="card" id="controls">
-      <h2>Умови дитини</h2>
+<!-- ВСТУП -->
+<main class="page wrap" id="page-intro">
+  <section class="hero">
+    <div>
+      <h1>Гроші чи освіта: що важливіше для <em>успіху дитини</em> в школі?</h1>
+      <p>Ми перевіряємо гіпотезу, що достаток сім'ї впливає на шкільні результати дитини сильніше, ніж освіта батьків. На інтерактивній карті можна задати умови життя 15-річного школяра і побачити, який бал з математики PISA 2025 в середньому отримують діти з такими умовами в кожній країні.</p>
+      <div class="btn-row">
+        <a class="btn" href="#map">Відкрити карту →</a>
+        <a class="btn ghost" href="#findings">Що ми знайшли</a>
+      </div>
+    </div>
+    <div class="hero-card" aria-hidden="true">
+      <div class="lbl">Як читати кольори</div>
+      <div class="mini-scale" id="miniScale"></div>
+      <p class="hint" style="margin-top:12px">Бал з математики PISA. Сірим позначено країни, які не брали участі в опитуванні.</p>
+    </div>
+  </section>
+
+  <h2 class="section-title">Що можна зробити з картою</h2>
+  <div class="steps">
+    <div class="step"><b class="n">Крок 1</b><h3>Задайте умови</h3><p>Оберіть освіту батьків, економічний і культурний капітал сім'ї на панелі зліва від карти.</p></div>
+    <div class="step"><b class="n">Крок 2</b><h3>Подивіться на світ</h3><p>Уся карта перефарбується: червоні країни — низький прогнозований бал, жовті — середній, зелені — високий.</p></div>
+    <div class="step"><b class="n">Крок 3</b><h3>Порівняйте фактори</h3><p>Натисніть на країну, щоб побачити, на скільки балів змінюється результат, якщо змінити лише гроші, лише освіту або лише культуру вдома.</p></div>
+  </div>
+
+  <h2 class="section-title">Три фактори, які ми порівнюємо</h2>
+  <div class="capitals">
+    <div class="cap"><h3>Освіта батьків</h3><p>Найвищий рівень освіти серед двох батьків: базова (до 9 класів), середня (школа / коледж) або вища (університет).</p></div>
+    <div class="cap"><h3>Економічний капітал</h3><p>Гроші сім'ї. Міряємо за речами вдома: кількість автомобілів, кімнат з ванною і кімнат з туалетом.</p></div>
+    <div class="cap"><h3>Культурний капітал</h3><p>Культурне середовище вдома (за П. Бурдьє): кількість книжок, музичних інструментів і творів мистецтва.</p></div>
+  </div>
+</main>
+
+<!-- КАРТА -->
+<main class="page wrap" id="page-map" hidden>
+  <div class="map-shell">
+    <button class="icon-btn open-btn" id="openDrawer" hidden>Умови дитини ▸</button>
+    <aside class="drawer" id="drawer" aria-label="Умови дитини">
+      <div class="drawer-head">
+        <h2>Умови дитини</h2>
+        <button class="icon-btn" id="closeDrawer" aria-label="Сховати панель">◂ Сховати</button>
+      </div>
       <label class="ctl">
         <div class="row">Освіта батьків <span class="val" id="eduVal"></span></div>
         <input type="range" id="edu" min="0" max="2" step="1" value="1">
       </label>
       <label class="ctl">
-        <div class="row">Достаток сім'ї <span class="val" id="wealthVal"></span></div>
+        <div class="row">Економічний капітал <span class="val" id="wealthVal"></span></div>
         <input type="range" id="wealth" min="0" max="3" step="1" value="1">
+        <div class="sub">кількість автомобілів, кімнат з ванною і кімнат з туалетом удома</div>
       </label>
       <label class="ctl" id="cultureCtl">
         <div class="row">Культурний капітал <span class="val" id="cultureVal"></span></div>
         <input type="range" id="culture" min="0" max="3" step="1" value="1">
-        <div class="hint">книжки, музичні інструменти, твори мистецтва вдома</div>
+        <div class="sub">кількість книжок, музичних інструментів і творів мистецтва вдома</div>
       </label>
       <label class="toggle">
         <input type="checkbox" id="useCulture" checked>
-        <span>Враховувати культурний капітал. Якщо вимкнути, модель про нього не знає, і його вплив частково «переходить» до освіти й достатку.</span>
+        <span>Враховувати культурний капітал. Якщо вимкнути, модель про нього не знає, і його вплив частково «переходить» до освіти й економічного капіталу.</span>
       </label>
 
-      <h2>Що показує карта</h2>
+      <h4>Що показує карта</h4>
       <div class="seg" role="group" aria-label="Режим карти">
         <button id="modePred" class="on">Прогноз для умов</button>
-        <button id="modeMean">Середній бал країни</button>
+        <button id="modeMean">Середній бал</button>
       </div>
 
-      <h2>Країна</h2>
+      <h4>Країна</h4>
       <select id="countrySel" aria-label="Обрати країну"></select>
       <p class="hint">Або натисніть на країну на карті. Малі країни (Сінгапур, Макао, Мальта…) зручніше обрати зі списку.</p>
     </aside>
-
-    <main class="card">
+    <div class="map-area">
       <div id="map" role="img" aria-label="Карта світу з прогнозованими балами"></div>
-      <div class="legend">
-        <span>350</span><div class="bar" id="legendBar"></div><span>550</span>
-      </div>
-      <p class="hint" id="mapHint"></p>
-    </main>
+    </div>
+    <div class="legend-box">
+      <div class="legend"><span>350</span><div class="bar" id="legendBar"></div><span>550</span></div>
+      <div class="legend-na"><i></i> не брали участі / немає даних</div>
+    </div>
   </div>
+  <p class="hint" id="mapHint"></p>
+  <div class="card" id="countryCard"></div>
+</main>
 
-  <div class="card" style="margin-top:16px" id="countryCard"></div>
-
-  <section class="card text">
-    <h2>Що ми знайшли</h2>
+<!-- ВИСНОВКИ -->
+<main class="page wrap" id="page-findings" hidden>
+  <div class="prose">
+    <h1>Що ми знайшли</h1>
     <div id="findings"></div>
-  </section>
+  </div>
+</main>
 
-  <section class="card text">
-    <h2>Що з цим робити: рішення</h2>
+<!-- РІШЕННЯ -->
+<main class="page wrap" id="page-solutions" hidden>
+  <div class="prose">
+    <h1>Що з цим робити</h1>
     <div class="todo">Цей блок заповнює група. Ідеї: безкоштовне репетиторство для дітей з бідних сімей; фінансування шкіл за потребою; шкільні бібліотеки, музичні й мистецькі гуртки, програми «книжка в кожен дім» (культурний капітал можна дати дитині й поза сім'єю); приклади країн, де розрив між багатими і бідними найменший (знайдіть їх на карті).</div>
-  </section>
+  </div>
+</main>
 
-  <section class="card text">
-    <h2>Як ми рахували і чого дані не кажуть</h2>
+<!-- МЕТОДИКА -->
+<main class="page wrap" id="page-method" hidden>
+  <div class="prose">
+    <h1>Як ми рахували і чого дані не кажуть</h1>
+    <h2>Розрахунки</h2>
     <ul>
       <li><b>Дані:</b> OECD PISA 2025, 747 068 учнів з 89 країн і регіонів.</li>
-      <li><b>Модель:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·достаток + b3·культура</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT.</li>
-      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED): базова = до 9 класів, середня = школа / коледж, вища = університет. <b>Достаток</b> — наш індекс з трьох «грошових» речей удома: кількість автомобілів, кімнат з ванною і кімнат з туалетом (середнє стандартизованих значень), поділений на чверті (квартилі) в межах країни. <b>Культурний капітал</b> (за П. Бурдьє) — такий самий індекс з кількості книжок, музичних інструментів і творів мистецтва вдома, теж поділений на чверті.</li>
-      <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Розкид усередині кожної групи великий: модель пояснює лише 10–40% різниці між учнями (R²).</li>
-      <li><b>Кореляція ≠ причинність.</b> Книжки не «роблять» дитину розумнішою: вони показують культурний капітал сім'ї (П. Бурдьє), тобто звичку читати, цінність освіти тощо.</li>
+      <li><b>Модель:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·економічний капітал + b3·культурний капітал</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT.</li>
+      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED): базова = до 9 класів, середня = школа / коледж, вища = університет.</li>
+      <li><b>Економічний капітал</b> — наш індекс з трьох «грошових» речей удома: кількість автомобілів (ST251Q01JA), кімнат з ванною (ST251Q03JA) і кімнат з туалетом (ST251Q04JA). Беремо середнє стандартизованих значень і ділимо учнів на чверті (квартилі) в межах країни.</li>
+      <li><b>Культурний капітал</b> (за П. Бурдьє) — такий самий індекс з кількості книжок (ST255Q01JA), музичних інструментів (ST251Q06JA) і творів мистецтва (ST251Q07JA) вдома, теж поділений на чверті.</li>
       <li><b>Чому два індекси, а не офіційний HOMEPOS:</b> HOMEPOS змішує гроші й культуру в одне число. У даних інструменти й мистецтво пов'язані з книжками (кореляція 0.28–0.30) сильніше, ніж з машинами чи ваннами (0.15–0.22), тож ми розділили речі на «грошові» й «культурні».</li>
-      <li><b>Індекси грубі:</b> лише 3 питання в кожному, тож багато учнів мають однакове значення. Учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на сайті є позначка.</li>
+    </ul>
+    <h2>Обмеження</h2>
+    <ul>
+      <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Розкид усередині кожної групи великий: модель пояснює лише 10–40% різниці між учнями (R²).</li>
+      <li><b>Кореляція ≠ причинність.</b> Книжки не «роблять» дитину розумнішою: вони показують культурне середовище сім'ї, тобто звичку читати, цінність освіти тощо.</li>
+      <li><b>Індекси грубі:</b> лише 3 питання в кожному, тож багато учнів мають однакове значення. Учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на карті є позначка.</li>
       <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Ріки немає даних про освіту батьків, тож для них показано лише середній бал.</li>
     </ul>
-  </section>
+  </div>
+</main>
 
-  <footer>Соціологія, груповий проєкт. Дані: OECD PISA 2025. Код аналізу: <code>analysis/analyze.py</code>.</footer>
-</div>
+<footer class="wrap">Соціологія, груповий проєкт. Дані: OECD PISA 2025. Код аналізу: <code>analysis/analyze.py</code>.</footer>
 
 <script src="data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
@@ -203,7 +377,7 @@ function predict(c, edu, wealth, culture) {
   return m.a + m.edu[edu] + m.wealth[wealth] + m.culture[culture];
 }
 
-// Колір: червоний (низький бал) → нейтральний → зелений (високий)
+// Колір: червоний (низький бал) → жовтий (середній) → зелений (високий)
 function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
 function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 function colorFor(score) {
@@ -215,13 +389,15 @@ function colorFor(score) {
   const rgb = a.map((x, i) => Math.round(x + (b[i] - x) * t));
   return `rgb(${rgb.join(",")})`;
 }
+// Темний текст на жовтому, білий на насиченому червоному / зеленому
 function inkFor(score) {
   const mc = (MIN_C + MAX_C) / 2, far = Math.abs(score - mc) / ((MAX_C - MIN_C) / 2);
-  return far > 0.55 ? "#ffffff" : css("--text");
+  return far > 0.6 ? "#ffffff" : "#15140f";
 }
 function colorscale() {
   return [[0, css("--bad")], [0.5, css("--mid")], [1, css("--good")]];
 }
+function rgba(hex, a) { const [r, g, b] = hexToRgb(hex); return `rgba(${r},${g},${b},${a})`; }
 
 const codes = Object.keys(D.countries).sort((a, b) => nm(a).localeCompare(nm(b), "uk"));
 const byMap = {};
@@ -231,7 +407,9 @@ function fillSelect() {
   $("countrySel").innerHTML = codes.map(c => `<option value="${c}">${nm(c)}</option>`).join("");
 }
 
+let mapReady = false;
 function drawMap() {
+  if ($("page-map").hidden) return;
   const locs = [], z = [], text = [];
   codes.forEach(c => {
     const d = D.countries[c];
@@ -243,31 +421,41 @@ function drawMap() {
   const trace = {
     type: "choropleth", locationmode: "ISO-3", locations: locs, z, text,
     hoverinfo: "text", zmin: MIN_C, zmax: MAX_C, colorscale: colorscale(), showscale: false,
-    marker: { line: { color: css("--surface"), width: 0.6 } },
+    marker: { line: { color: css("--surface"), width: 0.5 } },
   };
+  // Обведення обраної країни: м'яке світіння + тонка лінія
   const selLoc = D.countries[state.cnt].map;
-  const sel = {
+  const outline = (color, width) => ({
     type: "choropleth", locationmode: "ISO-3", locations: [selLoc], z: [1],
     colorscale: [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]], showscale: false, hoverinfo: "skip",
-    marker: { line: { color: css("--text"), width: 2.5 } },
-  };
+    marker: { line: { color, width } },
+  });
+  const ink = css("--text");
+  // На широкому екрані відкрита панель займає ліву частину — зсуваємо мапу праворуч
+  const drawerOpen = !$("drawer").classList.contains("closed") && window.innerWidth > 760;
   const layout = {
-    margin: { l: 0, r: 0, t: 0, b: 0 }, paper_bgcolor: "rgba(0,0,0,0)",
+    margin: { l: drawerOpen ? 330 : 0, r: 0, t: 8, b: 8 }, paper_bgcolor: "rgba(0,0,0,0)",
     geo: {
       projection: { type: "natural earth" }, showframe: false, showcoastlines: false,
-      showcountries: true, countrycolor: css("--border"), showland: true, landcolor: css("--mid"),
-      bgcolor: "rgba(0,0,0,0)", lataxis: { range: [-58, 85] }, resolution: 50,
+      showcountries: true, countrycolor: css("--surface"), showland: true, landcolor: css("--land"),
+      bgcolor: "rgba(0,0,0,0)", lataxis: { range: [-56, 84] }, resolution: 50,
     },
-    hoverlabel: { bgcolor: css("--surface"), bordercolor: css("--border"), font: { color: css("--text") } },
+    hoverlabel: { bgcolor: css("--surface"), bordercolor: css("--border"), font: { color: ink, family: "Manrope, sans-serif" } },
     dragmode: false,
   };
-  Plotly.react("map", [trace, sel], layout, {
-    displayModeBar: false, responsive: true,
-    topojsonURL: "topojson/",
+  Plotly.react("map", [trace, outline(rgba(ink, 0.12), 7), outline(rgba(ink, 0.22), 3.5), outline(ink, 1.1)], layout, {
+    displayModeBar: false, responsive: true, topojsonURL: "topojson/",
   });
+  if (!mapReady) {
+    mapReady = true;
+    $("map").on("plotly_click", ev => {
+      const loc = ev.points && ev.points[0] && ev.points[0].location;
+      if (loc && byMap[loc]) { state.cnt = byMap[loc]; update(); }
+    });
+  }
   $("mapHint").textContent = state.mode === "pred"
-    ? `Колір = прогнозований бал дитини з умовами: ${L.edu[state.edu]}, ${L.wealth[state.wealth]}` +
-      (state.useCulture ? `, культурний капітал ${L.culture[state.culture]}.` : ".") + " Сірі країни не брали участі в PISA або не мають даних."
+    ? `Колір = прогнозований бал дитини з умовами: освіта батьків ${L.edu[state.edu]}, економічний капітал ${L.wealth[state.wealth]}` +
+      (state.useCulture ? `, культурний капітал ${L.culture[state.culture]}.` : ".")
     : "Колір = фактичний середній бал з математики всіх учнів країни.";
 }
 
@@ -276,7 +464,7 @@ function drawCountry() {
   const card = $("countryCard");
   if (!m) {
     card.innerHTML = `<div class="country-head"><h3>${nm(c)}</h3><span class="pill">середній бал ${Math.round(d.mean)}</span></div>
-      <p class="warn">Для цієї країни в даних немає освіти батьків або достатку, тому прогноз порахувати неможливо.</p>`;
+      <p class="warn">Для цієї країни в даних немає освіти батьків або економічного капіталу, тому прогноз порахувати неможливо.</p>`;
     return;
   }
   const p = predict(d, state.edu, state.wealth, state.culture);
@@ -285,20 +473,20 @@ function drawCountry() {
   const cultureGap = state.useCulture ? m.culture[3] - m.culture[0] : null;
   const fmt = v => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v));
   const winner = wealthGap > eduGap
-    ? `У цій країні <b>достаток важить більше</b>, ніж освіта батьків.`
-    : `У цій країні <b>освіта батьків важить більше</b>, ніж достаток.`;
+    ? `У цій країні <b>гроші важать більше</b>, ніж освіта батьків.`
+    : `У цій країні <b>освіта батьків важить більше</b>, ніж гроші.`;
 
   const warns = [];
   if (d.edu_share[state.edu] < 0.05)
     warns.push(`Лише ${(d.edu_share[state.edu] * 100).toFixed(1)}% учнів у цій країні мають батьків з освітою «${L.edu[state.edu]}», тому прогноз для цієї групи неточний.`);
-  const ITEMS = { wealth: "достатку (машини, ванни, туалети)", culture: "культурного капіталу (книжки, інструменти, мистецтво)" };
+  const ITEMS = { wealth: "економічного капіталу (машини, ванни, туалети)", culture: "культурного капіталу (книжки, інструменти, мистецтво)" };
   for (const k of ["wealth", "culture"])
     if (d.items[k] < 3)
       warns.push(`У цій країні в анкеті було лише ${d.items[k]} з 3 питань для індексу ${ITEMS[k]}, тож порівнювати його з іншими країнами треба обережно.`);
   if (d.n_model / d.n < 0.7)
-    warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, достаток або культурний капітал, тож результат може бути зміщеним.`);
+    warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, економічний або культурний капітал, тож результат може бути зміщеним.`);
 
-  // Теплова карта: достаток (рядки) × освіта (стовпці) при поточному культурному капіталі
+  // Теплова карта: економічний капітал (рядки) × освіта (стовпці) при поточному культурному капіталі
   let heat = `<table class="heat"><thead><tr><th></th>${L.edu.map(e => `<th>${e.split(" (")[0]}</th>`).join("")}</tr></thead><tbody>`;
   for (let w = 3; w >= 0; w--) {
     heat += `<tr><th class="rowh">${L.wealth[w]}</th>`;
@@ -322,7 +510,7 @@ function drawCountry() {
         <div class="big">${Math.round(p)} <small>балів</small></div>
         <div class="compare">
           <div><b>${fmt(wealthGap)}</b><span>від найбідніших 25% до найбагатших 25% (освіта й культура ті самі)</span></div>
-          <div><b>${fmt(eduGap)}</b><span>від базової до вищої освіти батьків (достаток і культура ті самі)</span></div>
+          <div><b>${fmt(eduGap)}</b><span>від базової до вищої освіти батьків (гроші й культура ті самі)</span></div>
           ${cultureGap === null ? `<div><b>—</b><span>культурний капітал зараз не враховується</span></div>`
             : `<div><b>${fmt(cultureGap)}</b><span>від найнижчого до найвищого культурного капіталу (решта та сама)</span></div>`}
         </div>
@@ -330,12 +518,12 @@ function drawCountry() {
         ${warns.map(w => `<div class="warn">${w}</div>`).join("")}
       </div>
       <div>
-        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Прогноз для всіх комбінацій${state.useCulture ? ` (культурний капітал: ${L.culture[state.culture]})` : ""}. Рядки — достаток, стовпці — освіта батьків. Натисніть клітинку, щоб обрати її.</div>
-        ${heat}
+        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Прогноз для всіх комбінацій${state.useCulture ? ` (культурний капітал: ${L.culture[state.culture]})` : ""}. Рядки — економічний капітал, стовпці — освіта батьків. Натисніть клітинку, щоб обрати її.</div>
+        <div class="heat-wrap">${heat}</div>
       </div>
     </div>`;
   card.querySelectorAll("td[data-e]").forEach(td => td.addEventListener("click", () => {
-    state.edu = +td.dataset.e; state.wealth = +td.dataset.w; syncInputs(); update();
+    state.edu = +td.dataset.e; state.wealth = +td.dataset.w; update();
   }));
 }
 
@@ -347,18 +535,22 @@ function drawFindings() {
   });
   const w1 = wins(false), w2 = wins(true);
   const cult = full.filter(c => D.countries[c].culture[3] > D.countries[c].wealth[3]);
-  const top = w1.sort((a, b) => (D.countries[b].wealth[3] - D.countries[b].edu[2]) - (D.countries[a].wealth[3] - D.countries[a].edu[2])).slice(0, 6);
+  const top = [...w1].sort((a, b) => (D.countries[b].wealth[3] - D.countries[b].edu[2]) - (D.countries[a].wealth[3] - D.countries[a].edu[2])).slice(0, 6);
   $("findings").innerHTML = `
     <p>Наша гіпотеза: <b>достаток батьків впливає на результати дитини сильніше, ніж їхня освіта.</b></p>
-    <p>Якщо порівнювати дітей з однаковою освітою батьків і однаковим культурним капіталом, то перехід від найбідніших 25% сімей до найбагатших 25% дає більше балів, ніж перехід від базової до вищої освіти батьків, лише у <b>${w1.length} з ${full.length}</b> країн. Якщо культурний капітал не враховувати, таких країн <b>${w2.length}</b>.</p>
-    <p>Натомість культурний капітал (книжки, інструменти, мистецтво) важить більше, ніж гроші, у <b>${cult.length} з ${full.length}</b> країн.</p>
+    <div class="stats">
+      <div><b>${w1.length} з ${full.length}</b><span>країн, де гроші важать більше, ніж освіта батьків</span></div>
+      <div><b>${full.length - w1.length} з ${full.length}</b><span>країн, де освіта батьків важить більше, ніж гроші</span></div>
+      <div><b>${cult.length} з ${full.length}</b><span>країн, де культурний капітал важить більше, ніж гроші</span></div>
+    </div>
+    <p>Ми порівнювали дітей з однаковою освітою батьків і однаковим культурним капіталом. Перехід від найбідніших 25% сімей до найбагатших 25% дає більше балів, ніж перехід від базової до вищої освіти батьків, лише у <b>${w1.length} з ${full.length}</b> країн. Якщо культурний капітал не враховувати, таких країн <b>${w2.length}</b>.</p>
     <p>Тобто в більшості країн гіпотеза <b>не підтверджується</b>: освіта батьків і культурний капітал сім'ї пов'язані з балами сильніше, ніж речі й гроші. Але є країни, де гроші важать більше за освіту: ${top.map(nm).join(", ")}. Це переважно країни з нижчим доходом, де від статків сім'ї залежить, чи є в дитини взагалі доступ до якісної школи.</p>
     <p class="hint">Цей текст згенеровано автоматично з даних. Група може переписати висновки своїми словами.</p>`;
 }
 
 function syncInputs() {
   ["edu", "wealth", "culture"].forEach(k => { $(k).value = state[k]; });
-  $("eduVal").textContent = L.edu[state.edu];
+  $("eduVal").textContent = L.edu[state.edu].split(" (")[0];
   $("wealthVal").textContent = L.wealth[state.wealth];
   $("cultureVal").textContent = L.culture[state.culture];
   $("culture").disabled = !state.useCulture;
@@ -375,14 +567,37 @@ $("modePred").addEventListener("click", () => { state.mode = "pred"; update(); }
 $("modeMean").addEventListener("click", () => { state.mode = "mean"; update(); });
 $("countrySel").addEventListener("change", e => { state.cnt = e.target.value; update(); });
 
+// Панель умов: згорнути / розгорнути
+function setDrawer(open) {
+  $("drawer").classList.toggle("closed", !open);
+  $("openDrawer").hidden = open;
+  drawMap();
+}
+if (window.innerWidth <= 760) { $("drawer").classList.add("closed"); $("openDrawer").hidden = false; }
+$("closeDrawer").addEventListener("click", () => setDrawer(false));
+$("openDrawer").addEventListener("click", () => setDrawer(true));
+
+// Вкладки (#intro, #map, #findings, #solutions, #method)
+const PAGES = ["intro", "map", "findings", "solutions", "method"];
+function route() {
+  const page = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : "intro";
+  PAGES.forEach(p => { $("page-" + p).hidden = p !== page; });
+  document.querySelectorAll("nav.tabs a").forEach(a => a.classList.toggle("on", a.dataset.page === page));
+  if (page === "map") { drawMap(); if (mapReady) Plotly.Plots.resize("map"); }
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+// Міні-шкала кольорів на вступі
+$("miniScale").innerHTML = [[380, "низький"], [450, "середній"], [520, "високий"]]
+  .map(([v, t]) => `<div style="background:${colorFor(v)};color:${inkFor(v)}">${v}<small>${t}</small></div>`).join("");
 $("legendBar").style.background = `linear-gradient(to right, ${css("--bad")}, ${css("--mid")}, ${css("--good")})`;
+
 fillSelect();
 drawFindings();
-update();
-$("map").on("plotly_click", ev => {
-  const loc = ev.points && ev.points[0] && ev.points[0].location;
-  if (loc && byMap[loc]) { state.cnt = byMap[loc]; update(); }
-});
+syncInputs();
+drawCountry();
+route();
 </script>
 </body>
 </html>
