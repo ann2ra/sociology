@@ -63,13 +63,14 @@ a { color: var(--accent); }
   border-bottom: 1px solid var(--border);
 }
 .topbar .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; flex-wrap: wrap; }
-.brand { font-family: var(--font-display); font-weight: 700; font-size: 15px; white-space: nowrap; }
-.brand span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 2px;
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 15px; white-space: nowrap; text-decoration: none; color: var(--text); }
+.brand span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px;
   background: linear-gradient(90deg, var(--bad), var(--mid), var(--good)); }
 nav.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-left: auto; }
+nav.tabs::-webkit-scrollbar { display: none; }
 nav.tabs a {
   text-decoration: none; color: var(--text-2); font-weight: 600; font-size: 14px;
-  padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+  padding: 7px 12px; border-radius: 999px; white-space: nowrap; transition: background .15s, color .15s;
 }
 nav.tabs a:hover { color: var(--text); background: var(--border); }
 nav.tabs a.on { background: var(--text); color: var(--bg); }
@@ -87,9 +88,11 @@ main.page[hidden] { display: none !important; }
 .btn {
   display: inline-flex; align-items: center; gap: 8px; font: 600 16px var(--font-body);
   padding: 12px 20px; border-radius: 999px; border: 0; cursor: pointer; text-decoration: none;
-  background: var(--text); color: var(--bg);
+  background: var(--text); color: var(--bg); transition: opacity .15s, transform .15s;
 }
+.btn:hover { opacity: .9; }
 .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn.ghost:hover { background: var(--border); }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
 .hero-card .lbl { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
@@ -114,7 +117,7 @@ main.page[hidden] { display: none !important; }
   position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
   overflow: hidden; height: clamp(460px, 74vh, 780px);
 }
-#map { position: absolute; inset: 0; }
+#map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .drawer {
   position: absolute; top: 12px; left: 12px; bottom: 12px; width: 310px; z-index: 5;
   background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow);
@@ -125,15 +128,17 @@ main.page[hidden] { display: none !important; }
 .drawer h2, .drawer h4 { font-size: 13px; margin: 0; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); font-family: var(--font-body); font-weight: 700; }
 .drawer h4 { margin: 18px 0 10px; }
 .icon-btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 6px 12px; font: 600 13px var(--font-body); cursor: pointer; }
+.icon-btn:hover { background: var(--bg); }
 .open-btn { position: absolute; top: 12px; left: 12px; z-index: 4; box-shadow: var(--shadow); padding: 10px 16px; font-size: 14px; }
 .open-btn[hidden] { display: none; }
 label.ctl { display: block; margin-bottom: 16px; }
 label.ctl .row { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--text-2); font-weight: 600; }
 label.ctl .val { color: var(--text); font-weight: 700; text-align: right; }
 .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
-input[type=range] { width: 100%; accent-color: var(--accent); margin-top: 6px; }
-select { width: 100%; font: inherit; font-size: 15px; padding: 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
-.toggle { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--text-2); line-height: 1.4; }
+input[type=range] { width: 100%; accent-color: var(--accent); margin-top: 6px; cursor: pointer; }
+select { width: 100%; font: inherit; font-size: 15px; padding: 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.toggle { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--text-2); line-height: 1.4; cursor: pointer; }
+.toggle input { margin-top: 3px; accent-color: var(--accent); cursor: pointer; }
 .seg { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 .seg button { flex: 1; font: 600 13px var(--font-body); padding: 8px 6px; border: 0; background: transparent; color: var(--text-2); cursor: pointer; }
 .seg button.on { background: var(--text); color: var(--bg); }
@@ -151,7 +156,7 @@ select { width: 100%; font: inherit; font-size: 15px; padding: 8px; border-radiu
   .drawer { position: static; width: auto; box-shadow: none; margin-bottom: 12px; }
   .drawer.closed { display: none; }
   .open-btn { position: static; margin-bottom: 12px; }
-  .map-area { position: relative; height: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .map-area { position: relative; height: 340px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
   .legend-box { position: static; width: auto; margin-top: 8px; }
 }
 @media (min-width: 761px) { .map-area { position: absolute; inset: 0; } }
@@ -176,30 +181,124 @@ select { width: 100%; font: inherit; font-size: 15px; padding: 8px; border-radiu
 .heat-wrap { overflow-x: auto; }
 table.heat { border-collapse: separate; border-spacing: 3px; width: 100%; font-variant-numeric: tabular-nums; }
 table.heat th { font-size: 12px; font-weight: 600; color: var(--text-2); padding: 4px; }
-table.heat td { text-align: center; font-weight: 700; padding: 12px 4px; border-radius: 8px; cursor: pointer; }
-table.heat td.sel { box-shadow: inset 0 0 0 2px var(--text); }
+table.heat td { text-align: center; font-weight: 700; padding: 12px 4px; border-radius: 8px; cursor: pointer; transition: transform .1s; }
+table.heat td:hover { transform: scale(1.02); }
+table.heat td.sel { box-shadow: inset 0 0 0 2.5px var(--text); }
 table.heat th.rowh { text-align: right; white-space: nowrap; }
 
-/* Текстові сторінки */
-.prose { max-width: 820px; }
-.prose h1 { font-size: clamp(26px, 4vw, 40px); margin: 0 0 16px; line-height: 1.12; }
-.prose h2 { font-size: 20px; margin: 32px 0 8px; }
-.prose p, .prose li { color: var(--text-2); }
+/* Текстові сторінки та Рішення */
+.prose { max-width: 860px; }
+.prose-wide { max-width: 1120px; }
+.prose h1, .prose-wide h1 { font-size: clamp(26px, 4vw, 42px); margin: 0 0 16px; line-height: 1.12; }
+.prose h2, .prose-wide h2 { font-size: 22px; margin: 36px 0 12px; }
+.prose p, .prose li, .prose-wide p, .prose-wide li { color: var(--text-2); }
 .prose li { margin-bottom: 8px; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-@media (max-width: 700px) { .stats { grid-template-columns: 1fr; } }
-.stats div { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
-.stats b { font-family: var(--font-display); font-size: 30px; display: block; font-variant-numeric: tabular-nums; }
-.stats span { font-size: 14px; color: var(--text-2); }
-.todo { border: 2px dashed var(--border); border-radius: 14px; padding: 16px; color: var(--muted); }
+@media (max-width: 760px) { .stats { grid-template-columns: 1fr; } }
+.stats div { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+.stats b { font-family: var(--font-display); font-size: 28px; display: block; font-variant-numeric: tabular-nums; margin-bottom: 4px; color: var(--text); }
+.stats span { font-size: 14px; color: var(--text-2); display: block; line-height: 1.4; }
+.stats span b { display: inline; font-family: inherit; font-size: inherit; margin: 0; }
+.prose table.choose, .prose-wide table.choose { width: 100%; border-collapse: collapse; margin: 12px 0 8px; font-size: 15px; background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+.prose table.choose th, .prose table.choose td, .prose-wide table.choose th, .prose-wide table.choose td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.prose table.choose th, .prose-wide table.choose th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-2); background: color-mix(in srgb, var(--bg) 60%, var(--surface)); }
+.prose table.choose td:first-child, .prose-wide table.choose td:first-child { font-weight: 600; color: var(--text); width: 38%; }
+@media (max-width: 760px) { table.choose { display: block; overflow-x: auto; } }
+.prose .lead, .prose-wide .lead { font-size: 18px; color: var(--text-2); max-width: 75ch; }
+
+/* Стилі для вкладки Рішення */
+.sol-banner {
+  background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--good);
+  border-radius: 16px; padding: 18px 20px; margin: 20px 0 28px;
+}
+.sol-banner strong { color: var(--text); }
+.mech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0 28px; }
+@media (max-width: 900px) { .mech-grid { grid-template-columns: 1fr; } }
+.mech-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.mech-card .tag-top { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.mech-card h3 { font-size: 17px; margin: 0; }
+.mech-card p { font-size: 14.5px; margin: 0; color: var(--text-2); }
+.mech-card .metric { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text); font-weight: 600; }
+
+.filter-bar {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px;
+  margin: 24px 0; display: flex; flex-direction: column; gap: 12px;
+}
+.filter-bar-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filter-bar-head h3 { font-size: 15px; margin: 0; font-family: var(--font-body); text-transform: uppercase; letter-spacing: .05em; color: var(--text-2); }
+.scenario-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.scenario-btn {
+  font: 600 13.5px var(--font-body); padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--bg); color: var(--text-2);
+  cursor: pointer; transition: all .15s ease;
+}
+.scenario-btn:hover { color: var(--text); border-color: var(--text-2); }
+.scenario-btn.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+.scenario-desc { font-size: 14px; color: var(--text-2); margin: 0; padding-top: 4px; }
+
+.sol-group { margin-top: 32px; }
+.sol-group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 14px; }
+.sol-group-head h2 { margin: 0; font-size: 20px; }
+.sol-group-head span { font-size: 13.5px; color: var(--muted); }
+.sol-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 820px) { .sol-grid { grid-template-columns: 1fr; } }
+.sol-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 15px; padding: 16px 18px;
+  transition: transform .15s ease, border-color .15s ease, opacity .2s ease, box-shadow .15s ease;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.sol-card.active-pick {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.sol-card.dimmed { opacity: 0.42; }
+.sol-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sol-code {
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  padding: 3px 9px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text);
+}
+.sol-card.active-pick .sol-code { background: var(--accent); color: #fff; border-color: var(--accent); }
+.sol-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.sol-badge { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+.sol-badge.rec { background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+.sol-card h3 { font-size: 16.5px; margin: 2px 0 0; font-family: var(--font-body); font-weight: 700; color: var(--text); }
+.sol-card p { margin: 0; font-size: 14.5px; color: var(--text-2); line-height: 1.5; }
+.sol-card .evi { font-size: 12.5px; color: var(--muted); margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--border); }
+
+table.choose tr.clickable-row { cursor: pointer; transition: background .15s; }
+table.choose tr.clickable-row:hover { background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+table.choose tr.clickable-row.on { background: color-mix(in srgb, var(--accent) 13%, var(--surface)); }
+.code-pill {
+  display: inline-block; font-family: var(--font-display); font-size: 11.5px; font-weight: 700;
+  padding: 2px 7px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); margin: 1px 2px;
+}
+
+.peers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 16px 0 24px; }
+.peer-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.peer-card h4 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+.peer-card .peer-meta { font-size: 13px; color: var(--text-2); }
+.peer-card button {
+  margin-top: 6px; align-self: flex-start; font: 600 12.5px var(--font-body);
+  padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text); cursor: pointer;
+}
+.peer-card button:hover { background: var(--border); }
+
 footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
-@media (prefers-reduced-motion: reduce) { .drawer { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .drawer, .sol-card { transition: none; } }
 </style>
 </head>
 <body>
 <header class="topbar">
   <div class="wrap">
-    <div class="brand"><span></span> Гроші чи освіта?</div>
+    <a href="#intro" class="brand"><span></span> Гроші чи освіта?</a>
     <nav class="tabs" aria-label="Розділи сайту">
       <a href="#intro" data-page="intro">Вступ</a>
       <a href="#map" data-page="map">Карта</a>
@@ -219,6 +318,7 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
       <div class="btn-row">
         <a class="btn" href="#map">Відкрити карту →</a>
         <a class="btn ghost" href="#findings">Що ми знайшли</a>
+        <a class="btn ghost" href="#solutions">Які є рішення</a>
       </div>
     </div>
     <div class="hero-card" aria-hidden="true">
@@ -246,11 +346,11 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
 <!-- КАРТА -->
 <main class="page wrap" id="page-map" hidden>
   <div class="map-shell">
-    <button class="icon-btn open-btn" id="openDrawer" hidden>Умови дитини ▸</button>
+    <button type="button" class="icon-btn open-btn" id="openDrawer" hidden>Умови дитини ▸</button>
     <aside class="drawer" id="drawer" aria-label="Умови дитини">
       <div class="drawer-head">
         <h2>Умови дитини</h2>
-        <button class="icon-btn" id="closeDrawer" aria-label="Сховати панель">◂ Сховати</button>
+        <button type="button" class="icon-btn" id="closeDrawer" aria-label="Сховати панель">◂ Сховати</button>
       </div>
       <label class="ctl">
         <div class="row">Освіта батьків <span class="val" id="eduVal"></span></div>
@@ -273,8 +373,8 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
 
       <h4>Що показує карта</h4>
       <div class="seg" role="group" aria-label="Режим карти">
-        <button id="modePred" class="on">Прогноз для умов</button>
-        <button id="modeMean">Середній бал</button>
+        <button type="button" id="modePred" class="on">Прогноз для умов</button>
+        <button type="button" id="modeMean">Середній бал</button>
       </div>
 
       <h4>Країна</h4>
@@ -295,17 +395,136 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
 
 <!-- ВИСНОВКИ -->
 <main class="page wrap" id="page-findings" hidden>
-  <div class="prose">
-    <h1>Що ми знайшли</h1>
+  <div class="prose-wide">
+    <h1>Що ми знайшли (PISA 2025)</h1>
     <div id="findings"></div>
   </div>
 </main>
 
 <!-- РІШЕННЯ -->
 <main class="page wrap" id="page-solutions" hidden>
-  <div class="prose">
-    <h1>Що з цим робити</h1>
-    <div class="todo">Цей блок заповнює група. Ідеї: безкоштовне репетиторство для дітей з бідних сімей; фінансування шкіл за потребою; шкільні бібліотеки, музичні й мистецькі гуртки, програми «книжка в кожен дім» (культурний капітал можна дати дитині й поза сім'єю); приклади країн, де розрив між багатими і бідними найменший (знайдіть їх на карті).</div>
+  <div class="prose-wide">
+    <h1>Що з цим робити: ідеї для освітньої політики</h1>
+    <p class="lead">Дані PISA 2025 (636 000 учнів із повними даними у 87 країнах) показують, що освіта батьків і домашній достаток разом пояснюють лише близько <b>9,7% (~10%)</b> різниці в балах усередині країни. Інші <b>90%</b> залежать від шкіл, вчителів, мотивації, здібностей і випадку.</p>
+
+    <div class="sol-banner">
+      <strong>Головна новина для освітньої політики:</strong> результати дитини не визначені наперед її походженням. Багато дітей із найбідніших родин випереджають однолітків із найбагатших. Проте всі 16 пропозицій нижче — це <strong>гіпотези для пілотування та оцінки впливу, а не гарантовані рецепти</strong>: дані PISA точно показують, де саме виникає бар'єр, але не кажуть наперед, яке втручання спрацює найкраще у конкретній країні.
+    </div>
+
+    <h2>Три механізми, на які вказують дані</h2>
+    <p>Аналіз розділяє вплив сім'ї на три окремі канали, кожен з яких потребує власного типу інструментів:</p>
+
+    <div class="mech-grid">
+      <div class="mech-card">
+        <span class="tag-top">Механізм 1 · Напрям А</span>
+        <h3>Матеріальні умови вдома</h3>
+        <p>Там, де базові умови життя не гарантовані, гроші купують час, спокійне місце для занять, інтернет, транспорт і доступ до сильнішої школи.</p>
+        <div class="metric">У третині країн із найнижчими ресурсами достаток важить більше за освіту в <b>20 із 29 країн</b> (коеф. 0.19 проти 0.15).</div>
+      </div>
+      <div class="mech-card">
+        <span class="tag-top">Механізм 2 · Напрям Б</span>
+        <h3>Домашнє навчальне середовище</h3>
+        <p>Велика частина «ефекту багатства» — це насправді культурний і навчальний капітал удома (книжки, звичка читати, допомога з уроками), який школа може частково компенсувати.</p>
+        <div class="metric">Книжки вдома — найсильніший окремий чинник у <b>47 із 82 країн</b> (середній коеф. <b>0.195</b> проти 0.110 для матеріальних речей).</div>
+      </div>
+      <div class="mech-card">
+        <span class="tag-top">Механізм 3 · Напрями В і Г</span>
+        <h3>Освіта та залученість батьків</h3>
+        <p>Освічені батьки передають мову, академічні очікування та вміння орієнтуватися в освітній системі. Цей фактор домінує у більшості середніх і заможних країн.</p>
+        <div class="metric">Освіта батьків сильніша у <b>59 із 87 країн</b> (+18 балів на 1 СВ проти +12.5 для індексу достатку HOMEPOS).</div>
+      </div>
+    </div>
+
+    <!-- Інтерактивний фільтр сценаріїв -->
+    <div class="filter-bar" aria-label="Підбір рішень за ситуацією">
+      <div class="filter-bar-head">
+        <h3>Інтерактивний підбір за контекстом («Що обирати і коли»)</h3>
+        <label class="toggle" style="margin:0">
+          <input type="checkbox" id="solHideOthers">
+          <span>Ховати неосновні кроки для обраного сценарію</span>
+        </label>
+      </div>
+      <div class="scenario-pills" id="scenarioPills">
+        <button type="button" class="scenario-btn on" data-scen="all">Усі 16 рішень</button>
+        <button type="button" class="scenario-btn" data-scen="low_res">Низький рівень ресурсів (гроші &gt; освіта)</button>
+        <button type="button" class="scenario-btn" data-scen="mid_high">Середній / високий рівень ресурсів (освіта &gt; гроші)</button>
+        <button type="button" class="scenario-btn" data-scen="budget">Обмежений бюджет</button>
+        <button type="button" class="scenario-btn" data-scen="long_term">Довгострокова стратегія</button>
+      </div>
+      <p class="scenario-desc" id="scenarioDesc">Показано всі 16 гіпотез політики у 5 напрямах (А–Ґ). Натисніть на сценарій вище або на рядок у таблиці внизу, щоб підсвітити найобґрунтованіші кроки.</p>
+    </div>
+
+    <!-- Контейнер для карток рішень А1–Ґ16 -->
+    <div id="solutionsList"></div>
+
+    <h2>Матриця вибору: що обирати і коли</h2>
+    <p>Натисніть на будь-який рядок таблиці, щоб підсвітити відповідний пакет рішень у переліку вище:</p>
+    <table class="choose" id="chooseTable">
+      <thead>
+        <tr>
+          <th>Ситуація / контекст країни</th>
+          <th>Найобґрунтованіші кроки</th>
+          <th>Чому саме цей фокус (за даними PISA 2025)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable-row" data-scen="low_res">
+          <td>Країна з низьким рівнем ресурсів, де гроші важать більше за освіту</td>
+          <td>
+            <span class="code-pill">А1</span><span class="code-pill">А2</span><span class="code-pill">А3</span><span class="code-pill">А4</span>
+            (набір, харчування, гуртки, фінансування за потребою),
+            <span class="code-pill">Б5</span> (репетиторство), <span class="code-pill">Б7</span> (дошкілля)
+          </td>
+          <td>У бідних країнах навіть вища освіта батьків у найбідніших 20% сімей дає лише <b>+6 балів</b> переваги (проти +53 у багатих), бо базові матеріальні бар'єри блокують реалізацію освітнього потенціалу.</td>
+        </tr>
+        <tr class="clickable-row" data-scen="mid_high">
+          <td>Країна із середнім або високим рівнем ресурсів, де важливіша освіта батьків</td>
+          <td>
+            <span class="code-pill">Б5</span> <span class="code-pill">Б6</span> <span class="code-pill">Б8</span>
+            <span class="code-pill">В9</span><span class="code-pill">В10</span><span class="code-pill">В11</span>
+            <span class="code-pill">Г12</span><span class="code-pill">Г13</span>
+          </td>
+          <td>Коли базові матеріальні умови забезпечені майже для всіх (у середніх і багатих країнах освіта переважає у <b>50 із 58 країн</b>), вирішальним стає те, чи може сім'я або школа допомогти з навчанням.</td>
+        </tr>
+        <tr class="clickable-row" data-scen="budget">
+          <td>Обмежений бюджет</td>
+          <td>
+            <span class="code-pill">Б6</span> <span class="code-pill">Б8</span> <span class="code-pill">В11</span> (дешевші у впровадженні) та вибіркове <span class="code-pill">Б5</span> для тих, кому це найпотрібніше
+          </td>
+          <td>Книжкові програми, рання діагностика наприкінці початкової школи й проста комунікація з родинами потребують мінімальних витрат, а дороге тьюторство концентрується лише на учнях з найбільшим відставанням.</td>
+        </tr>
+        <tr class="clickable-row" data-scen="long_term">
+          <td>Довгострокова стратегія</td>
+          <td>
+            <span class="code-pill">Б7</span> <span class="code-pill">В10</span> <span class="code-pill">Г12</span> <span class="code-pill">Г14</span> <span class="code-pill">Ґ15</span><span class="code-pill">Ґ16</span>
+          </td>
+          <td>Ефект накопичується з роками: дошкілля, освіта дорослих, десегрегація шкіл і оцінка доданої вартості змінюють саму структуру освітньої нерівності між поколіннями.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Контекст для України та сусідніх країн</h2>
+    <p>Згідно зі звітом (Розділи 8 і 10), висновки для України варто розглядати у порівнянні з країнами регіону зі схожим рівнем ресурсів: <b>Молдовою, Грузією, Вірменією, Румунією, Польщею та Болгарією</b>. Ви можете одразу порівняти їхні показники та перейти до будь-якої з них на інтерактивній карті:</p>
+    <div class="peers-grid" id="peersGrid"></div>
+
+    <h2>Наступні кроки (як переходити від даних до дій)</h2>
+    <div class="steps" style="margin-top:16px">
+      <div class="step">
+        <b class="n">Крок 1 · Глибинна діагностика</b>
+        <h3>Порівняння з референтними країнами</h3>
+        <p>Зіставити профіль конкретної країни (наприклад, України) із сусідами у вибірці PISA за розподілом квінтилів достатку та вразливих груп або доповнити аналіз національними даними (НМТ, моніторинги якості освіти).</p>
+      </div>
+      <div class="step">
+        <b class="n">Крок 2 · Перевірка стійкості</b>
+        <h3>Тестування через ESCS та ВВП</h3>
+        <p>Перевірити стабільність висновків з використанням композитного індексу соціально-економічного статусу (ESCS) та макроекономічних показників доходу країни (ВВП на душу населення), яких немає у базовому файлі учнів.</p>
+      </div>
+      <div class="step">
+        <b class="n">Крок 3 · Дизайн пілоту</b>
+        <h3>План впровадження та оцінки</h3>
+        <p>Для обраної ідеї з переліку А1–Ґ16 розробити детальний паспорт пілоту: кошторис і бюджет, чітку цільову групу, індикатори успіху та протокол оцінки впливу (RCT або порівняння схожих шкіл) перед масштабуванням.</p>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -315,19 +534,20 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
     <h1>Як ми рахували і чого дані не кажуть</h1>
     <h2>Розрахунки</h2>
     <ul>
-      <li><b>Дані:</b> OECD PISA 2025, 747 068 учнів з 89 країн і регіонів.</li>
-      <li><b>Модель:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·економічний капітал + b3·культурний капітал</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT.</li>
-      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED): базова = до 9 класів, середня = школа / коледж, вища = університет.</li>
+      <li><b>Дані:</b> OECD PISA 2025, 747 068 учнів з 89 країн і економік (повні дані про освіту батьків і достаток є для 636 000 учнів, або 85%, у 87 країнах).</li>
+      <li><b>Модель на карті:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·економічний капітал + b3·культурний капітал</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT. У міжкраїнних підсумках кожна країна має однакову вагу, щоб великі країни не «заглушали» малі.</li>
+      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED / PAREDINT у роках навчання: 6, 9, 12, 14, 16 років): базова = до 9 класів, середня = школа / коледж, вища = університет.</li>
       <li><b>Економічний капітал</b> — наш індекс з трьох «грошових» речей удома: кількість автомобілів (ST251Q01JA), кімнат з ванною (ST251Q03JA) і кімнат з туалетом (ST251Q04JA). Беремо середнє стандартизованих значень і ділимо учнів на чверті (квартилі) в межах країни.</li>
       <li><b>Культурний капітал</b> (за П. Бурдьє) — такий самий індекс з кількості книжок (ST255Q01JA), музичних інструментів (ST251Q06JA) і творів мистецтва (ST251Q07JA) вдома, теж поділений на чверті.</li>
-      <li><b>Чому два індекси, а не офіційний HOMEPOS:</b> HOMEPOS змішує гроші й культуру в одне число. У даних інструменти й мистецтво пов'язані з книжками (кореляція 0.28–0.30) сильніше, ніж з машинами чи ваннами (0.15–0.22), тож ми розділили речі на «грошові» й «культурні».</li>
+      <li><b>Чому два індекси, а не офіційний HOMEPOS:</b> HOMEPOS змішує гроші й культуру в одне число. Якщо розділити HOMEPOS на складові (82 країни з повними даними), середній стандартизований коефіцієнт книжок вдома становить <b>0.195</b>, освіти батьків — <b>0.162</b>, а суто матеріальних речей — <b>0.110</b>.</li>
     </ul>
     <h2>Обмеження</h2>
     <ul>
-      <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Розкид усередині кожної групи великий: модель пояснює лише 10–40% різниці між учнями (R²).</li>
-      <li><b>Кореляція ≠ причинність.</b> Книжки не «роблять» дитину розумнішою: вони показують культурне середовище сім'ї, тобто звичку читати, цінність освіти тощо.</li>
-      <li><b>Індекси грубі:</b> лише 3 питання в кожному, тож багато учнів мають однакове значення. Учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на карті є позначка.</li>
-      <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Ріки немає даних про освіту батьків, тож для них показано лише середній бал.</li>
+      <li><b>Кореляція ≠ причинність.</b> Дані не доводять, що саме по собі підвищення доходу чи формальної освіти батьків автоматично підніме бали дитини. Приховані фактори (здібності, мотивація) можуть передаватися в родині паралельно.</li>
+      <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Обидва фактори разом пояснюють близько 10% різниці в балах усередині країни (а з урахуванням розширених категорій — до 11–18%).</li>
+      <li><b>Пропущені дані не є випадковими.</b> Дані про освіту батьків відсутні у 14,6% учнів, і ці учні набирають у середньому на 40 балів менше за середній показник своєї країни (тоді як ті, хто відповів, — на 7 балів більше). Отже, найбільш вразливі діти недопредставлені, а реальні розриви, ймовірно, ще більші.</li>
+      <li><b>Індекси грубі:</b> і наші індекси, і HOMEPOS спираються на відповіді 15-річного підлітка про речі вдома, а не на реальний дохід чи активи сім'ї. У наших індексах лише по 3 питання, тож учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на карті є позначка.</li>
+      <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Рики немає даних про освіту батьків, тож для них показано лише середній бал.</li>
     </ul>
   </div>
 </main>
@@ -337,6 +557,10 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
 <script src="data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
 <script>
+if (!window.PISA) {
+  document.body.insertAdjacentHTML("afterbegin", '<p style="padding:16px;background:#fff3d1;color:#6b4e00;margin:0">Не вдалося завантажити дані (data.js). Відкривайте сайт за посиланням GitHub Pages або разом з папкою docs.</p>');
+}
+
 const D = window.PISA;
 const L = D.levels;
 const MIN_C = 350, MAX_C = 550;
@@ -363,11 +587,13 @@ const NAMES = {
 };
 const nm = c => NAMES[c] || c;
 
-const state = { edu: 1, wealth: 1, culture: 1, useCulture: true, mode: "pred", cnt: "QUA" };
+const codes = Object.keys(D.countries).sort((a, b) => nm(a).localeCompare(nm(b), "uk"));
+const defaultCnt = D.countries["QUA"] ? "QUA" : codes[0];
+const state = { edu: 1, wealth: 1, culture: 1, useCulture: true, mode: "pred", cnt: defaultCnt, solScen: "all", solHideOthers: false };
 const $ = id => document.getElementById(id);
 
 function model(c) {
-  if (!c.a) return null;
+  if (!c || c.a == null) return null;
   if (state.useCulture) return c;
   return { ...c.noculture, culture: [0, 0, 0, 0] };
 }
@@ -378,7 +604,11 @@ function predict(c, edu, wealth, culture) {
 }
 
 // Колір: червоний (низький бал) → жовтий (середній) → зелений (високий)
-function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+function hexToRgb(h) {
+  const clean = h.replace("#", "").trim();
+  const n = parseInt(clean, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
 function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 function colorFor(score) {
   const bad = hexToRgb(css("--bad")), mid = hexToRgb(css("--mid")), good = hexToRgb(css("--good"));
@@ -399,17 +629,29 @@ function colorscale() {
 }
 function rgba(hex, a) { const [r, g, b] = hexToRgb(hex); return `rgba(${r},${g},${b},${a})`; }
 
-const codes = Object.keys(D.countries).sort((a, b) => nm(a).localeCompare(nm(b), "uk"));
 const byMap = {};
-codes.forEach(c => { byMap[D.countries[c].map] = c; });
+codes.forEach(c => {
+  const iso = D.countries[c].map;
+  if (!byMap[iso] || c === iso || c === "QUA" || c === "QCI") byMap[iso] = c;
+});
 
 function fillSelect() {
   $("countrySel").innerHTML = codes.map(c => `<option value="${c}">${nm(c)}</option>`).join("");
 }
 
-let mapReady = false;
+let mapBound = false;
 function drawMap() {
   if ($("page-map").hidden) return;
+  $("mapHint").textContent = state.mode === "pred"
+    ? `Колір = прогнозований бал дитини з умовами: освіта батьків ${L.edu[state.edu]}, економічний капітал ${L.wealth[state.wealth]}` +
+      (state.useCulture ? `, культурний капітал ${L.culture[state.culture]}.` : ".")
+    : "Колір = фактичний середній бал з математики всіх учнів країни.";
+
+  if (typeof Plotly === "undefined") {
+    $("map").innerHTML = `<div style="padding:24px;color:var(--text-2)">Бібліотека карти (Plotly) не завантажилася. Перевірте підключення до інтернету або скористайтеся вибором країни зі списку ліворуч.</div>`;
+    return;
+  }
+
   const locs = [], z = [], text = [];
   codes.forEach(c => {
     const d = D.countries[c];
@@ -423,7 +665,6 @@ function drawMap() {
     hoverinfo: "text", zmin: MIN_C, zmax: MAX_C, colorscale: colorscale(), showscale: false,
     marker: { line: { color: css("--surface"), width: 0.5 } },
   };
-  // Обведення обраної країни: м'яке світіння + тонка лінія
   const selLoc = D.countries[state.cnt].map;
   const outline = (color, width) => ({
     type: "choropleth", locationmode: "ISO-3", locations: [selLoc], z: [1],
@@ -431,7 +672,6 @@ function drawMap() {
     marker: { line: { color, width } },
   });
   const ink = css("--text");
-  // На широкому екрані відкрита панель займає ліву частину — зсуваємо мапу праворуч
   const drawerOpen = !$("drawer").classList.contains("closed") && window.innerWidth > 760;
   const layout = {
     margin: { l: drawerOpen ? 330 : 0, r: 0, t: 8, b: 8 }, paper_bgcolor: "rgba(0,0,0,0)",
@@ -443,20 +683,21 @@ function drawMap() {
     hoverlabel: { bgcolor: css("--surface"), bordercolor: css("--border"), font: { color: ink, family: "Manrope, sans-serif" } },
     dragmode: false,
   };
+
   Plotly.react("map", [trace, outline(rgba(ink, 0.12), 7), outline(rgba(ink, 0.22), 3.5), outline(ink, 1.1)], layout, {
-    displayModeBar: false, responsive: true, topojsonURL: "topojson/",
+    displayModeBar: false, responsive: true, topojsonURL: "topojson/"
+  }).then(() => {
+    const mapEl = $("map");
+    if (!mapBound && mapEl && typeof mapEl.on === "function") {
+      mapBound = true;
+      mapEl.on("plotly_click", ev => {
+        const loc = ev.points && ev.points[0] && ev.points[0].location;
+        if (loc && byMap[loc]) { state.cnt = byMap[loc]; update(); }
+      });
+    }
+  }).catch(err => {
+    console.warn("Помилка відображення карти:", err);
   });
-  if (!mapReady) {
-    mapReady = true;
-    $("map").on("plotly_click", ev => {
-      const loc = ev.points && ev.points[0] && ev.points[0].location;
-      if (loc && byMap[loc]) { state.cnt = byMap[loc]; update(); }
-    });
-  }
-  $("mapHint").textContent = state.mode === "pred"
-    ? `Колір = прогнозований бал дитини з умовами: освіта батьків ${L.edu[state.edu]}, економічний капітал ${L.wealth[state.wealth]}` +
-      (state.useCulture ? `, культурний капітал ${L.culture[state.culture]}.` : ".")
-    : "Колір = фактичний середній бал з математики всіх учнів країни.";
 }
 
 function drawCountry() {
@@ -477,16 +718,17 @@ function drawCountry() {
     : `У цій країні <b>освіта батьків важить більше</b>, ніж гроші.`;
 
   const warns = [];
-  if (d.edu_share[state.edu] < 0.05)
+  if (d.edu_share && d.edu_share[state.edu] < 0.05)
     warns.push(`Лише ${(d.edu_share[state.edu] * 100).toFixed(1)}% учнів у цій країні мають батьків з освітою «${L.edu[state.edu]}», тому прогноз для цієї групи неточний.`);
   const ITEMS = { wealth: "економічного капіталу (машини, ванни, туалети)", culture: "культурного капіталу (книжки, інструменти, мистецтво)" };
-  for (const k of ["wealth", "culture"])
-    if (d.items[k] < 3)
-      warns.push(`У цій країні в анкеті було лише ${d.items[k]} з 3 питань для індексу ${ITEMS[k]}, тож порівнювати його з іншими країнами треба обережно.`);
-  if (d.n_model / d.n < 0.7)
+  if (d.items) {
+    for (const k of ["wealth", "culture"])
+      if (d.items[k] < 3)
+        warns.push(`У цій країні в анкеті було лише ${d.items[k]} з 3 питань для індексу ${ITEMS[k]}, тож порівнювати його з іншими країнами треба обережно.`);
+  }
+  if (d.n && d.n_model / d.n < 0.7)
     warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, економічний або культурний капітал, тож результат може бути зміщеним.`);
 
-  // Теплова карта: економічний капітал (рядки) × освіта (стовпці) при поточному культурному капіталі
   let heat = `<table class="heat"><thead><tr><th></th>${L.edu.map(e => `<th>${e.split(" (")[0]}</th>`).join("")}</tr></thead><tbody>`;
   for (let w = 3; w >= 0; w--) {
     heat += `<tr><th class="rowh">${L.wealth[w]}</th>`;
@@ -528,24 +770,332 @@ function drawCountry() {
 }
 
 function drawFindings() {
-  const full = codes.filter(c => D.countries[c].a);
+  const full = codes.filter(c => D.countries[c].a != null);
   const wins = (useNb) => full.filter(c => {
     const d = D.countries[c], m = useNb ? d.noculture : d;
     return m.wealth[3] - m.wealth[0] > m.edu[2] - m.edu[0];
   });
   const w1 = wins(false), w2 = wins(true);
   const cult = full.filter(c => D.countries[c].culture[3] > D.countries[c].wealth[3]);
-  const top = [...w1].sort((a, b) => (D.countries[b].wealth[3] - D.countries[b].edu[2]) - (D.countries[a].wealth[3] - D.countries[a].edu[2])).slice(0, 6);
+  const top = [...w1].sort((a, b) => (D.countries[b].wealth[3] - D.countries[b].edu[2]) - (D.countries[a].wealth[3] - D.countries[a].edu[2])).slice(0, 8);
   $("findings").innerHTML = `
-    <p>Наша гіпотеза: <b>достаток батьків впливає на результати дитини сильніше, ніж їхня освіта.</b></p>
+    <p class="lead">Гіпотеза про те, що достаток батьків впливає на результати дитини з математики сильніше за їхню освіту, <b>підтвердилася лише частково</b>: освіта є сильнішим предиктором у більшості країн, а гроші виходять на перше місце переважно в країнах з низьким рівнем ресурсів.</p>
+
     <div class="stats">
-      <div><b>${w1.length} з ${full.length}</b><span>країн, де гроші важать більше, ніж освіта батьків</span></div>
-      <div><b>${full.length - w1.length} з ${full.length}</b><span>країн, де освіта батьків важить більше, ніж гроші</span></div>
-      <div><b>${cult.length} з ${full.length}</b><span>країн, де культурний капітал важить більше, ніж гроші</span></div>
+      <div><b>59 з 87</b><span>країн у двофакторній моделі звіту, де <b>освіта батьків</b> сильніша за достаток (у нашій 3-факторній моделі на карті — ${full.length - w1.length} з ${full.length})</span></div>
+      <div><b>28 з 87</b><span>країн, де <b>достаток (HOMEPOS)</b> важить більше за освіту батьків; 20 із них — у третині країн із найменшими ресурсами</span></div>
+      <div><b>47 з 82</b><span>країн, де <b>книжки вдома</b> (культурний капітал) є сильнішим окремим фактором, ніж освіта чи матеріальні речі</span></div>
     </div>
-    <p>Ми порівнювали дітей з однаковою освітою батьків і однаковим культурним капіталом. Перехід від найбідніших 25% сімей до найбагатших 25% дає більше балів, ніж перехід від базової до вищої освіти батьків, лише у <b>${w1.length} з ${full.length}</b> країн. Якщо культурний капітал не враховувати, таких країн <b>${w2.length}</b>.</p>
-    <p>Тобто в більшості країн гіпотеза <b>не підтверджується</b>: освіта батьків і культурний капітал сім'ї пов'язані з балами сильніше, ніж речі й гроші. Але є країни, де гроші важать більше за освіту: ${top.map(nm).join(", ")}. Це переважно країни з нижчим доходом, де від статків сім'ї залежить, чи є в дитини взагалі доступ до якісної школи.</p>
-    <p class="hint">Цей текст згенеровано автоматично з даних. Група може переписати висновки своїми словами.</p>`;
+
+    <h2>1. Порівняння сили факторів у середньому по країнах</h2>
+    <p>Якщо розглядати чисті розриви окремо, вони майже однакові: учні з найбідніших 20% сімей відстають від найбагатших 20% приблизно на <b>54 бали</b>, і так само діти батьків із базовою освітою (до 9 років навчання) відстають від дітей випускників університетів (16 років навчання) на <b>54 бали</b> — це еквівалент приблизно двох-трьох років шкільного навчання.</p>
+    <p>Проте коли обидва фактори одночасно включені в регресійну модель у межах кожної країни, освіта батьків виявляється сильнішою:</p>
+
+    <table class="choose">
+      <thead>
+        <tr>
+          <th>Показник (у середньому по 87 країнах)</th>
+          <th>Освіта батьків</th>
+          <th>Домашній достаток (HOMEPOS)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Стандартизований коефіцієнт (обидва фактори в моделі)</td>
+          <td><b>0.20</b></td>
+          <td><b>0.15</b></td>
+        </tr>
+        <tr>
+          <td>Балів з математики на 1 стандартне відхилення</td>
+          <td><b>близько 18 балів</b></td>
+          <td><b>близько 12.5 балів</b></td>
+        </tr>
+        <tr>
+          <td>Частка поясненої різниці балів (окремо, R²)</td>
+          <td><b>7.2%</b></td>
+          <td><b>5.7%</b></td>
+        </tr>
+        <tr>
+          <td>Кількість країн, де фактор є сильнішим</td>
+          <td><b>59 із 87</b></td>
+          <td><b>28 із 87</b></td>
+        </tr>
+        <tr>
+          <td>Частка учнів нижче базового порогу (~420 балів) у крайніх групах</td>
+          <td><b>74%</b> (≤9 років) проти <b>34%</b> (16 років)</td>
+          <td><b>60%</b> (найбідніші 20%) проти <b>37%</b> (найбагатші 20%)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Де гроші важливіші за освіту?</h2>
+    <p>У третині країн із найнижчим рівнем домашніх ресурсів достаток переважає освіту в <b>20 із 29 випадків</b> (середній коефіцієнт 0.19 для достатку проти 0.15 для освіти). Серед лідерів за впливом грошей: ${top.map(nm).join(", ")}.</p>
+    <p>Натомість у середній та верхній третинах країн переконливо лідирує освіта батьків (0.23 проти 0.13 та 0.23 проти 0.12), а достаток випереджає її лише у <b>8 із 58 країн</b>, зазвичай із мінімальним відривом. Практичний висновок: <b>там, де базові матеріальні умови вдома не гарантовані, головним бар'єром стають гроші; там, де базовий добробут забезпечений, вирішує здатність сім'ї підтримати навчання.</b></p>
+
+    <h2>3. Освіта і гроші підсилюють одне одного, а не конкурують</h2>
+    <ul>
+      <li><b>Найкращі результати</b> мають діти освічених і заможних батьків, а найгірші — діти малоосвічених і бідних: розрив між цими групами становить <b>79 балів</b> у середньому по всіх країнах.</li>
+      <li><b>У бідних країнах вища освіта батьків майже не рятує бідну сім'ю:</b> серед найбідніших 20% родин (Q1) діти випускників університетів випереджають дітей батьків із базовою освітою лише на <b>+6 балів</b> у бідних країнах проти <b>+53 балів</b> у ресурсних країнах.</li>
+      <li><b>Гроші без освіти теж дають обмежений ефект:</b> серед батьків із освітою до 9 класів різниця між бідними й багатими становить лише 21 бал і перестає зростати після середнього квінтиля, тоді як серед батьків з університетською освітою різниця між найбіднішими і найбагатшими сягає <b>51 бала</b>.</li>
+    </ul>
+
+    <div style="margin-top:24px">
+      <a class="btn" href="#solutions">Перейти до рішень на основі цих висновків →</a>
+    </div>`;
+}
+
+// Дані та логіка вкладки «Рішення» на основі PDF-звіту (Розділи 7, 8, 9, 10)
+const SOL_GROUPS = [
+  {
+    id: "A",
+    title: "А. Прибрати матеріальні бар'єри",
+    sub: "Пріоритет №1 там, де базові умови вдома не гарантовані й гроші важать більше за освіту",
+    items: [
+      {
+        code: "А1",
+        title: "Безкоштовний базовий «навчальний набір»",
+        desc: "Підручники, робочі зошити, базовий цифровий пристрій та доступ до інтернету для учнів, у яких їх немає вдома. Це знімає пряму фізичну перешкоду для виконання домашніх завдань.",
+        evi: "Найважливіше у 28 країнах, де достаток важить більше за освіту батьків (особливо у третині країн з низькими ресурсами).",
+        tags: ["Швидкий ефект", "Цільова підтримка"],
+        scens: ["low_res"]
+      },
+      {
+        code: "А2",
+        title: "Безкоштовне шкільне харчування",
+        desc: "Прибирає голод як фізіологічну перешкоду для концентрації на уроках і водночас вивільняє частину сімейного бюджету бідних родин.",
+        evi: "Пом'якшує депривацію у найбіднішому квінтилі (Q1), де 60% учнів не досягають базового порогу 420 балів.",
+        tags: ["Базова потреба", "Соціальний захист"],
+        scens: ["low_res"]
+      },
+      {
+        code: "А3",
+        title: "Безкоштовні гуртки та групи продовженого дня",
+        desc: "Організована допомога з домашніми завданнями та позашкільні заняття прямо у приміщенні школи. Вони замінюють те, що заможні сім'ї купують на ринку — платні гуртки, секції та приватних репетиторів.",
+        evi: "Забезпечує тихе місце для навчання та супровід дорослого, яких бракує вдома.",
+        tags: ["Шкільне середовище", "Вирівнювання шансів"],
+        scens: ["low_res"]
+      },
+      {
+        code: "А4",
+        title: "Фінансування шкіл за потребою (needs-based funding)",
+        desc: "Формула, за якою школи з більшою часткою соціально вразливих та бідних учнів отримують більше коштів у розрахунку на одного учня, а не однакову суму для всіх.",
+        evi: "Дозволяє школам у бідних районах компенсувати брак сімейних ресурсів, які самотужки батьки покрити не можуть.",
+        tags: ["Фінансова формула", "Системний перерозподіл"],
+        scens: ["low_res"]
+      }
+    ]
+  },
+  {
+    id: "B",
+    title: "Б. Замінити домашній навчальний капітал, якого бракує",
+    sub: "Школа компенсує домашнє навчальне середовище (книжки, читання, вчасну допомогу з предметами)",
+    items: [
+      {
+        code: "Б5",
+        title: "Репетиторство в малих групах у школі (small-group tutoring)",
+        desc: "Короткі регулярні заняття у групах по 2–4 учні з підготовленим тьютором для тих, хто починає відставати. Серед шкільних втручань цей інструмент має одні з найсильніших емпіричних доказів ефективності.",
+        evi: "Оскільки інструмент дорогий, при обмеженому бюджеті його варто спрямовувати вибірково на учнів із найбільшим ризиком.",
+        tags: ["Найвища доказовість", "Прицільна дія"],
+        scens: ["low_res", "mid_high", "budget"]
+      },
+      {
+        code: "Б6",
+        title: "Книжки вдома та сучасні шкільні бібліотеки",
+        desc: "Програми дарування книжок («книжка в кожен дім»), читацькі підписки та практики сімейного читання — дешеві й прості для запуску пілотів. Оскільки книжки є маркером середовища, а не «чарівною пігулкою», їх обов'язково слід поєднувати з читацькими активностями.",
+        evi: "Кількість книжок вдома — найсильніший окремий чинник у даних PISA (середній коеф. 0.195; №1 у 47 із 82 країн).",
+        tags: ["Низька вартість", "Легкий пілот"],
+        scens: ["mid_high", "budget"]
+      },
+      {
+        code: "Б7",
+        title: "Рання освіта (доступне та якісне дошкілля)",
+        desc: "Освітня нерівність формується задовго до першого класу. Безкоштовний або субсидований доступ до якісного дитячого садка для дітей із бідних родин закладає базові мовні та когнітивні навички.",
+        evi: "Має найтриваліший кумулятивний ефект протягом усього шкільного циклу.",
+        tags: ["Довгостроковий ефект", "Ранній старт"],
+        scens: ["low_res", "long_term"]
+      },
+      {
+        code: "Б8",
+        title: "Ранні сигнали і швидка автоматична допомога",
+        desc: "Регулярні діагностичні тести наприкінці початкової школи та автоматичне призначення додаткової підтримки тим, хто відстає — без очікування запиту від батьків.",
+        evi: "Освічені батьки самі просять про допомогу значно частіше; автоматичний тригер захищає дітей менш обізнаних батьків.",
+        tags: ["Низька вартість", "Управління на даних"],
+        scens: ["mid_high", "budget"]
+      }
+    ]
+  },
+  {
+    id: "C",
+    title: "В. Працювати з батьками",
+    sub: "Підтримка родин із низьким рівнем формальної освіти та зниження інформаційних бар'єрів",
+    items: [
+      {
+        code: "В9",
+        title: "Практичні програми для батьків із низькою освітою",
+        desc: "Прості та зрозумілі підказки, як підтримувати навчання дитини вдома (як перевіряти домашні завдання, як розмовляти з дитиною про школу та навчальні цілі) через короткі формати та місцевих координаторів.",
+        evi: "Допомагає відтворити ті практики підтримки, які в сім'ях із вищою освітою передаються за замовчуванням.",
+        tags: ["Робота з громадою", "Середня вартість"],
+        scens: ["mid_high"]
+      },
+      {
+        code: "В10",
+        title: "Освіта дорослих та навчання впродовж життя",
+        desc: "Доступ батьків до вечірніх шкіл, інтенсивних професійних курсів та онлайн-освіти. Це фундаментальна довгострокова інвестиція в людський капітал родини.",
+        evi: "Освіта батьків — найсильніший сімейний фактор у 59 із 87 країн (різниця між ≤9 і 16 роками навчання становить 54 бали).",
+        tags: ["Довгострокова інвестиція", "Людський капітал"],
+        scens: ["mid_high", "long_term"]
+      },
+      {
+        code: "В11",
+        title: "Прозора та проста комунікація школи з родинами",
+        desc: "Відмова від складної бюрократичної мови, зрозумілі путівники та індивідуальні консультації для сімей, які погано знають освітню систему (вибір гуртків, профільного ліцею, правила вступу).",
+        evi: "Зменшує інформаційну перевагу високоосвічених батьків при навігації освітніми траєкторіями.",
+        tags: ["Низька вартість", "Швидке впровадження"],
+        scens: ["mid_high", "budget"]
+      }
+    ]
+  },
+  {
+    id: "D",
+    title: "Г. Рішення на рівні системи",
+    sub: "Структурні правила гри: десегрегація, розподіл найкращих вчителів та соціальні ліфти",
+    items: [
+      {
+        code: "Г12",
+        title: "Менше шкільної сегрегації",
+        desc: "Прозорі правила прийому до шкіл без прихованого відбору на старті, пізніший поділ учнів за академічними треками (tracking) та збалансовані межі шкільних округів.",
+        evi: "Запобігає концентрації дітей із бідних та малоосвічених родин в ізольованих «слабких» школах.",
+        tags: ["Структурна реформа", "Довгостроковий ефект"],
+        scens: ["mid_high", "long_term"]
+      },
+      {
+        code: "Г13",
+        title: "Найкращі вчителі в найскладніших школах",
+        desc: "Відчутні фінансові надбавки до оплати праці, програми менторства для педагогів та менший розмір класів у школах, де зосереджена бідність і соціальна вразливість.",
+        evi: "Оскільки 90% варіації балів не пояснюється сім'єю, якість викладання у складних школах є головним важелем змін.",
+        tags: ["Кадрова політика", "Високий імпакт"],
+        scens: ["mid_high"]
+      },
+      {
+        code: "Г14",
+        title: "Кар'єрні консультації та «сходинки вгору»",
+        desc: "Цільові стипендії, менторський супровід і підготовчі програми для здібних учнів із бідних сімей та родин із низьким рівнем освіти батьків.",
+        evi: "У даних багато дітей із нижніх груп перевершують середній рівень країни — їм потрібен місток до університетів.",
+        tags: ["Соціальна мобільність", "Довгострокова дія"],
+        scens: ["long_term"]
+      }
+    ]
+  },
+  {
+    id: "E",
+    title: "Ґ. Вимірювання та оцінка політик",
+    sub: "Щоб бачити реальний внесок школи й масштабувати лише те, що справді працює",
+    items: [
+      {
+        code: "Ґ15",
+        title: "Показник знедоленості як офіційна метрика (Value-Added)",
+        desc: "Публікувати результати шкіл із поправкою на соціальне походження учнів (індекс неблагополуччя). Це потрібно, щоб школи, які працюють у важких соціальних умовах, не карали «сирими» рейтингами, а успішні практики ставали видимими.",
+        evi: "Без урахування фону сімей рейтинги шкіл просто відображають склад батьків, а не якість роботи вчителів.",
+        tags: ["Освітня аналітика", "Справедлива оцінка"],
+        scens: ["long_term"]
+      },
+      {
+        code: "Ґ16",
+        title: "Пілоти з оцінкою впливу перед масштабуванням",
+        desc: "Перевіряти кожне втручання через випадковий розподіл (RCT) або порівняння схожих шкіл перед розгортанням на всю країну. Дані PISA добре діагностують проблему, але не кажуть, яке саме лікування спрацює.",
+        evi: "Захищає освітній бюджет від неефективних витрат і перетворює гіпотези на перевірені рішення.",
+        tags: ["Доказова політика", "Обов'язковий стандарт"],
+        scens: ["long_term"]
+      }
+    ]
+  }
+];
+
+const SCEN_META = {
+  all: "Показано всі 16 гіпотез політики у 5 напрямах (А–Ґ). Натисніть на сценарій вище або на рядок у таблиці внизу, щоб підсвітити найобґрунтованіші кроки.",
+  low_res: "Сценарій для країн з низьким рівнем ресурсів (де гроші важать більше за освіту): фокус на знятті матеріальних бар'єрів (А1–А4), шкільному репетиторстві (Б5) та ранньому дошкіллі (Б7).",
+  mid_high: "Сценарій для країн із середнім і високим рівнем ресурсів (де важливіша освіта батьків): фокус на компенсації навчального капіталу в школі (Б5, Б6, Б8), роботі з батьками (В9–В11) і зниженні сегрегації (Г12–Г13).",
+  budget: "Сценарій для обмеженого бюджету: низькозатратні швидкі інтервенції (Б6 книжки, Б8 рання діагностика, В11 проста комунікація) плюс прицільне репетиторство Б5 лише для найбільш відстаючих.",
+  long_term: "Довгострокова системна стратегія: інвестиції в дошкілля (Б7), освіту дорослих (В10), десегрегацію та соціальні ліфти (Г12, Г14), а також справедливі метрики й оцінку впливу (Ґ15–Ґ16)."
+};
+
+function renderSolutions() {
+  const scen = state.solScen;
+  const hideOthers = state.solHideOthers;
+  $("scenarioDesc").textContent = SCEN_META[scen] || SCEN_META.all;
+
+  document.querySelectorAll("#scenarioPills .scenario-btn").forEach(btn => {
+    btn.classList.toggle("on", btn.dataset.scen === scen);
+  });
+  document.querySelectorAll("#chooseTable tr.clickable-row").forEach(tr => {
+    tr.classList.toggle("on", tr.dataset.scen === scen);
+  });
+
+  let html = "";
+  for (const grp of SOL_GROUPS) {
+    const visibleItems = grp.items.filter(it => scen === "all" || !hideOthers || it.scens.includes(scen));
+    if (!visibleItems.length) continue;
+
+    html += `<section class="sol-group">
+      <div class="sol-group-head">
+        <h2>${grp.title}</h2>
+        <span>${grp.sub}</span>
+      </div>
+      <div class="sol-grid">`;
+
+    for (const it of visibleItems) {
+      const isPick = scen !== "all" && it.scens.includes(scen);
+      const isDim = scen !== "all" && !it.scens.includes(scen) && !hideOthers;
+      const cls = ["sol-card", isPick ? "active-pick" : "", isDim ? "dimmed" : ""].filter(Boolean).join(" ");
+      html += `
+        <article class="${cls}">
+          <div class="sol-card-top">
+            <span class="sol-code">${it.code}</span>
+            <div class="sol-badges">
+              ${isPick ? `<span class="sol-badge rec">Рекомендовано для сценарію</span>` : ""}
+              ${it.tags.map(t => `<span class="sol-badge">${t}</span>`).join("")}
+            </div>
+          </div>
+          <h3>${it.title}</h3>
+          <p>${it.desc}</p>
+          <div class="evi">${it.evi}</div>
+        </article>`;
+    }
+    html += `</div></section>`;
+  }
+  $("solutionsList").innerHTML = html;
+}
+
+function renderPeers() {
+  const fmt = v => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v));
+  const peerCodes = ["QUA", "MDA", "GEO", "ARM", "ROU", "POL", "BGR"].filter(c => D.countries[c]);
+  $("peersGrid").innerHTML = peerCodes.map(c => {
+    const d = D.countries[c];
+    const eduGap = d.edu ? d.edu[2] - d.edu[0] : 0;
+    const wGap = d.wealth ? d.wealth[3] - d.wealth[0] : 0;
+    const cGap = d.culture ? d.culture[3] - d.culture[0] : 0;
+    return `<div class="peer-card">
+      <h4><span>${nm(c).split(" (")[0]}</span> <span class="pill">${Math.round(d.mean)}</span></h4>
+      <div class="peer-meta">Освіта батьків: <b>${fmt(eduGap)}</b> балів</div>
+      <div class="peer-meta">Економічний капітал: <b>${fmt(wGap)}</b> балів</div>
+      <div class="peer-meta">Культурний капітал: <b>${fmt(cGap)}</b> балів</div>
+      <button type="button" data-goto-cnt="${c}">Відкрити на карті →</button>
+    </div>`;
+  }).join("");
+
+  $("peersGrid").querySelectorAll("button[data-goto-cnt]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.cnt = btn.dataset.gotoCnt;
+      update();
+      location.hash = "#map";
+    });
+  });
+}
+
+function renderScales() {
+  $("miniScale").innerHTML = [[380, "низький"], [450, "середній"], [520, "високий"]]
+    .map(([v, t]) => `<div style="background:${colorFor(v)};color:${inkFor(v)}">${v}<small>${t}</small></div>`).join("");
+  $("legendBar").style.background = `linear-gradient(to right, ${css("--bad")}, ${css("--mid")}, ${css("--good")})`;
 }
 
 function syncInputs() {
@@ -567,11 +1117,33 @@ $("modePred").addEventListener("click", () => { state.mode = "pred"; update(); }
 $("modeMean").addEventListener("click", () => { state.mode = "mean"; update(); });
 $("countrySel").addEventListener("change", e => { state.cnt = e.target.value; update(); });
 
+// Обробники для вкладки Рішення
+document.querySelectorAll("#scenarioPills .scenario-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.solScen = btn.dataset.scen;
+    renderSolutions();
+  });
+});
+document.querySelectorAll("#chooseTable tr.clickable-row").forEach(tr => {
+  tr.addEventListener("click", () => {
+    state.solScen = state.solScen === tr.dataset.scen ? "all" : tr.dataset.scen;
+    renderSolutions();
+    $("scenarioPills").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+});
+$("solHideOthers").addEventListener("change", e => {
+  state.solHideOthers = e.target.checked;
+  renderSolutions();
+});
+
 // Панель умов: згорнути / розгорнути
 function setDrawer(open) {
   $("drawer").classList.toggle("closed", !open);
   $("openDrawer").hidden = open;
   drawMap();
+  if (typeof Plotly !== "undefined" && !$("page-map").hidden) {
+    setTimeout(() => Plotly.Plots.resize("map"), 260);
+  }
 }
 if (window.innerWidth <= 760) { $("drawer").classList.add("closed"); $("openDrawer").hidden = false; }
 $("closeDrawer").addEventListener("click", () => setDrawer(false));
@@ -583,18 +1155,38 @@ function route() {
   const page = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : "intro";
   PAGES.forEach(p => { $("page-" + p).hidden = p !== page; });
   document.querySelectorAll("nav.tabs a").forEach(a => a.classList.toggle("on", a.dataset.page === page));
-  if (page === "map") { drawMap(); if (mapReady) Plotly.Plots.resize("map"); }
+  if (page === "map") {
+    requestAnimationFrame(() => {
+      drawMap();
+      if (typeof Plotly !== "undefined") Plotly.Plots.resize("map");
+    });
+  }
   window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", route);
 
-// Міні-шкала кольорів на вступі
-$("miniScale").innerHTML = [[380, "низький"], [450, "середній"], [520, "високий"]]
-  .map(([v, t]) => `<div style="background:${colorFor(v)};color:${inkFor(v)}">${v}<small>${t}</small></div>`).join("");
-$("legendBar").style.background = `linear-gradient(to right, ${css("--bad")}, ${css("--mid")}, ${css("--good")})`;
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!$("page-map").hidden) {
+      drawMap();
+      if (typeof Plotly !== "undefined") Plotly.Plots.resize("map");
+    }
+  }, 150);
+});
+if (window.matchMedia) {
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    renderScales();
+    update();
+  });
+}
 
+renderScales();
 fillSelect();
 drawFindings();
+renderSolutions();
+renderPeers();
 syncInputs();
 drawCountry();
 route();
