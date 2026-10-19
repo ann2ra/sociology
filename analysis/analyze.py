@@ -1,38 +1,38 @@
 """
-Аналіз PISA 2025: як освіта батьків, достаток і культурний капітал сім'ї
-пов'язані з балом з математики в кожній країні.
+PISA 2025 analysis: how parental education, family wealth and cultural
+capital relate to students' maths scores in each country.
 
-Модель (для кожної країни окремо, зважена регресія з вагою W_FSTUWT):
+Model (a separate weighted regression for each country, weight W_FSTUWT):
 
-    бал_математики = a
-                     + b1[освіта]     (базова / середня / вища)
-                     + b2[достаток]   (квартиль індексу WEALTH у країні: Q1..Q4)
-                     + b3[культура]   (квартиль індексу CULTURE у країні: Q1..Q4)
+    maths_score = a
+                  + b1[education]  (basic / secondary / higher)
+                  + b2[wealth]     (within-country quartile of the WEALTH index: Q1..Q4)
+                  + b3[culture]    (within-country quartile of the CULTURE index: Q1..Q4)
 
-Кожен фактор — категорії (dummy-змінні), базова категорія = найнижча,
-тож a = прогноз для «базова освіта + найбідніші 25% + найнижчий культурний
-капітал». Регресію рахуємо окремо для кожного з 10 plausible values
-(PV1–PV10MATH) і усереднюємо коефіцієнти, як рекомендує методика PISA.
+Each factor is categorical (dummy variables) with the lowest category as the
+baseline, so a = prediction for "basic education + poorest 25% + lowest
+cultural capital". The regression is run separately for each of the 10
+plausible values (PV1-PV10MATH) and the coefficients are averaged, as PISA
+methodology recommends.
 
-Обидва індекси будуємо самі (офіційний HOMEPOS не використовуємо, бо він
-змішує гроші з книжками):
+We build both indices ourselves (the official HOMEPOS is not used because it
+mixes money with books):
 
-  WEALTH  (економічний капітал) — автомобілі (ST251Q01JA),
-          кімнати з ванною (ST251Q03JA), кімнати з туалетом (ST251Q04JA);
-  CULTURE (культурний капітал, П. Бурдьє) — книжки (ST255Q01JA),
-          музичні інструменти (ST251Q06JA), твори мистецтва (ST251Q07JA).
+  WEALTH  (economic capital) - cars (ST251Q01JA),
+          rooms with a bath or shower (ST251Q03JA), rooms with a toilet (ST251Q04JA);
+  CULTURE (cultural capital, after P. Bourdieu) - books (ST255Q01JA),
+          musical instruments (ST251Q06JA), works of art (ST251Q07JA).
 
-Такий поділ видно в самих даних: інструменти й мистецтво корелюють
-з книжками (0.28–0.30) сильніше, ніж з машинами та ваннами (0.15–0.22).
-Індекс = середнє стандартизованих (z) значень; потрібно щонайменше 2 з 3
-відповідей.
+The split is visible in the data itself: instruments and art correlate more
+with books (0.28-0.30) than with cars and bathrooms (0.15-0.22).
+Index = mean of standardised (z) values; at least 2 of 3 answers are required.
 
-Додатково рахуємо «стандартизовану» модель
-    бал = a + β1·z(PAREDINT) + β2·z(WEALTH) + β3·z(CULTURE)
-щоб порівняти, який фактор сильніший (бали за +1 стандартне відхилення).
+We also fit a "standardised" model
+    score = a + β1·z(PAREDINT) + β2·z(WEALTH) + β3·z(CULTURE)
+to compare which factor is stronger (points per +1 standard deviation).
 
-Запуск:  python analysis/analyze.py
-Результат: docs/data.js (його читає сайт)
+Run:     python analysis/analyze.py
+Output:  docs/data.js (read by the website)
 """
 import json
 from pathlib import Path
@@ -45,29 +45,29 @@ SRC = ROOT / "PISA2025_math_SES_clean.csv.gz"
 OUT = ROOT / "docs" / "data.js"
 
 PV = [f"PV{i}MATH" for i in range(1, 11)]
-MIN_STUDENTS = 500  # менше учнів з повними даними — модель не рахуємо
+MIN_STUDENTS = 500  # skip the model if fewer students have complete data
 
-# HISCED: 1 немає кваліфікації, 2 ISCED 2 → «базова»
-#         3–5 ISCED 3–4 (старша школа, післясередня) → «середня»
-#         6–9 ISCED 5–8 (вища)                       → «вища»
+# HISCED: 1 no qualification, 2 ISCED 2                      -> "basic"
+#         3-5 ISCED 3-4 (upper secondary, post-secondary)  -> "secondary"
+#         6-9 ISCED 5-8 (tertiary)                         -> "higher"
 EDU_BINS = {1: 0, 2: 0, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2, 9: 2}
 
 WEALTH_ITEMS = ["ST251Q01JA", "ST251Q03JA", "ST251Q04JA"]
 CULTURE_ITEMS = ["ST255Q01JA", "ST251Q06JA", "ST251Q07JA"]
 
-# Q-коди — це частини країн (окремі регіони), а не країни цілком.
-# Прив'язка до карти — припущення, перевірте у звіті PISA 2025.
+# Q-codes are parts of countries (selected regions), not whole countries.
+# Mapping them onto the map is an assumption; check the PISA 2025 report.
 MAP_CODE = {"TAP": "TWN", "KSV": "XKX", "QUA": "UKR", "QCI": "CHN"}
 
 
 def build_index(d, items):
-    """Середнє z-значень питань.
+    """Mean of the items' z-values.
 
-    Деякі країни не ставили частину питань (напр. у QCI немає питань про
-    інструменти й мистецтво, у Нідерландах — про машини й туалети). Тоді
-    індекс у цій країні рахуємо з тих питань, які там були, і вимагаємо
-    щонайменше 2 відповіді (або 1, якщо в країні було лише одне питання).
-    Повертає індекс і, для кожної країни, скільки питань у ньому використано."""
+    Some countries did not ask all the questions (e.g. QCI has no questions
+    on instruments and art, the Netherlands none on cars and toilets). There
+    the index is built from the questions that were asked, and at least 2
+    answers are required (or 1 if the country asked only one question).
+    Returns the index and, for each country, how many items it used."""
     z = pd.DataFrame(index=d.index)
     for c in items:
         ok = d[c].notna()
@@ -89,11 +89,11 @@ def build_index(d, items):
 
 
 def wquantile_bins(x, w, n=4, seed=2025):
-    """Номер зваженого квартиля (0..n-1) для кожного учня.
-    Індекс має небагато різних значень (3 питання з кількома варіантами),
-    тож багато учнів мають однакове значення. Щоб групи були рівно по 25%,
-    таких учнів упорядковуємо випадково (фіксований seed — результат
-    відтворюваний)."""
+    """Weighted quartile number (0..n-1) for each student.
+    The index has few distinct values (3 questions with a few options each),
+    so many students share the same value. To make each group exactly 25%,
+    such students are ordered at random (fixed seed, so the result is
+    reproducible)."""
     tie = np.random.default_rng(seed).random(len(x))
     order = np.lexsort((tie, x.values))
     cw = np.cumsum(w.values[order])
@@ -124,7 +124,7 @@ def r2(X, Y, w, coefs):
 
 
 def fit(X, Y, w):
-    """Коефіцієнти, усереднені по 10 plausible values, і R²."""
+    """Coefficients averaged over the 10 plausible values, and R²."""
     coefs = np.array([wls(X, Y[:, j], w) for j in range(Y.shape[1])])
     return coefs.mean(axis=0), round(r2(X, Y, w, coefs), 3)
 
@@ -149,7 +149,7 @@ def country_model(g):
     culture = wquantile_bins(m.CULTURE, m.W_FSTUWT)
     Y = m[PV].values
 
-    # Категорійна модель: intercept, edu1, edu2, w1, w2, w3, c1, c2, c3
+    # Categorical model: intercept, edu1, edu2, w1, w2, w3, c1, c2, c3
     X = np.column_stack([
         np.ones(len(m)),
         edu == 1, edu == 2,
@@ -162,8 +162,8 @@ def country_model(g):
     res["wealth"] = levels(c, 3, 3)
     res["culture"] = levels(c, 6, 3)
 
-    # Та сама модель БЕЗ культурного капіталу: його не контролюємо, тож
-    # частина його зв'язку з балами «переходить» до освіти й достатку.
+    # The same model WITHOUT cultural capital: it is not controlled for, so
+    # part of its association with scores "moves" to education and wealth.
     c2, r2_2 = fit(X[:, :6], Y, w)
     res["noculture"] = {
         "a": round(c2[0], 1),
@@ -172,10 +172,10 @@ def country_model(g):
         "r2": r2_2,
     }
 
-    # Частка учнів у кожній групі освіти (для попереджень на сайті)
+    # Share of students in each education group (for warnings on the site)
     res["edu_share"] = [round(float(w[edu == k].sum() / w.sum()), 3) for k in range(3)]
 
-    # Стандартизована модель: бали за +1 SD кожного фактора
+    # Standardised model: points per +1 SD of each factor
     def z(v):
         mu = np.average(v, weights=w)
         sd = np.sqrt(np.average((v - mu) ** 2, weights=w))
@@ -199,38 +199,38 @@ def main():
     for cnt, g in d.groupby("CNT"):
         r = country_model(g)
         r["map"] = MAP_CODE.get(cnt, cnt)
-        # Скільки з 3 питань увійшло в кожен індекс у цій країні
+        # How many of the 3 items went into each index in this country
         r["items"] = {"wealth": wealth_used[cnt], "culture": culture_used[cnt]}
         if "a" in r:
-            print(f"{cnt} {r['mean']:.0f}  достаток {r['wealth'][3]:+.0f}, освіта {r['edu'][2]:+.0f},"
-                  f" культура {r['culture'][3]:+.0f}")
+            print(f"{cnt} {r['mean']:.0f}  wealth {r['wealth'][3]:+.0f}, education {r['edu'][2]:+.0f},"
+                  f" culture {r['culture'][3]:+.0f}")
         else:
-            print(f"{cnt} {r['mean']:.0f}  — замало даних для моделі")
+            print(f"{cnt} {r['mean']:.0f}  - not enough data for the model")
         countries[cnt] = r
 
     payload = {
-        "source": "OECD PISA 2025, учні; зважена регресія, 10 plausible values",
-        "wealth_items": "автомобілі, кімнати з ванною, кімнати з туалетом",
-        "culture_items": "книжки, музичні інструменти, твори мистецтва",
+        "source": "OECD PISA 2025 students; weighted regression, 10 plausible values",
+        "wealth_items": "cars, rooms with a bath or shower, rooms with a toilet",
+        "culture_items": "books, musical instruments, works of art",
         "levels": {
-            "edu": ["базова (до 9 класів)", "середня (школа / коледж)", "вища (університет)"],
-            "wealth": ["найбідніші 25%", "нижче середнього", "вище середнього", "найбагатші 25%"],
-            "culture": ["найнижчий (25%)", "нижче середнього", "вище середнього", "найвищий (25%)"],
+            "edu": ["basic (up to grade 9)", "secondary (school / college)", "higher (university)"],
+            "wealth": ["poorest 25%", "below average", "above average", "richest 25%"],
+            "culture": ["lowest 25%", "below average", "above average", "highest 25%"],
         },
         "countries": countries,
     }
     full = [c for c in countries.values() if "a" in c]
-    print(f"\nДостаток сильніший за освіту: у {sum(c['wealth'][3] > c['edu'][2] for c in full)}"
-          f" з {len(full)} країн; без культурного капіталу в моделі — у "
+    print(f"\nWealth stronger than education: {sum(c['wealth'][3] > c['edu'][2] for c in full)}"
+          f" of {len(full)} countries; without cultural capital in the model: "
           f"{sum(c['noculture']['wealth'][3] > c['noculture']['edu'][2] for c in full)}")
-    print(f"Культура сильніша за достаток: у {sum(c['culture'][3] > c['wealth'][3] for c in full)}"
-          f" з {len(full)}; за освіту: у {sum(c['culture'][3] > c['edu'][2] for c in full)}")
+    print(f"Culture stronger than wealth: {sum(c['culture'][3] > c['wealth'][3] for c in full)}"
+          f" of {len(full)}; than education: {sum(c['culture'][3] > c['edu'][2] for c in full)}")
     OUT.write_text(
-        "// Згенеровано analysis/analyze.py — не редагуйте вручну\n"
+        "// Generated by analysis/analyze.py - do not edit by hand\n"
         "window.PISA = " + json.dumps(payload, ensure_ascii=False) + ";\n",
         encoding="utf-8",
     )
-    print(f"\nЗбережено {OUT} ({OUT.stat().st_size // 1024} КБ)")
+    print(f"\nSaved {OUT} ({OUT.stat().st_size // 1024} KB)")
 
 
 if __name__ == "__main__":

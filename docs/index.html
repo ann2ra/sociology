@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Гроші чи освіта?</title>
-<meta name="description" content="Інтерактивна карта PISA 2025: як освіта батьків, економічний і культурний капітал сім'ї пов'язані з балом дитини з математики.">
+<title>Money or Education?</title>
+<meta name="description" content="Interactive PISA 2025 map: how parental education and a family's economic and cultural capital relate to a child's maths score.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
-/* Макет: верхня навігація-вкладки; на «Карті» мапа на всю ширину, панель умов виїжджає зліва поверх мапи. */
+/* Layout: top tab navigation; on the Map tab the map spans the full width and the controls panel slides in from the left over it. */
 :root {
   --bg: #f5f4ef;
   --surface: #fdfdfb;
@@ -56,7 +56,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: bala
 a { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Навігація */
+/* Navigation */
 .topbar {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
   background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px);
@@ -79,7 +79,7 @@ nav.tabs a.on { background: var(--text); color: var(--bg); }
 main.page { padding-block: 28px 64px; }
 main.page[hidden] { display: none !important; }
 
-/* Вступ */
+/* Intro */
 .hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; padding-block: 24px 8px; }
 @media (max-width: 900px) { .hero { grid-template-columns: 1fr; gap: 24px; } }
 .hero h1 { font-size: clamp(30px, 5vw, 56px); line-height: 1.08; margin: 0 0 18px; }
@@ -112,7 +112,7 @@ main.page[hidden] { display: none !important; }
 .cap p { margin: 0; color: var(--text-2); font-size: 15px; }
 .section-title { font-size: 22px; margin: 48px 0 0; }
 
-/* Карта */
+/* Map */
 .map-shell {
   position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
   overflow: hidden; height: clamp(460px, 74vh, 780px);
@@ -161,7 +161,7 @@ select { width: 100%; font: inherit; font-size: 15px; padding: 8px; border-radiu
 }
 @media (min-width: 761px) { .map-area { position: absolute; inset: 0; } }
 
-/* Картка країни */
+/* Country card */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
 #countryCard { margin-top: 16px; }
 .big { font-family: var(--font-display); font-size: 56px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -186,7 +186,7 @@ table.heat td:hover { transform: scale(1.02); }
 table.heat td.sel { box-shadow: inset 0 0 0 2.5px var(--text); }
 table.heat th.rowh { text-align: right; white-space: nowrap; }
 
-/* Текстові сторінки та Рішення */
+/* Text pages and Solutions */
 .prose { max-width: 860px; }
 .prose-wide { max-width: 1120px; }
 .prose h1, .prose-wide h1 { font-size: clamp(26px, 4vw, 42px); margin: 0 0 16px; line-height: 1.12; }
@@ -206,7 +206,7 @@ table.heat th.rowh { text-align: right; white-space: nowrap; }
 @media (max-width: 760px) { table.choose { display: block; overflow-x: auto; } }
 .prose .lead, .prose-wide .lead { font-size: 18px; color: var(--text-2); max-width: 75ch; }
 
-/* Стилі для вкладки Рішення */
+/* Solutions tab styles */
 .sol-banner {
   background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--good);
   border-radius: 16px; padding: 18px 20px; margin: 20px 0 28px;
@@ -298,267 +298,267 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
 <body>
 <header class="topbar">
   <div class="wrap">
-    <a href="#intro" class="brand"><span></span> Гроші чи освіта?</a>
-    <nav class="tabs" aria-label="Розділи сайту">
-      <a href="#intro" data-page="intro">Вступ</a>
-      <a href="#map" data-page="map">Карта</a>
-      <a href="#findings" data-page="findings">Висновки</a>
-      <a href="#solutions" data-page="solutions">Рішення</a>
-      <a href="#method" data-page="method">Методика</a>
+    <a href="#intro" class="brand"><span></span> Money or Education?</a>
+    <nav class="tabs" aria-label="Site sections">
+      <a href="#intro" data-page="intro">Intro</a>
+      <a href="#map" data-page="map">Map</a>
+      <a href="#findings" data-page="findings">Findings</a>
+      <a href="#solutions" data-page="solutions">Solutions</a>
+      <a href="#method" data-page="method">Methods</a>
     </nav>
   </div>
 </header>
 
-<!-- ВСТУП -->
+<!-- INTRO -->
 <main class="page wrap" id="page-intro">
   <section class="hero">
     <div>
-      <h1>Гроші чи освіта: що важливіше для <em>успіху дитини</em> в школі?</h1>
-      <p>Ми перевіряємо гіпотезу, що достаток сім'ї впливає на шкільні результати дитини сильніше, ніж освіта батьків. На інтерактивній карті можна задати умови життя 15-річного школяра і побачити, який бал з математики PISA 2025 в середньому отримують діти з такими умовами в кожній країні.</p>
+      <h1>Money or education: what matters more for a <em>child's success</em> at school?</h1>
+      <p>We test the hypothesis that family wealth affects a child's school results more strongly than parental education. On the interactive map you can set the living conditions of a 15-year-old student and see the average PISA 2025 maths score of children with those conditions in each country.</p>
       <div class="btn-row">
-        <a class="btn" href="#map">Відкрити карту →</a>
-        <a class="btn ghost" href="#findings">Що ми знайшли</a>
-        <a class="btn ghost" href="#solutions">Які є рішення</a>
+        <a class="btn" href="#map">Open the map →</a>
+        <a class="btn ghost" href="#findings">What we found</a>
+        <a class="btn ghost" href="#solutions">Possible solutions</a>
       </div>
     </div>
     <div class="hero-card" aria-hidden="true">
-      <div class="lbl">Як читати кольори</div>
+      <div class="lbl">How to read the colours</div>
       <div class="mini-scale" id="miniScale"></div>
-      <p class="hint" style="margin-top:12px">Бал з математики PISA. Сірим позначено країни, які не брали участі в опитуванні.</p>
+      <p class="hint" style="margin-top:12px">PISA maths score. Grey marks countries that did not take part in the survey.</p>
     </div>
   </section>
 
-  <h2 class="section-title">Що можна зробити з картою</h2>
+  <h2 class="section-title">What you can do with the map</h2>
   <div class="steps">
-    <div class="step"><b class="n">Крок 1</b><h3>Задайте умови</h3><p>Оберіть освіту батьків, економічний і культурний капітал сім'ї на панелі зліва від карти.</p></div>
-    <div class="step"><b class="n">Крок 2</b><h3>Подивіться на світ</h3><p>Уся карта перефарбується: червоні країни — низький прогнозований бал, жовті — середній, зелені — високий.</p></div>
-    <div class="step"><b class="n">Крок 3</b><h3>Порівняйте фактори</h3><p>Натисніть на країну, щоб побачити, на скільки балів змінюється результат, якщо змінити лише гроші, лише освіту або лише культуру вдома.</p></div>
+    <div class="step"><b class="n">Step 1</b><h3>Set the conditions</h3><p>Choose parental education and the family's economic and cultural capital in the panel to the left of the map.</p></div>
+    <div class="step"><b class="n">Step 2</b><h3>Look at the world</h3><p>The whole map recolours: red countries mean a low predicted score, yellow an average one, green a high one.</p></div>
+    <div class="step"><b class="n">Step 3</b><h3>Compare the factors</h3><p>Click a country to see how many points the score changes if you change only money, only education or only the cultural environment at home.</p></div>
   </div>
 
-  <h2 class="section-title">Три фактори, які ми порівнюємо</h2>
+  <h2 class="section-title">The three factors we compare</h2>
   <div class="capitals">
-    <div class="cap"><h3>Освіта батьків</h3><p>Найвищий рівень освіти серед двох батьків: базова (до 9 класів), середня (школа / коледж) або вища (університет).</p></div>
-    <div class="cap"><h3>Економічний капітал</h3><p>Гроші сім'ї. Міряємо за речами вдома: кількість автомобілів, кімнат з ванною і кімнат з туалетом.</p></div>
-    <div class="cap"><h3>Культурний капітал</h3><p>Культурне середовище вдома (за П. Бурдьє): кількість книжок, музичних інструментів і творів мистецтва.</p></div>
+    <div class="cap"><h3>Parental education</h3><p>The highest level of education of the two parents: basic (up to grade 9), secondary (school / college) or higher (university).</p></div>
+    <div class="cap"><h3>Economic capital</h3><p>The family's money. We measure it by possessions at home: the number of cars, rooms with a bath or shower, and rooms with a toilet.</p></div>
+    <div class="cap"><h3>Cultural capital</h3><p>The cultural environment at home (after P. Bourdieu): the number of books, musical instruments and works of art.</p></div>
   </div>
 </main>
 
-<!-- КАРТА -->
+<!-- MAP -->
 <main class="page wrap" id="page-map" hidden>
   <div class="map-shell">
-    <button type="button" class="icon-btn open-btn" id="openDrawer" hidden>Умови дитини ▸</button>
-    <aside class="drawer" id="drawer" aria-label="Умови дитини">
+    <button type="button" class="icon-btn open-btn" id="openDrawer" hidden>Child's conditions ▸</button>
+    <aside class="drawer" id="drawer" aria-label="Child's conditions">
       <div class="drawer-head">
-        <h2>Умови дитини</h2>
-        <button type="button" class="icon-btn" id="closeDrawer" aria-label="Сховати панель">◂ Сховати</button>
+        <h2>Child's conditions</h2>
+        <button type="button" class="icon-btn" id="closeDrawer" aria-label="Hide panel">◂ Hide</button>
       </div>
       <label class="ctl">
-        <div class="row">Освіта батьків <span class="val" id="eduVal"></span></div>
+        <div class="row">Parental education <span class="val" id="eduVal"></span></div>
         <input type="range" id="edu" min="0" max="2" step="1" value="1">
       </label>
       <label class="ctl">
-        <div class="row">Економічний капітал <span class="val" id="wealthVal"></span></div>
+        <div class="row">Economic capital <span class="val" id="wealthVal"></span></div>
         <input type="range" id="wealth" min="0" max="3" step="1" value="1">
-        <div class="sub">кількість автомобілів, кімнат з ванною і кімнат з туалетом удома</div>
+        <div class="sub">number of cars, rooms with a bath or shower, and rooms with a toilet at home</div>
       </label>
       <label class="ctl" id="cultureCtl">
-        <div class="row">Культурний капітал <span class="val" id="cultureVal"></span></div>
+        <div class="row">Cultural capital <span class="val" id="cultureVal"></span></div>
         <input type="range" id="culture" min="0" max="3" step="1" value="1">
-        <div class="sub">кількість книжок, музичних інструментів і творів мистецтва вдома</div>
+        <div class="sub">number of books, musical instruments and works of art at home</div>
       </label>
       <label class="toggle">
         <input type="checkbox" id="useCulture" checked>
-        <span>Враховувати культурний капітал. Якщо вимкнути, модель про нього не знає, і його вплив частково «переходить» до освіти й економічного капіталу.</span>
+        <span>Include cultural capital. If switched off, the model does not know about it, and part of its effect "moves" to education and economic capital.</span>
       </label>
 
-      <h4>Що показує карта</h4>
-      <div class="seg" role="group" aria-label="Режим карти">
-        <button type="button" id="modePred" class="on">Прогноз для умов</button>
-        <button type="button" id="modeMean">Середній бал</button>
+      <h4>What the map shows</h4>
+      <div class="seg" role="group" aria-label="Map mode">
+        <button type="button" id="modePred" class="on">Prediction</button>
+        <button type="button" id="modeMean">Average score</button>
       </div>
 
-      <h4>Країна</h4>
-      <select id="countrySel" aria-label="Обрати країну"></select>
-      <p class="hint">Або натисніть на країну на карті. Малі країни (Сінгапур, Макао, Мальта…) зручніше обрати зі списку.</p>
+      <h4>Country</h4>
+      <select id="countrySel" aria-label="Choose a country"></select>
+      <p class="hint">Or click a country on the map. Small countries (Singapore, Macao, Malta…) are easier to pick from the list.</p>
     </aside>
     <div class="map-area">
-      <div id="map" role="img" aria-label="Карта світу з прогнозованими балами"></div>
+      <div id="map" role="img" aria-label="World map with predicted scores"></div>
     </div>
     <div class="legend-box">
       <div class="legend"><span>350</span><div class="bar" id="legendBar"></div><span>550</span></div>
-      <div class="legend-na"><i></i> не брали участі / немає даних</div>
+      <div class="legend-na"><i></i> did not take part / no data</div>
     </div>
   </div>
   <p class="hint" id="mapHint"></p>
   <div class="card" id="countryCard"></div>
 </main>
 
-<!-- ВИСНОВКИ -->
+<!-- FINDINGS -->
 <main class="page wrap" id="page-findings" hidden>
   <div class="prose-wide">
-    <h1>Що ми знайшли (PISA 2025)</h1>
+    <h1>What we found (PISA 2025)</h1>
     <div id="findings"></div>
   </div>
 </main>
 
-<!-- РІШЕННЯ -->
+<!-- SOLUTIONS -->
 <main class="page wrap" id="page-solutions" hidden>
   <div class="prose-wide">
-    <h1>Що з цим робити: ідеї для освітньої політики</h1>
-    <p class="lead">Дані PISA 2025 (636 000 учнів із повними даними у 87 країнах) показують, що освіта батьків і домашній достаток разом пояснюють лише близько <b>9,7% (~10%)</b> різниці в балах усередині країни. Інші <b>90%</b> залежать від шкіл, вчителів, мотивації, здібностей і випадку.</p>
+    <h1>What to do about it: ideas for education policy</h1>
+    <p class="lead">PISA 2025 data (636,000 students with complete data in 87 countries) show that parental education and home wealth together explain only about <b>9.7% (~10%)</b> of the score differences within a country. The other <b>90%</b> depend on schools, teachers, motivation, ability and chance.</p>
 
     <div class="sol-banner">
-      <strong>Головна новина для освітньої політики:</strong> результати дитини не визначені наперед її походженням. Багато дітей із найбідніших родин випереджають однолітків із найбагатших. Проте всі 16 пропозицій нижче — це <strong>гіпотези для пілотування та оцінки впливу, а не гарантовані рецепти</strong>: дані PISA точно показують, де саме виникає бар'єр, але не кажуть наперед, яке втручання спрацює найкраще у конкретній країні.
+      <strong>The key message for education policy:</strong> a child's results are not predetermined by their background. Many children from the poorest families outperform peers from the richest ones. However, all 16 proposals below are <strong>hypotheses to pilot and evaluate, not guaranteed recipes</strong>: PISA data show precisely where the barrier arises, but cannot tell in advance which intervention will work best in a given country.
     </div>
 
-    <h2>Три механізми, на які вказують дані</h2>
-    <p>Аналіз розділяє вплив сім'ї на три окремі канали, кожен з яких потребує власного типу інструментів:</p>
+    <h2>Three mechanisms the data point to</h2>
+    <p>The analysis splits the family's influence into three separate channels, each of which needs its own type of tools:</p>
 
     <div class="mech-grid">
       <div class="mech-card">
-        <span class="tag-top">Механізм 1 · Напрям А</span>
-        <h3>Матеріальні умови вдома</h3>
-        <p>Там, де базові умови життя не гарантовані, гроші купують час, спокійне місце для занять, інтернет, транспорт і доступ до сильнішої школи.</p>
-        <div class="metric">У третині країн із найнижчими ресурсами достаток важить більше за освіту в <b>20 із 29 країн</b> (коеф. 0.19 проти 0.15).</div>
+        <span class="tag-top">Mechanism 1 · Direction A</span>
+        <h3>Material conditions at home</h3>
+        <p>Where basic living conditions are not guaranteed, money buys time, a quiet place to study, internet access, transport and access to a stronger school.</p>
+        <div class="metric">In the third of countries with the fewest resources, wealth matters more than education in <b>20 of 29 countries</b> (coef. 0.19 vs 0.15).</div>
       </div>
       <div class="mech-card">
-        <span class="tag-top">Механізм 2 · Напрям Б</span>
-        <h3>Домашнє навчальне середовище</h3>
-        <p>Велика частина «ефекту багатства» — це насправді культурний і навчальний капітал удома (книжки, звичка читати, допомога з уроками), який школа може частково компенсувати.</p>
-        <div class="metric">Книжки вдома — найсильніший окремий чинник у <b>47 із 82 країн</b> (середній коеф. <b>0.195</b> проти 0.110 для матеріальних речей).</div>
+        <span class="tag-top">Mechanism 2 · Direction B</span>
+        <h3>Home learning environment</h3>
+        <p>Much of the "wealth effect" is actually cultural and learning capital at home (books, a reading habit, help with homework), which school can partly compensate for.</p>
+        <div class="metric">Books at home are the strongest single factor in <b>47 of 82 countries</b> (mean coef. <b>0.195</b> vs 0.110 for material possessions).</div>
       </div>
       <div class="mech-card">
-        <span class="tag-top">Механізм 3 · Напрями В і Г</span>
-        <h3>Освіта та залученість батьків</h3>
-        <p>Освічені батьки передають мову, академічні очікування та вміння орієнтуватися в освітній системі. Цей фактор домінує у більшості середніх і заможних країн.</p>
-        <div class="metric">Освіта батьків сильніша у <b>59 із 87 країн</b> (+18 балів на 1 СВ проти +12.5 для індексу достатку HOMEPOS).</div>
+        <span class="tag-top">Mechanism 3 · Directions C and D</span>
+        <h3>Parental education and involvement</h3>
+        <p>Educated parents pass on language, academic expectations and the ability to navigate the education system. This factor dominates in most middle- and high-resource countries.</p>
+        <div class="metric">Parental education is stronger in <b>59 of 87 countries</b> (+18 points per 1 SD vs +12.5 for the HOMEPOS wealth index).</div>
       </div>
     </div>
 
-    <!-- Інтерактивний фільтр сценаріїв -->
-    <div class="filter-bar" aria-label="Підбір рішень за ситуацією">
+    <!-- Interactive scenario filter -->
+    <div class="filter-bar" aria-label="Choose solutions by situation">
       <div class="filter-bar-head">
-        <h3>Інтерактивний підбір за контекстом («Що обирати і коли»)</h3>
+        <h3>Interactive selection by context ("What to choose and when")</h3>
         <label class="toggle" style="margin:0">
           <input type="checkbox" id="solHideOthers">
-          <span>Ховати неосновні кроки для обраного сценарію</span>
+          <span>Hide secondary steps for the chosen scenario</span>
         </label>
       </div>
       <div class="scenario-pills" id="scenarioPills">
-        <button type="button" class="scenario-btn on" data-scen="all">Усі 16 рішень</button>
-        <button type="button" class="scenario-btn" data-scen="low_res">Низький рівень ресурсів (гроші &gt; освіта)</button>
-        <button type="button" class="scenario-btn" data-scen="mid_high">Середній / високий рівень ресурсів (освіта &gt; гроші)</button>
-        <button type="button" class="scenario-btn" data-scen="budget">Обмежений бюджет</button>
-        <button type="button" class="scenario-btn" data-scen="long_term">Довгострокова стратегія</button>
+        <button type="button" class="scenario-btn on" data-scen="all">All 16 solutions</button>
+        <button type="button" class="scenario-btn" data-scen="low_res">Low resources (money &gt; education)</button>
+        <button type="button" class="scenario-btn" data-scen="mid_high">Middle / high resources (education &gt; money)</button>
+        <button type="button" class="scenario-btn" data-scen="budget">Limited budget</button>
+        <button type="button" class="scenario-btn" data-scen="long_term">Long-term strategy</button>
       </div>
-      <p class="scenario-desc" id="scenarioDesc">Показано всі 16 гіпотез політики у 5 напрямах (А–Ґ). Натисніть на сценарій вище або на рядок у таблиці внизу, щоб підсвітити найобґрунтованіші кроки.</p>
+      <p class="scenario-desc" id="scenarioDesc">Showing all 16 policy hypotheses in 5 directions (A–E). Click a scenario above or a row in the table below to highlight the best-supported steps.</p>
     </div>
 
-    <!-- Контейнер для карток рішень А1–Ґ16 -->
+    <!-- Container for solution cards A1–E16 -->
     <div id="solutionsList"></div>
 
-    <h2>Матриця вибору: що обирати і коли</h2>
-    <p>Натисніть на будь-який рядок таблиці, щоб підсвітити відповідний пакет рішень у переліку вище:</p>
+    <h2>Choice matrix: what to choose and when</h2>
+    <p>Click any row of the table to highlight the matching set of solutions in the list above:</p>
     <table class="choose" id="chooseTable">
       <thead>
         <tr>
-          <th>Ситуація / контекст країни</th>
-          <th>Найобґрунтованіші кроки</th>
-          <th>Чому саме цей фокус (за даними PISA 2025)</th>
+          <th>Situation / country context</th>
+          <th>Best-supported steps</th>
+          <th>Why this focus (based on PISA 2025 data)</th>
         </tr>
       </thead>
       <tbody>
         <tr class="clickable-row" data-scen="low_res">
-          <td>Країна з низьким рівнем ресурсів, де гроші важать більше за освіту</td>
+          <td>Low-resource country where money matters more than education</td>
           <td>
-            <span class="code-pill">А1</span><span class="code-pill">А2</span><span class="code-pill">А3</span><span class="code-pill">А4</span>
-            (набір, харчування, гуртки, фінансування за потребою),
-            <span class="code-pill">Б5</span> (репетиторство), <span class="code-pill">Б7</span> (дошкілля)
+            <span class="code-pill">A1</span><span class="code-pill">A2</span><span class="code-pill">A3</span><span class="code-pill">A4</span>
+            (learning kit, meals, clubs, needs-based funding),
+            <span class="code-pill">B5</span> (tutoring), <span class="code-pill">B7</span> (pre-school)
           </td>
-          <td>У бідних країнах навіть вища освіта батьків у найбідніших 20% сімей дає лише <b>+6 балів</b> переваги (проти +53 у багатих), бо базові матеріальні бар'єри блокують реалізацію освітнього потенціалу.</td>
+          <td>In poor countries, even higher parental education in the poorest 20% of families gives only a <b>+6 point</b> advantage (vs +53 in rich ones), because basic material barriers block the family's educational potential.</td>
         </tr>
         <tr class="clickable-row" data-scen="mid_high">
-          <td>Країна із середнім або високим рівнем ресурсів, де важливіша освіта батьків</td>
+          <td>Middle- or high-resource country where parental education matters more</td>
           <td>
-            <span class="code-pill">Б5</span> <span class="code-pill">Б6</span> <span class="code-pill">Б8</span>
-            <span class="code-pill">В9</span><span class="code-pill">В10</span><span class="code-pill">В11</span>
-            <span class="code-pill">Г12</span><span class="code-pill">Г13</span>
+            <span class="code-pill">B5</span> <span class="code-pill">B6</span> <span class="code-pill">B8</span>
+            <span class="code-pill">C9</span><span class="code-pill">C10</span><span class="code-pill">C11</span>
+            <span class="code-pill">D12</span><span class="code-pill">D13</span>
           </td>
-          <td>Коли базові матеріальні умови забезпечені майже для всіх (у середніх і багатих країнах освіта переважає у <b>50 із 58 країн</b>), вирішальним стає те, чи може сім'я або школа допомогти з навчанням.</td>
+          <td>When basic material conditions are secured for almost everyone (in middle- and high-resource countries education dominates in <b>50 of 58 countries</b>), what matters is whether the family or the school can help with learning.</td>
         </tr>
         <tr class="clickable-row" data-scen="budget">
-          <td>Обмежений бюджет</td>
+          <td>Limited budget</td>
           <td>
-            <span class="code-pill">Б6</span> <span class="code-pill">Б8</span> <span class="code-pill">В11</span> (дешевші у впровадженні) та вибіркове <span class="code-pill">Б5</span> для тих, кому це найпотрібніше
+            <span class="code-pill">B6</span> <span class="code-pill">B8</span> <span class="code-pill">C11</span> (cheaper to implement) and targeted <span class="code-pill">B5</span> for those who need it most
           </td>
-          <td>Книжкові програми, рання діагностика наприкінці початкової школи й проста комунікація з родинами потребують мінімальних витрат, а дороге тьюторство концентрується лише на учнях з найбільшим відставанням.</td>
+          <td>Book programmes, early diagnostics at the end of primary school and simple communication with families cost little, while expensive tutoring is focused only on the students who are furthest behind.</td>
         </tr>
         <tr class="clickable-row" data-scen="long_term">
-          <td>Довгострокова стратегія</td>
+          <td>Long-term strategy</td>
           <td>
-            <span class="code-pill">Б7</span> <span class="code-pill">В10</span> <span class="code-pill">Г12</span> <span class="code-pill">Г14</span> <span class="code-pill">Ґ15</span><span class="code-pill">Ґ16</span>
+            <span class="code-pill">B7</span> <span class="code-pill">C10</span> <span class="code-pill">D12</span> <span class="code-pill">D14</span> <span class="code-pill">E15</span><span class="code-pill">E16</span>
           </td>
-          <td>Ефект накопичується з роками: дошкілля, освіта дорослих, десегрегація шкіл і оцінка доданої вартості змінюють саму структуру освітньої нерівності між поколіннями.</td>
+          <td>The effect builds up over years: pre-school, adult education, school desegregation and value-added assessment change the very structure of educational inequality between generations.</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>Контекст для України та сусідніх країн</h2>
-    <p>Згідно зі звітом (Розділи 8 і 10), висновки для України варто розглядати у порівнянні з країнами регіону зі схожим рівнем ресурсів: <b>Молдовою, Грузією, Вірменією, Румунією, Польщею та Болгарією</b>. Ви можете одразу порівняти їхні показники та перейти до будь-якої з них на інтерактивній карті:</p>
+    <h2>Context for Ukraine and neighbouring countries</h2>
+    <p>According to the report (Sections 8 and 10), the findings for Ukraine should be compared with countries in the region with a similar level of resources: <b>Moldova, Georgia, Armenia, Romania, Poland and Bulgaria</b>. You can compare their figures right here and open any of them on the interactive map:</p>
     <div class="peers-grid" id="peersGrid"></div>
 
-    <h2>Наступні кроки (як переходити від даних до дій)</h2>
+    <h2>Next steps (from data to action)</h2>
     <div class="steps" style="margin-top:16px">
       <div class="step">
-        <b class="n">Крок 1 · Глибинна діагностика</b>
-        <h3>Порівняння з референтними країнами</h3>
-        <p>Зіставити профіль конкретної країни (наприклад, України) із сусідами у вибірці PISA за розподілом квінтилів достатку та вразливих груп або доповнити аналіз національними даними (НМТ, моніторинги якості освіти).</p>
+        <b class="n">Step 1 · In-depth diagnosis</b>
+        <h3>Comparison with reference countries</h3>
+        <p>Compare the profile of a specific country (for example, Ukraine) with its neighbours in the PISA sample by wealth quintiles and vulnerable groups, or add national data (national exams, education quality monitoring).</p>
       </div>
       <div class="step">
-        <b class="n">Крок 2 · Перевірка стійкості</b>
-        <h3>Тестування через ESCS та ВВП</h3>
-        <p>Перевірити стабільність висновків з використанням композитного індексу соціально-економічного статусу (ESCS) та макроекономічних показників доходу країни (ВВП на душу населення), яких немає у базовому файлі учнів.</p>
+        <b class="n">Step 2 · Robustness check</b>
+        <h3>Testing with ESCS and GDP</h3>
+        <p>Check whether the findings hold using the composite index of socio-economic status (ESCS) and country income indicators (GDP per capita), which are not in the base student file.</p>
       </div>
       <div class="step">
-        <b class="n">Крок 3 · Дизайн пілоту</b>
-        <h3>План впровадження та оцінки</h3>
-        <p>Для обраної ідеї з переліку А1–Ґ16 розробити детальний паспорт пілоту: кошторис і бюджет, чітку цільову групу, індикатори успіху та протокол оцінки впливу (RCT або порівняння схожих шкіл) перед масштабуванням.</p>
+        <b class="n">Step 3 · Pilot design</b>
+        <h3>Implementation and evaluation plan</h3>
+        <p>For a chosen idea from A1–E16, develop a detailed pilot plan: costs and budget, a clear target group, success indicators and an impact evaluation protocol (RCT or comparison of similar schools) before scaling up.</p>
       </div>
     </div>
   </div>
 </main>
 
-<!-- МЕТОДИКА -->
+<!-- METHODS -->
 <main class="page wrap" id="page-method" hidden>
   <div class="prose">
-    <h1>Як ми рахували і чого дані не кажуть</h1>
-    <h2>Розрахунки</h2>
+    <h1>How we calculated it and what the data do not tell us</h1>
+    <h2>Calculations</h2>
     <ul>
-      <li><b>Дані:</b> OECD PISA 2025, 747 068 учнів з 89 країн і економік (повні дані про освіту батьків і достаток є для 636 000 учнів, або 85%, у 87 країнах).</li>
-      <li><b>Модель на карті:</b> для кожної країни окремо зважена регресія <i>бал = a + b1·освіта + b2·економічний капітал + b3·культурний капітал</i>, де кожен фактор має кілька рівнів. Регресію пораховано для всіх 10 plausible values і усереднено, учні зважені вагою W_FSTUWT. У міжкраїнних підсумках кожна країна має однакову вагу, щоб великі країни не «заглушали» малі.</li>
-      <li><b>Освіта батьків</b> — найвищий рівень серед двох батьків (HISCED / PAREDINT у роках навчання: 6, 9, 12, 14, 16 років): базова = до 9 класів, середня = школа / коледж, вища = університет.</li>
-      <li><b>Економічний капітал</b> — наш індекс з трьох «грошових» речей удома: кількість автомобілів (ST251Q01JA), кімнат з ванною (ST251Q03JA) і кімнат з туалетом (ST251Q04JA). Беремо середнє стандартизованих значень і ділимо учнів на чверті (квартилі) в межах країни.</li>
-      <li><b>Культурний капітал</b> (за П. Бурдьє) — такий самий індекс з кількості книжок (ST255Q01JA), музичних інструментів (ST251Q06JA) і творів мистецтва (ST251Q07JA) вдома, теж поділений на чверті.</li>
-      <li><b>Чому два індекси, а не офіційний HOMEPOS:</b> HOMEPOS змішує гроші й культуру в одне число. Якщо розділити HOMEPOS на складові (82 країни з повними даними), середній стандартизований коефіцієнт книжок вдома становить <b>0.195</b>, освіти батьків — <b>0.162</b>, а суто матеріальних речей — <b>0.110</b>.</li>
+      <li><b>Data:</b> OECD PISA 2025, 747,068 students from 89 countries and economies (complete data on parental education and wealth for 636,000 students, or 85%, in 87 countries).</li>
+      <li><b>Model on the map:</b> a separate weighted regression for each country, <i>score = a + b1·education + b2·economic capital + b3·cultural capital</i>, where each factor has several levels. The regression is run for all 10 plausible values and averaged; students are weighted by W_FSTUWT. In cross-country summaries every country has equal weight, so that large countries do not "drown out" small ones.</li>
+      <li><b>Parental education</b> is the higher level of the two parents (HISCED / PAREDINT in years of schooling: 6, 9, 12, 14, 16 years): basic = up to grade 9, secondary = school / college, higher = university.</li>
+      <li><b>Economic capital</b> is our index of three "money" possessions at home: the number of cars (ST251Q01JA), rooms with a bath or shower (ST251Q03JA) and rooms with a toilet (ST251Q04JA). We take the mean of the standardised values and split students into quarters (quartiles) within each country.</li>
+      <li><b>Cultural capital</b> (after P. Bourdieu) is the same kind of index built from the number of books (ST255Q01JA), musical instruments (ST251Q06JA) and works of art (ST251Q07JA) at home, also split into quarters.</li>
+      <li><b>Why two indices instead of the official HOMEPOS:</b> HOMEPOS mixes money and culture into one number. If HOMEPOS is split into its components (82 countries with complete data), the mean standardised coefficient is <b>0.195</b> for books at home, <b>0.162</b> for parental education and <b>0.110</b> for purely material possessions.</li>
     </ul>
-    <h2>Обмеження</h2>
+    <h2>Limitations</h2>
     <ul>
-      <li><b>Кореляція ≠ причинність.</b> Дані не доводять, що саме по собі підвищення доходу чи формальної освіти батьків автоматично підніме бали дитини. Приховані фактори (здібності, мотивація) можуть передаватися в родині паралельно.</li>
-      <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Обидва фактори разом пояснюють близько 10% різниці в балах усередині країни (а з урахуванням розширених категорій — до 11–18%).</li>
-      <li><b>Пропущені дані не є випадковими.</b> Дані про освіту батьків відсутні у 14,6% учнів, і ці учні набирають у середньому на 40 балів менше за середній показник своєї країни (тоді як ті, хто відповів, — на 7 балів більше). Отже, найбільш вразливі діти недопредставлені, а реальні розриви, ймовірно, ще більші.</li>
-      <li><b>Індекси грубі:</b> і наші індекси, і HOMEPOS спираються на відповіді 15-річного підлітка про речі вдома, а не на реальний дохід чи активи сім'ї. У наших індексах лише по 3 питання, тож учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на карті є позначка.</li>
-      <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Рики немає даних про освіту батьків, тож для них показано лише середній бал.</li>
+      <li><b>Correlation ≠ causation.</b> The data do not prove that raising parents' income or formal education would by itself raise a child's score. Hidden factors (ability, motivation) may be passed on in the family at the same time.</li>
+      <li><b>A prediction is not the fate of a particular child</b>, but the average score of children with these conditions in this country. Together the factors explain about 10% of the score differences within a country (up to 11–18% with extended categories).</li>
+      <li><b>Missing data are not random.</b> Parental education is missing for 14.6% of students, and these students score on average 40 points below their country's mean (while those who answered score 7 points above it). So the most vulnerable children are under-represented, and the real gaps are probably even larger.</li>
+      <li><b>The indices are rough:</b> both our indices and HOMEPOS rely on a 15-year-old's answers about things at home, not on the family's actual income or assets. Each of our indices has only 3 questions, so students with identical answers at quartile borders are split between neighbouring groups at random. Some countries did not ask all the questions (the Netherlands, Israel, Germany, Taiwan, QCI); there the index is built from the questions that were asked, and the map shows a note.</li>
+      <li>The codes QCI, QUA, QKI and QTJ refer to individual regions of countries, not whole countries. Mapping QCI → China and QUA → Ukraine is our assumption and needs to be checked against the PISA 2025 report. El Salvador and Costa Rica have no data on parental education, so only their average score is shown.</li>
     </ul>
   </div>
 </main>
 
-<footer class="wrap">Соціологія, груповий проєкт. Дані: OECD PISA 2025. Код аналізу: <code>analysis/analyze.py</code>.</footer>
+<footer class="wrap">Sociology group project. Data: OECD PISA 2025. Analysis code: <code>analysis/analyze.py</code>.</footer>
 
 <script src="data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
 <script>
 if (!window.PISA) {
-  document.body.insertAdjacentHTML("afterbegin", '<p style="padding:16px;background:#fff3d1;color:#6b4e00;margin:0">Не вдалося завантажити дані (data.js). Відкривайте сайт за посиланням GitHub Pages або разом з папкою docs.</p>');
+  document.body.insertAdjacentHTML("afterbegin", '<p style="padding:16px;background:#fff3d1;color:#6b4e00;margin:0">The data (data.js) failed to load. Open the site via the GitHub Pages link or together with the docs folder.</p>');
 }
 
 const D = window.PISA;
@@ -566,28 +566,28 @@ const L = D.levels;
 const MIN_C = 350, MAX_C = 550;
 
 const NAMES = {
-  ALB:"Албанія", ARE:"ОАЕ", ARG:"Аргентина", ARM:"Вірменія", AUS:"Австралія", AUT:"Австрія",
-  AZE:"Азербайджан", BEL:"Бельгія", BGR:"Болгарія", BRA:"Бразилія", BRN:"Бруней", CAN:"Канада",
-  CHE:"Швейцарія", CHL:"Чилі", COL:"Колумбія", CRI:"Коста-Рика", CZE:"Чехія", DEU:"Німеччина",
-  DNK:"Данія", DOM:"Домініканська Республіка", ECU:"Еквадор", ESP:"Іспанія", EST:"Естонія",
-  FIN:"Фінляндія", FRA:"Франція", GBR:"Велика Британія", GEO:"Грузія", GRC:"Греція",
-  GTM:"Гватемала", HKG:"Гонконг", HRV:"Хорватія", HUN:"Угорщина", IDN:"Індонезія",
-  IRL:"Ірландія", ISL:"Ісландія", ISR:"Ізраїль", ITA:"Італія", JOR:"Йорданія", JPN:"Японія",
-  KAZ:"Казахстан", KEN:"Кенія", KGZ:"Киргизстан", KHM:"Камбоджа", KOR:"Південна Корея",
-  KSV:"Косово", LBN:"Ліван", LTU:"Литва", LUX:"Люксембург", LVA:"Латвія", MAC:"Макао",
-  MAR:"Марокко", MDA:"Молдова", MEX:"Мексика", MKD:"Північна Македонія", MLT:"Мальта",
-  MNE:"Чорногорія", MNG:"Монголія", MUS:"Маврикій", MYS:"Малайзія", NLD:"Нідерланди",
-  NOR:"Норвегія", NZL:"Нова Зеландія", PER:"Перу", PHL:"Філіппіни", POL:"Польща",
-  PRT:"Португалія", PRY:"Парагвай", PSE:"Палестина", QAT:"Катар",
-  QCI:"Китай (окремі регіони, QCI)", QKI:"Регіон QKI", QTJ:"Регіон QTJ",
-  QUA:"Україна (окремі регіони, QUA)", ROU:"Румунія", RWA:"Руанда", SAU:"Саудівська Аравія",
-  SGP:"Сінгапур", SLV:"Сальвадор", SRB:"Сербія", SVK:"Словаччина", SVN:"Словенія",
-  SWE:"Швеція", TAP:"Тайвань", THA:"Таїланд", TUR:"Туреччина", URY:"Уругвай", USA:"США",
-  VNM:"В'єтнам", ZMB:"Замбія"
+  ALB:"Albania", ARE:"United Arab Emirates", ARG:"Argentina", ARM:"Armenia", AUS:"Australia", AUT:"Austria",
+  AZE:"Azerbaijan", BEL:"Belgium", BGR:"Bulgaria", BRA:"Brazil", BRN:"Brunei", CAN:"Canada",
+  CHE:"Switzerland", CHL:"Chile", COL:"Colombia", CRI:"Costa Rica", CZE:"Czechia", DEU:"Germany",
+  DNK:"Denmark", DOM:"Dominican Republic", ECU:"Ecuador", ESP:"Spain", EST:"Estonia",
+  FIN:"Finland", FRA:"France", GBR:"United Kingdom", GEO:"Georgia", GRC:"Greece",
+  GTM:"Guatemala", HKG:"Hong Kong", HRV:"Croatia", HUN:"Hungary", IDN:"Indonesia",
+  IRL:"Ireland", ISL:"Iceland", ISR:"Israel", ITA:"Italy", JOR:"Jordan", JPN:"Japan",
+  KAZ:"Kazakhstan", KEN:"Kenya", KGZ:"Kyrgyzstan", KHM:"Cambodia", KOR:"South Korea",
+  KSV:"Kosovo", LBN:"Lebanon", LTU:"Lithuania", LUX:"Luxembourg", LVA:"Latvia", MAC:"Macao",
+  MAR:"Morocco", MDA:"Moldova", MEX:"Mexico", MKD:"North Macedonia", MLT:"Malta",
+  MNE:"Montenegro", MNG:"Mongolia", MUS:"Mauritius", MYS:"Malaysia", NLD:"Netherlands",
+  NOR:"Norway", NZL:"New Zealand", PER:"Peru", PHL:"Philippines", POL:"Poland",
+  PRT:"Portugal", PRY:"Paraguay", PSE:"Palestine", QAT:"Qatar",
+  QCI:"China (selected regions, QCI)", QKI:"Region QKI", QTJ:"Region QTJ",
+  QUA:"Ukraine (selected regions, QUA)", ROU:"Romania", RWA:"Rwanda", SAU:"Saudi Arabia",
+  SGP:"Singapore", SLV:"El Salvador", SRB:"Serbia", SVK:"Slovakia", SVN:"Slovenia",
+  SWE:"Sweden", TAP:"Taiwan", THA:"Thailand", TUR:"Türkiye", URY:"Uruguay", USA:"United States",
+  VNM:"Vietnam", ZMB:"Zambia"
 };
 const nm = c => NAMES[c] || c;
 
-const codes = Object.keys(D.countries).sort((a, b) => nm(a).localeCompare(nm(b), "uk"));
+const codes = Object.keys(D.countries).sort((a, b) => nm(a).localeCompare(nm(b), "en"));
 const defaultCnt = D.countries["QUA"] ? "QUA" : codes[0];
 const state = { edu: 1, wealth: 1, culture: 1, useCulture: true, mode: "pred", cnt: defaultCnt, solScen: "all", solHideOthers: false };
 const $ = id => document.getElementById(id);
@@ -603,7 +603,7 @@ function predict(c, edu, wealth, culture) {
   return m.a + m.edu[edu] + m.wealth[wealth] + m.culture[culture];
 }
 
-// Колір: червоний (низький бал) → жовтий (середній) → зелений (високий)
+// Colour: red (low score) → yellow (average) → green (high)
 function hexToRgb(h) {
   const clean = h.replace("#", "").trim();
   const n = parseInt(clean, 16);
@@ -619,7 +619,7 @@ function colorFor(score) {
   const rgb = a.map((x, i) => Math.round(x + (b[i] - x) * t));
   return `rgb(${rgb.join(",")})`;
 }
-// Темний текст на жовтому, білий на насиченому червоному / зеленому
+// Dark text on yellow, white on saturated red / green
 function inkFor(score) {
   const mc = (MIN_C + MAX_C) / 2, far = Math.abs(score - mc) / ((MAX_C - MIN_C) / 2);
   return far > 0.6 ? "#ffffff" : "#15140f";
@@ -643,12 +643,12 @@ let mapBound = false;
 function drawMap() {
   if ($("page-map").hidden) return;
   $("mapHint").textContent = state.mode === "pred"
-    ? `Колір = прогнозований бал дитини з умовами: освіта батьків ${L.edu[state.edu]}, економічний капітал ${L.wealth[state.wealth]}` +
-      (state.useCulture ? `, культурний капітал ${L.culture[state.culture]}.` : ".")
-    : "Колір = фактичний середній бал з математики всіх учнів країни.";
+    ? `Colour = predicted score of a child with: parental education ${L.edu[state.edu]}, economic capital ${L.wealth[state.wealth]}` +
+      (state.useCulture ? `, cultural capital ${L.culture[state.culture]}.` : ".")
+    : "Colour = actual average maths score of all students in the country.";
 
   if (typeof Plotly === "undefined") {
-    $("map").innerHTML = `<div style="padding:24px;color:var(--text-2)">Бібліотека карти (Plotly) не завантажилася. Перевірте підключення до інтернету або скористайтеся вибором країни зі списку ліворуч.</div>`;
+    $("map").innerHTML = `<div style="padding:24px;color:var(--text-2)">The map library (Plotly) failed to load. Check your internet connection or pick a country from the list on the left.</div>`;
     return;
   }
 
@@ -658,7 +658,7 @@ function drawMap() {
     const v = state.mode === "pred" ? predict(d, state.edu, state.wealth, state.culture) : d.mean;
     if (v == null) return;
     locs.push(d.map); z.push(v);
-    text.push(`<b>${nm(c)}</b><br>${state.mode === "pred" ? "Прогноз" : "Середній бал"}: ${Math.round(v)}`);
+    text.push(`<b>${nm(c)}</b><br>${state.mode === "pred" ? "Prediction" : "Average score"}: ${Math.round(v)}`);
   });
   const trace = {
     type: "choropleth", locationmode: "ISO-3", locations: locs, z, text,
@@ -696,7 +696,7 @@ function drawMap() {
       });
     }
   }).catch(err => {
-    console.warn("Помилка відображення карти:", err);
+    console.warn("Map rendering error:", err);
   });
 }
 
@@ -704,8 +704,8 @@ function drawCountry() {
   const c = state.cnt, d = D.countries[c], m = model(d);
   const card = $("countryCard");
   if (!m) {
-    card.innerHTML = `<div class="country-head"><h3>${nm(c)}</h3><span class="pill">середній бал ${Math.round(d.mean)}</span></div>
-      <p class="warn">Для цієї країни в даних немає освіти батьків або економічного капіталу, тому прогноз порахувати неможливо.</p>`;
+    card.innerHTML = `<div class="country-head"><h3>${nm(c)}</h3><span class="pill">average score ${Math.round(d.mean)}</span></div>
+      <p class="warn">There are no data on parental education or economic capital for this country, so a prediction cannot be calculated.</p>`;
     return;
   }
   const p = predict(d, state.edu, state.wealth, state.culture);
@@ -714,20 +714,20 @@ function drawCountry() {
   const cultureGap = state.useCulture ? m.culture[3] - m.culture[0] : null;
   const fmt = v => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v));
   const winner = wealthGap > eduGap
-    ? `У цій країні <b>гроші важать більше</b>, ніж освіта батьків.`
-    : `У цій країні <b>освіта батьків важить більше</b>, ніж гроші.`;
+    ? `In this country <b>money matters more</b> than parental education.`
+    : `In this country <b>parental education matters more</b> than money.`;
 
   const warns = [];
   if (d.edu_share && d.edu_share[state.edu] < 0.05)
-    warns.push(`Лише ${(d.edu_share[state.edu] * 100).toFixed(1)}% учнів у цій країні мають батьків з освітою «${L.edu[state.edu]}», тому прогноз для цієї групи неточний.`);
-  const ITEMS = { wealth: "економічного капіталу (машини, ванни, туалети)", culture: "культурного капіталу (книжки, інструменти, мистецтво)" };
+    warns.push(`Only ${(d.edu_share[state.edu] * 100).toFixed(1)}% of students in this country have parents with "${L.edu[state.edu]}" education, so the prediction for this group is imprecise.`);
+  const ITEMS = { wealth: "economic capital (cars, bathrooms, toilets)", culture: "cultural capital (books, instruments, art)" };
   if (d.items) {
     for (const k of ["wealth", "culture"])
       if (d.items[k] < 3)
-        warns.push(`У цій країні в анкеті було лише ${d.items[k]} з 3 питань для індексу ${ITEMS[k]}, тож порівнювати його з іншими країнами треба обережно.`);
+        warns.push(`In this country the questionnaire had only ${d.items[k]} of the 3 questions for the index of ${ITEMS[k]}, so compare it with other countries with caution.`);
   }
   if (d.n && d.n_model / d.n < 0.7)
-    warns.push(`Для ${Math.round((1 - d.n_model / d.n) * 100)}% учнів бракує відповідей про освіту, економічний або культурний капітал, тож результат може бути зміщеним.`);
+    warns.push(`${Math.round((1 - d.n_model / d.n) * 100)}% of students are missing answers on education, economic or cultural capital, so the result may be biased.`);
 
   let heat = `<table class="heat"><thead><tr><th></th>${L.edu.map(e => `<th>${e.split(" (")[0]}</th>`).join("")}</tr></thead><tbody>`;
   for (let w = 3; w >= 0; w--) {
@@ -735,7 +735,7 @@ function drawCountry() {
     for (let e = 0; e < 3; e++) {
       const v = predict(d, e, w, state.culture);
       const sel = e === state.edu && w === state.wealth ? " sel" : "";
-      heat += `<td class="${sel}" data-e="${e}" data-w="${w}" style="background:${colorFor(v)};color:${inkFor(v)}" title="${L.wealth[w]}, освіта ${L.edu[e]}: ${Math.round(v)}">${Math.round(v)}</td>`;
+      heat += `<td class="${sel}" data-e="${e}" data-w="${w}" style="background:${colorFor(v)};color:${inkFor(v)}" title="${L.wealth[w]}, education ${L.edu[e]}: ${Math.round(v)}">${Math.round(v)}</td>`;
     }
     heat += "</tr>";
   }
@@ -744,23 +744,23 @@ function drawCountry() {
   card.innerHTML = `
     <div class="country-head">
       <h3>${nm(c)}</h3>
-      <span class="pill">середній бал країни: ${Math.round(d.mean)}</span>
+      <span class="pill">country average: ${Math.round(d.mean)}</span>
     </div>
     <div class="detail">
       <div>
-        <div style="color:var(--text-2);font-size:14px;margin-top:8px">Прогнозований бал з математики</div>
-        <div class="big">${Math.round(p)} <small>балів</small></div>
+        <div style="color:var(--text-2);font-size:14px;margin-top:8px">Predicted maths score</div>
+        <div class="big">${Math.round(p)} <small>points</small></div>
         <div class="compare">
-          <div><b>${fmt(wealthGap)}</b><span>від найбідніших 25% до найбагатших 25% (освіта й культура ті самі)</span></div>
-          <div><b>${fmt(eduGap)}</b><span>від базової до вищої освіти батьків (гроші й культура ті самі)</span></div>
-          ${cultureGap === null ? `<div><b>—</b><span>культурний капітал зараз не враховується</span></div>`
-            : `<div><b>${fmt(cultureGap)}</b><span>від найнижчого до найвищого культурного капіталу (решта та сама)</span></div>`}
+          <div><b>${fmt(wealthGap)}</b><span>from the poorest 25% to the richest 25% (same education and culture)</span></div>
+          <div><b>${fmt(eduGap)}</b><span>from basic to higher parental education (same money and culture)</span></div>
+          ${cultureGap === null ? `<div><b>—</b><span>cultural capital is currently not included</span></div>`
+            : `<div><b>${fmt(cultureGap)}</b><span>from the lowest to the highest cultural capital (everything else the same)</span></div>`}
         </div>
         <p style="margin:0">${winner}</p>
         ${warns.map(w => `<div class="warn">${w}</div>`).join("")}
       </div>
       <div>
-        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Прогноз для всіх комбінацій${state.useCulture ? ` (культурний капітал: ${L.culture[state.culture]})` : ""}. Рядки — економічний капітал, стовпці — освіта батьків. Натисніть клітинку, щоб обрати її.</div>
+        <div style="color:var(--text-2);font-size:14px;margin:8px 0">Prediction for all combinations${state.useCulture ? ` (cultural capital: ${L.culture[state.culture]})` : ""}. Rows are economic capital, columns are parental education. Click a cell to select it.</div>
         <div class="heat-wrap">${heat}</div>
       </div>
     </div>`;
@@ -779,232 +779,232 @@ function drawFindings() {
   const cult = full.filter(c => D.countries[c].culture[3] > D.countries[c].wealth[3]);
   const top = [...w1].sort((a, b) => (D.countries[b].wealth[3] - D.countries[b].edu[2]) - (D.countries[a].wealth[3] - D.countries[a].edu[2])).slice(0, 8);
   $("findings").innerHTML = `
-    <p class="lead">Гіпотеза про те, що достаток батьків впливає на результати дитини з математики сильніше за їхню освіту, <b>підтвердилася лише частково</b>: освіта є сильнішим предиктором у більшості країн, а гроші виходять на перше місце переважно в країнах з низьким рівнем ресурсів.</p>
+    <p class="lead">The hypothesis that parental wealth affects a child's maths results more strongly than parental education was <b>only partly confirmed</b>: education is the stronger predictor in most countries, while money comes first mainly in low-resource countries.</p>
 
     <div class="stats">
-      <div><b>59 з 87</b><span>країн у двофакторній моделі звіту, де <b>освіта батьків</b> сильніша за достаток (у нашій 3-факторній моделі на карті — ${full.length - w1.length} з ${full.length})</span></div>
-      <div><b>28 з 87</b><span>країн, де <b>достаток (HOMEPOS)</b> важить більше за освіту батьків; 20 із них — у третині країн із найменшими ресурсами</span></div>
-      <div><b>47 з 82</b><span>країн, де <b>книжки вдома</b> (культурний капітал) є сильнішим окремим фактором, ніж освіта чи матеріальні речі</span></div>
+      <div><b>59 of 87</b><span>countries in the report's two-factor model where <b>parental education</b> is stronger than wealth (in our 3-factor model on the map: ${full.length - w1.length} of ${full.length})</span></div>
+      <div><b>28 of 87</b><span>countries where <b>wealth (HOMEPOS)</b> matters more than parental education; 20 of them are in the third of countries with the fewest resources</span></div>
+      <div><b>47 of 82</b><span>countries where <b>books at home</b> (cultural capital) are a stronger single factor than education or material possessions</span></div>
     </div>
 
-    <h2>1. Порівняння сили факторів у середньому по країнах</h2>
-    <p>Якщо розглядати чисті розриви окремо, вони майже однакові: учні з найбідніших 20% сімей відстають від найбагатших 20% приблизно на <b>54 бали</b>, і так само діти батьків із базовою освітою (до 9 років навчання) відстають від дітей випускників університетів (16 років навчання) на <b>54 бали</b> — це еквівалент приблизно двох-трьох років шкільного навчання.</p>
-    <p>Проте коли обидва фактори одночасно включені в регресійну модель у межах кожної країни, освіта батьків виявляється сильнішою:</p>
+    <h2>1. Comparing the strength of the factors across countries</h2>
+    <p>Taken separately, the raw gaps are almost equal: students from the poorest 20% of families are about <b>54 points</b> behind the richest 20%, and children of parents with basic education (up to 9 years of schooling) are likewise <b>54 points</b> behind children of university graduates (16 years of schooling). That is roughly two to three years of schooling.</p>
+    <p>But when both factors are included in a regression model within each country at the same time, parental education turns out to be stronger:</p>
 
     <table class="choose">
       <thead>
         <tr>
-          <th>Показник (у середньому по 87 країнах)</th>
-          <th>Освіта батьків</th>
-          <th>Домашній достаток (HOMEPOS)</th>
+          <th>Indicator (average across 87 countries)</th>
+          <th>Parental education</th>
+          <th>Home wealth (HOMEPOS)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Стандартизований коефіцієнт (обидва фактори в моделі)</td>
+          <td>Standardised coefficient (both factors in the model)</td>
           <td><b>0.20</b></td>
           <td><b>0.15</b></td>
         </tr>
         <tr>
-          <td>Балів з математики на 1 стандартне відхилення</td>
-          <td><b>близько 18 балів</b></td>
-          <td><b>близько 12.5 балів</b></td>
+          <td>Maths points per 1 standard deviation</td>
+          <td><b>about 18 points</b></td>
+          <td><b>about 12.5 points</b></td>
         </tr>
         <tr>
-          <td>Частка поясненої різниці балів (окремо, R²)</td>
+          <td>Share of score variation explained (separately, R²)</td>
           <td><b>7.2%</b></td>
           <td><b>5.7%</b></td>
         </tr>
         <tr>
-          <td>Кількість країн, де фактор є сильнішим</td>
-          <td><b>59 із 87</b></td>
-          <td><b>28 із 87</b></td>
+          <td>Number of countries where the factor is stronger</td>
+          <td><b>59 of 87</b></td>
+          <td><b>28 of 87</b></td>
         </tr>
         <tr>
-          <td>Частка учнів нижче базового порогу (~420 балів) у крайніх групах</td>
-          <td><b>74%</b> (≤9 років) проти <b>34%</b> (16 років)</td>
-          <td><b>60%</b> (найбідніші 20%) проти <b>37%</b> (найбагатші 20%)</td>
+          <td>Share of students below the baseline level (~420 points) in the extreme groups</td>
+          <td><b>74%</b> (≤9 years) vs <b>34%</b> (16 years)</td>
+          <td><b>60%</b> (poorest 20%) vs <b>37%</b> (richest 20%)</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>2. Де гроші важливіші за освіту?</h2>
-    <p>У третині країн із найнижчим рівнем домашніх ресурсів достаток переважає освіту в <b>20 із 29 випадків</b> (середній коефіцієнт 0.19 для достатку проти 0.15 для освіти). Серед лідерів за впливом грошей: ${top.map(nm).join(", ")}.</p>
-    <p>Натомість у середній та верхній третинах країн переконливо лідирує освіта батьків (0.23 проти 0.13 та 0.23 проти 0.12), а достаток випереджає її лише у <b>8 із 58 країн</b>, зазвичай із мінімальним відривом. Практичний висновок: <b>там, де базові матеріальні умови вдома не гарантовані, головним бар'єром стають гроші; там, де базовий добробут забезпечений, вирішує здатність сім'ї підтримати навчання.</b></p>
+    <h2>2. Where does money matter more than education?</h2>
+    <p>In the third of countries with the lowest level of home resources, wealth outweighs education in <b>20 of 29 cases</b> (mean coefficient 0.19 for wealth vs 0.15 for education). Among the countries where money matters most: ${top.map(nm).join(", ")}.</p>
+    <p>In contrast, in the middle and top thirds of countries parental education clearly leads (0.23 vs 0.13 and 0.23 vs 0.12), and wealth outweighs it in only <b>8 of 58 countries</b>, usually by a small margin. The practical conclusion: <b>where basic material conditions at home are not guaranteed, money becomes the main barrier; where basic well-being is secured, what decides is the family's ability to support learning.</b></p>
 
-    <h2>3. Освіта і гроші підсилюють одне одного, а не конкурують</h2>
+    <h2>3. Education and money reinforce each other rather than compete</h2>
     <ul>
-      <li><b>Найкращі результати</b> мають діти освічених і заможних батьків, а найгірші — діти малоосвічених і бідних: розрив між цими групами становить <b>79 балів</b> у середньому по всіх країнах.</li>
-      <li><b>У бідних країнах вища освіта батьків майже не рятує бідну сім'ю:</b> серед найбідніших 20% родин (Q1) діти випускників університетів випереджають дітей батьків із базовою освітою лише на <b>+6 балів</b> у бідних країнах проти <b>+53 балів</b> у ресурсних країнах.</li>
-      <li><b>Гроші без освіти теж дають обмежений ефект:</b> серед батьків із освітою до 9 класів різниця між бідними й багатими становить лише 21 бал і перестає зростати після середнього квінтиля, тоді як серед батьків з університетською освітою різниця між найбіднішими і найбагатшими сягає <b>51 бала</b>.</li>
+      <li><b>The best results</b> belong to children of educated and well-off parents, the worst to children of poorly educated and poor parents: the gap between these groups is <b>79 points</b> on average across all countries.</li>
+      <li><b>In poor countries higher parental education hardly helps a poor family:</b> among the poorest 20% of families (Q1), children of university graduates are only <b>+6 points</b> ahead of children of parents with basic education in poor countries, vs <b>+53 points</b> in high-resource countries.</li>
+      <li><b>Money without education also has a limited effect:</b> among parents with education up to grade 9, the gap between poor and rich is only 21 points and stops growing after the middle quintile, while among parents with university education the gap between the poorest and the richest reaches <b>51 points</b>.</li>
     </ul>
 
     <div style="margin-top:24px">
-      <a class="btn" href="#solutions">Перейти до рішень на основі цих висновків →</a>
+      <a class="btn" href="#solutions">Go to the solutions based on these findings →</a>
     </div>`;
 }
 
-// Дані та логіка вкладки «Рішення» на основі PDF-звіту (Розділи 7, 8, 9, 10)
+// Solutions tab data and logic, based on the PDF report (Sections 7, 8, 9, 10)
 const SOL_GROUPS = [
   {
     id: "A",
-    title: "А. Прибрати матеріальні бар'єри",
-    sub: "Пріоритет №1 там, де базові умови вдома не гарантовані й гроші важать більше за освіту",
+    title: "A. Remove material barriers",
+    sub: "Priority #1 where basic conditions at home are not guaranteed and money matters more than education",
     items: [
       {
-        code: "А1",
-        title: "Безкоштовний базовий «навчальний набір»",
-        desc: "Підручники, робочі зошити, базовий цифровий пристрій та доступ до інтернету для учнів, у яких їх немає вдома. Це знімає пряму фізичну перешкоду для виконання домашніх завдань.",
-        evi: "Найважливіше у 28 країнах, де достаток важить більше за освіту батьків (особливо у третині країн з низькими ресурсами).",
-        tags: ["Швидкий ефект", "Цільова підтримка"],
+        code: "A1",
+        title: "A free basic \"learning kit\"",
+        desc: "Textbooks, workbooks, a basic digital device and internet access for students who do not have them at home. This removes a direct physical obstacle to doing homework.",
+        evi: "Most important in the 28 countries where wealth matters more than parental education (especially in the third of countries with low resources).",
+        tags: ["Quick effect", "Targeted support"],
         scens: ["low_res"]
       },
       {
-        code: "А2",
-        title: "Безкоштовне шкільне харчування",
-        desc: "Прибирає голод як фізіологічну перешкоду для концентрації на уроках і водночас вивільняє частину сімейного бюджету бідних родин.",
-        evi: "Пом'якшує депривацію у найбіднішому квінтилі (Q1), де 60% учнів не досягають базового порогу 420 балів.",
-        tags: ["Базова потреба", "Соціальний захист"],
+        code: "A2",
+        title: "Free school meals",
+        desc: "Removes hunger as a physical obstacle to concentrating in class and at the same time frees up part of poor families' budgets.",
+        evi: "Eases deprivation in the poorest quintile (Q1), where 60% of students do not reach the 420-point baseline.",
+        tags: ["Basic need", "Social protection"],
         scens: ["low_res"]
       },
       {
-        code: "А3",
-        title: "Безкоштовні гуртки та групи продовженого дня",
-        desc: "Організована допомога з домашніми завданнями та позашкільні заняття прямо у приміщенні школи. Вони замінюють те, що заможні сім'ї купують на ринку — платні гуртки, секції та приватних репетиторів.",
-        evi: "Забезпечує тихе місце для навчання та супровід дорослого, яких бракує вдома.",
-        tags: ["Шкільне середовище", "Вирівнювання шансів"],
+        code: "A3",
+        title: "Free clubs and after-school groups",
+        desc: "Organised homework help and extracurricular activities right on school premises. They replace what well-off families buy on the market: paid clubs, sports sections and private tutors.",
+        evi: "Provides a quiet place to study and adult support that are missing at home.",
+        tags: ["School environment", "Levelling the field"],
         scens: ["low_res"]
       },
       {
-        code: "А4",
-        title: "Фінансування шкіл за потребою (needs-based funding)",
-        desc: "Формула, за якою школи з більшою часткою соціально вразливих та бідних учнів отримують більше коштів у розрахунку на одного учня, а не однакову суму для всіх.",
-        evi: "Дозволяє школам у бідних районах компенсувати брак сімейних ресурсів, які самотужки батьки покрити не можуть.",
-        tags: ["Фінансова формула", "Системний перерозподіл"],
+        code: "A4",
+        title: "Needs-based school funding",
+        desc: "A formula under which schools with a larger share of socially vulnerable and poor students receive more money per student, rather than the same amount for everyone.",
+        evi: "Lets schools in poor areas compensate for the lack of family resources that parents cannot cover on their own.",
+        tags: ["Funding formula", "Systemic redistribution"],
         scens: ["low_res"]
       }
     ]
   },
   {
     id: "B",
-    title: "Б. Замінити домашній навчальний капітал, якого бракує",
-    sub: "Школа компенсує домашнє навчальне середовище (книжки, читання, вчасну допомогу з предметами)",
+    title: "B. Replace missing home learning capital",
+    sub: "School compensates for the home learning environment (books, reading, timely help with subjects)",
     items: [
       {
-        code: "Б5",
-        title: "Репетиторство в малих групах у школі (small-group tutoring)",
-        desc: "Короткі регулярні заняття у групах по 2–4 учні з підготовленим тьютором для тих, хто починає відставати. Серед шкільних втручань цей інструмент має одні з найсильніших емпіричних доказів ефективності.",
-        evi: "Оскільки інструмент дорогий, при обмеженому бюджеті його варто спрямовувати вибірково на учнів із найбільшим ризиком.",
-        tags: ["Найвища доказовість", "Прицільна дія"],
+        code: "B5",
+        title: "Small-group tutoring at school",
+        desc: "Short regular sessions in groups of 2–4 students with a trained tutor for those who start to fall behind. Among school interventions, this tool has some of the strongest empirical evidence of effectiveness.",
+        evi: "Because the tool is expensive, with a limited budget it should be targeted at the students most at risk.",
+        tags: ["Strongest evidence", "Targeted action"],
         scens: ["low_res", "mid_high", "budget"]
       },
       {
-        code: "Б6",
-        title: "Книжки вдома та сучасні шкільні бібліотеки",
-        desc: "Програми дарування книжок («книжка в кожен дім»), читацькі підписки та практики сімейного читання — дешеві й прості для запуску пілотів. Оскільки книжки є маркером середовища, а не «чарівною пігулкою», їх обов'язково слід поєднувати з читацькими активностями.",
-        evi: "Кількість книжок вдома — найсильніший окремий чинник у даних PISA (середній коеф. 0.195; №1 у 47 із 82 країн).",
-        tags: ["Низька вартість", "Легкий пілот"],
+        code: "B6",
+        title: "Books at home and modern school libraries",
+        desc: "Book-gifting programmes (\"a book in every home\"), reading subscriptions and family reading practices are cheap and easy to pilot. Since books are a marker of the environment rather than a \"magic pill\", they must be combined with reading activities.",
+        evi: "The number of books at home is the strongest single factor in the PISA data (mean coef. 0.195; #1 in 47 of 82 countries).",
+        tags: ["Low cost", "Easy pilot"],
         scens: ["mid_high", "budget"]
       },
       {
-        code: "Б7",
-        title: "Рання освіта (доступне та якісне дошкілля)",
-        desc: "Освітня нерівність формується задовго до першого класу. Безкоштовний або субсидований доступ до якісного дитячого садка для дітей із бідних родин закладає базові мовні та когнітивні навички.",
-        evi: "Має найтриваліший кумулятивний ефект протягом усього шкільного циклу.",
-        tags: ["Довгостроковий ефект", "Ранній старт"],
+        code: "B7",
+        title: "Early education (accessible, high-quality pre-school)",
+        desc: "Educational inequality forms long before grade 1. Free or subsidised access to good kindergartens for children from poor families builds basic language and cognitive skills.",
+        evi: "Has the longest cumulative effect over the whole school cycle.",
+        tags: ["Long-term effect", "Early start"],
         scens: ["low_res", "long_term"]
       },
       {
-        code: "Б8",
-        title: "Ранні сигнали і швидка автоматична допомога",
-        desc: "Регулярні діагностичні тести наприкінці початкової школи та автоматичне призначення додаткової підтримки тим, хто відстає — без очікування запиту від батьків.",
-        evi: "Освічені батьки самі просять про допомогу значно частіше; автоматичний тригер захищає дітей менш обізнаних батьків.",
-        tags: ["Низька вартість", "Управління на даних"],
+        code: "B8",
+        title: "Early warning signals and fast automatic help",
+        desc: "Regular diagnostic tests at the end of primary school and automatic assignment of extra support to those who fall behind, without waiting for parents to ask.",
+        evi: "Educated parents ask for help much more often; an automatic trigger protects children of less informed parents.",
+        tags: ["Low cost", "Data-driven management"],
         scens: ["mid_high", "budget"]
       }
     ]
   },
   {
     id: "C",
-    title: "В. Працювати з батьками",
-    sub: "Підтримка родин із низьким рівнем формальної освіти та зниження інформаційних бар'єрів",
+    title: "C. Work with parents",
+    sub: "Support for families with little formal education and lower information barriers",
     items: [
       {
-        code: "В9",
-        title: "Практичні програми для батьків із низькою освітою",
-        desc: "Прості та зрозумілі підказки, як підтримувати навчання дитини вдома (як перевіряти домашні завдання, як розмовляти з дитиною про школу та навчальні цілі) через короткі формати та місцевих координаторів.",
-        evi: "Допомагає відтворити ті практики підтримки, які в сім'ях із вищою освітою передаються за замовчуванням.",
-        tags: ["Робота з громадою", "Середня вартість"],
+        code: "C9",
+        title: "Practical programmes for parents with little education",
+        desc: "Simple, clear tips on how to support a child's learning at home (how to check homework, how to talk with a child about school and learning goals) through short formats and local coordinators.",
+        evi: "Helps reproduce the support practices that families with higher education pass on by default.",
+        tags: ["Community work", "Medium cost"],
         scens: ["mid_high"]
       },
       {
-        code: "В10",
-        title: "Освіта дорослих та навчання впродовж життя",
-        desc: "Доступ батьків до вечірніх шкіл, інтенсивних професійних курсів та онлайн-освіти. Це фундаментальна довгострокова інвестиція в людський капітал родини.",
-        evi: "Освіта батьків — найсильніший сімейний фактор у 59 із 87 країн (різниця між ≤9 і 16 роками навчання становить 54 бали).",
-        tags: ["Довгострокова інвестиція", "Людський капітал"],
+        code: "C10",
+        title: "Adult education and lifelong learning",
+        desc: "Parents' access to evening schools, intensive vocational courses and online education. This is a fundamental long-term investment in the family's human capital.",
+        evi: "Parental education is the strongest family factor in 59 of 87 countries (the gap between ≤9 and 16 years of schooling is 54 points).",
+        tags: ["Long-term investment", "Human capital"],
         scens: ["mid_high", "long_term"]
       },
       {
-        code: "В11",
-        title: "Прозора та проста комунікація школи з родинами",
-        desc: "Відмова від складної бюрократичної мови, зрозумілі путівники та індивідуальні консультації для сімей, які погано знають освітню систему (вибір гуртків, профільного ліцею, правила вступу).",
-        evi: "Зменшує інформаційну перевагу високоосвічених батьків при навігації освітніми траєкторіями.",
-        tags: ["Низька вартість", "Швидке впровадження"],
+        code: "C11",
+        title: "Clear and simple school–family communication",
+        desc: "No complex bureaucratic language, clear guides and individual consultations for families who know little about the education system (choice of clubs, specialised upper-secondary schools, admission rules).",
+        evi: "Reduces the information advantage of highly educated parents when navigating educational pathways.",
+        tags: ["Low cost", "Quick to implement"],
         scens: ["mid_high", "budget"]
       }
     ]
   },
   {
     id: "D",
-    title: "Г. Рішення на рівні системи",
-    sub: "Структурні правила гри: десегрегація, розподіл найкращих вчителів та соціальні ліфти",
+    title: "D. System-level solutions",
+    sub: "Structural rules of the game: desegregation, allocation of the best teachers and social mobility",
     items: [
       {
-        code: "Г12",
-        title: "Менше шкільної сегрегації",
-        desc: "Прозорі правила прийому до шкіл без прихованого відбору на старті, пізніший поділ учнів за академічними треками (tracking) та збалансовані межі шкільних округів.",
-        evi: "Запобігає концентрації дітей із бідних та малоосвічених родин в ізольованих «слабких» школах.",
-        tags: ["Структурна реформа", "Довгостроковий ефект"],
+        code: "D12",
+        title: "Less school segregation",
+        desc: "Transparent school admission rules without hidden selection at the start, later separation of students into academic tracks (tracking), and balanced school catchment areas.",
+        evi: "Prevents children from poor and less educated families from being concentrated in isolated \"weak\" schools.",
+        tags: ["Structural reform", "Long-term effect"],
         scens: ["mid_high", "long_term"]
       },
       {
-        code: "Г13",
-        title: "Найкращі вчителі в найскладніших школах",
-        desc: "Відчутні фінансові надбавки до оплати праці, програми менторства для педагогів та менший розмір класів у школах, де зосереджена бідність і соціальна вразливість.",
-        evi: "Оскільки 90% варіації балів не пояснюється сім'єю, якість викладання у складних школах є головним важелем змін.",
-        tags: ["Кадрова політика", "Високий імпакт"],
+        code: "D13",
+        title: "The best teachers in the hardest schools",
+        desc: "Substantial pay bonuses, mentoring programmes for teachers and smaller classes in schools where poverty and social vulnerability are concentrated.",
+        evi: "Since 90% of the variation in scores is not explained by the family, teaching quality in difficult schools is the main lever for change.",
+        tags: ["Staffing policy", "High impact"],
         scens: ["mid_high"]
       },
       {
-        code: "Г14",
-        title: "Кар'єрні консультації та «сходинки вгору»",
-        desc: "Цільові стипендії, менторський супровід і підготовчі програми для здібних учнів із бідних сімей та родин із низьким рівнем освіти батьків.",
-        evi: "У даних багато дітей із нижніх груп перевершують середній рівень країни — їм потрібен місток до університетів.",
-        tags: ["Соціальна мобільність", "Довгострокова дія"],
+        code: "D14",
+        title: "Career guidance and \"steps up\"",
+        desc: "Targeted scholarships, mentoring and preparatory programmes for able students from poor families and families with low parental education.",
+        evi: "In the data, many children from the bottom groups outperform their country's average; they need a bridge to university.",
+        tags: ["Social mobility", "Long-term action"],
         scens: ["long_term"]
       }
     ]
   },
   {
     id: "E",
-    title: "Ґ. Вимірювання та оцінка політик",
-    sub: "Щоб бачити реальний внесок школи й масштабувати лише те, що справді працює",
+    title: "E. Measuring and evaluating policies",
+    sub: "To see the real contribution of schools and scale up only what actually works",
     items: [
       {
-        code: "Ґ15",
-        title: "Показник знедоленості як офіційна метрика (Value-Added)",
-        desc: "Публікувати результати шкіл із поправкою на соціальне походження учнів (індекс неблагополуччя). Це потрібно, щоб школи, які працюють у важких соціальних умовах, не карали «сирими» рейтингами, а успішні практики ставали видимими.",
-        evi: "Без урахування фону сімей рейтинги шкіл просто відображають склад батьків, а не якість роботи вчителів.",
-        tags: ["Освітня аналітика", "Справедлива оцінка"],
+        code: "E15",
+        title: "A disadvantage indicator as an official metric (value-added)",
+        desc: "Publish school results adjusted for students' social background (a disadvantage index). This is needed so that schools working in difficult social conditions are not punished by \"raw\" rankings, and successful practices become visible.",
+        evi: "Without accounting for family background, school rankings simply reflect who the parents are, not how well the teachers work.",
+        tags: ["Education analytics", "Fair assessment"],
         scens: ["long_term"]
       },
       {
-        code: "Ґ16",
-        title: "Пілоти з оцінкою впливу перед масштабуванням",
-        desc: "Перевіряти кожне втручання через випадковий розподіл (RCT) або порівняння схожих шкіл перед розгортанням на всю країну. Дані PISA добре діагностують проблему, але не кажуть, яке саме лікування спрацює.",
-        evi: "Захищає освітній бюджет від неефективних витрат і перетворює гіпотези на перевірені рішення.",
-        tags: ["Доказова політика", "Обов'язковий стандарт"],
+        code: "E16",
+        title: "Pilots with impact evaluation before scaling up",
+        desc: "Test every intervention through random assignment (RCT) or comparison of similar schools before rolling it out nationwide. PISA data diagnose the problem well, but do not say which treatment will work.",
+        evi: "Protects the education budget from ineffective spending and turns hypotheses into proven solutions.",
+        tags: ["Evidence-based policy", "Mandatory standard"],
         scens: ["long_term"]
       }
     ]
@@ -1012,11 +1012,11 @@ const SOL_GROUPS = [
 ];
 
 const SCEN_META = {
-  all: "Показано всі 16 гіпотез політики у 5 напрямах (А–Ґ). Натисніть на сценарій вище або на рядок у таблиці внизу, щоб підсвітити найобґрунтованіші кроки.",
-  low_res: "Сценарій для країн з низьким рівнем ресурсів (де гроші важать більше за освіту): фокус на знятті матеріальних бар'єрів (А1–А4), шкільному репетиторстві (Б5) та ранньому дошкіллі (Б7).",
-  mid_high: "Сценарій для країн із середнім і високим рівнем ресурсів (де важливіша освіта батьків): фокус на компенсації навчального капіталу в школі (Б5, Б6, Б8), роботі з батьками (В9–В11) і зниженні сегрегації (Г12–Г13).",
-  budget: "Сценарій для обмеженого бюджету: низькозатратні швидкі інтервенції (Б6 книжки, Б8 рання діагностика, В11 проста комунікація) плюс прицільне репетиторство Б5 лише для найбільш відстаючих.",
-  long_term: "Довгострокова системна стратегія: інвестиції в дошкілля (Б7), освіту дорослих (В10), десегрегацію та соціальні ліфти (Г12, Г14), а також справедливі метрики й оцінку впливу (Ґ15–Ґ16)."
+  all: "Showing all 16 policy hypotheses in 5 directions (A–E). Click a scenario above or a row in the table below to highlight the best-supported steps.",
+  low_res: "Scenario for low-resource countries (where money matters more than education): focus on removing material barriers (A1–A4), school tutoring (B5) and early pre-school (B7).",
+  mid_high: "Scenario for middle- and high-resource countries (where parental education matters more): focus on compensating learning capital at school (B5, B6, B8), working with parents (C9–C11) and reducing segregation (D12–D13).",
+  budget: "Scenario for a limited budget: low-cost quick interventions (B6 books, B8 early diagnostics, C11 simple communication) plus targeted B5 tutoring only for those furthest behind.",
+  long_term: "Long-term systemic strategy: investment in pre-school (B7), adult education (C10), desegregation and social mobility (D12, D14), plus fair metrics and impact evaluation (E15–E16)."
 };
 
 function renderSolutions() {
@@ -1052,7 +1052,7 @@ function renderSolutions() {
           <div class="sol-card-top">
             <span class="sol-code">${it.code}</span>
             <div class="sol-badges">
-              ${isPick ? `<span class="sol-badge rec">Рекомендовано для сценарію</span>` : ""}
+              ${isPick ? `<span class="sol-badge rec">Recommended for this scenario</span>` : ""}
               ${it.tags.map(t => `<span class="sol-badge">${t}</span>`).join("")}
             </div>
           </div>
@@ -1076,10 +1076,10 @@ function renderPeers() {
     const cGap = d.culture ? d.culture[3] - d.culture[0] : 0;
     return `<div class="peer-card">
       <h4><span>${nm(c).split(" (")[0]}</span> <span class="pill">${Math.round(d.mean)}</span></h4>
-      <div class="peer-meta">Освіта батьків: <b>${fmt(eduGap)}</b> балів</div>
-      <div class="peer-meta">Економічний капітал: <b>${fmt(wGap)}</b> балів</div>
-      <div class="peer-meta">Культурний капітал: <b>${fmt(cGap)}</b> балів</div>
-      <button type="button" data-goto-cnt="${c}">Відкрити на карті →</button>
+      <div class="peer-meta">Parental education: <b>${fmt(eduGap)}</b> points</div>
+      <div class="peer-meta">Economic capital: <b>${fmt(wGap)}</b> points</div>
+      <div class="peer-meta">Cultural capital: <b>${fmt(cGap)}</b> points</div>
+      <button type="button" data-goto-cnt="${c}">Open on the map →</button>
     </div>`;
   }).join("");
 
@@ -1093,7 +1093,7 @@ function renderPeers() {
 }
 
 function renderScales() {
-  $("miniScale").innerHTML = [[380, "низький"], [450, "середній"], [520, "високий"]]
+  $("miniScale").innerHTML = [[380, "low"], [450, "average"], [520, "high"]]
     .map(([v, t]) => `<div style="background:${colorFor(v)};color:${inkFor(v)}">${v}<small>${t}</small></div>`).join("");
   $("legendBar").style.background = `linear-gradient(to right, ${css("--bad")}, ${css("--mid")}, ${css("--good")})`;
 }
@@ -1117,7 +1117,7 @@ $("modePred").addEventListener("click", () => { state.mode = "pred"; update(); }
 $("modeMean").addEventListener("click", () => { state.mode = "mean"; update(); });
 $("countrySel").addEventListener("change", e => { state.cnt = e.target.value; update(); });
 
-// Обробники для вкладки Рішення
+// Solutions tab handlers
 document.querySelectorAll("#scenarioPills .scenario-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     state.solScen = btn.dataset.scen;
@@ -1136,7 +1136,7 @@ $("solHideOthers").addEventListener("change", e => {
   renderSolutions();
 });
 
-// Панель умов: згорнути / розгорнути
+// Controls panel: collapse / expand
 function setDrawer(open) {
   $("drawer").classList.toggle("closed", !open);
   $("openDrawer").hidden = open;
@@ -1149,7 +1149,7 @@ if (window.innerWidth <= 760) { $("drawer").classList.add("closed"); $("openDraw
 $("closeDrawer").addEventListener("click", () => setDrawer(false));
 $("openDrawer").addEventListener("click", () => setDrawer(true));
 
-// Вкладки (#intro, #map, #findings, #solutions, #method)
+// Tabs (#intro, #map, #findings, #solutions, #method)
 const PAGES = ["intro", "map", "findings", "solutions", "method"];
 function route() {
   const page = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : "intro";
