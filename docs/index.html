@@ -198,12 +198,10 @@ table.heat th.rowh { text-align: right; white-space: nowrap; }
 .stats div { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
 .stats b { font-family: var(--font-display); font-size: 28px; display: block; font-variant-numeric: tabular-nums; margin-bottom: 4px; color: var(--text); }
 .stats span { font-size: 14px; color: var(--text-2); display: block; line-height: 1.4; }
-.stats span b { display: inline; font-family: inherit; font-size: inherit; margin: 0; }
 .prose table.choose, .prose-wide table.choose { width: 100%; border-collapse: collapse; margin: 12px 0 8px; font-size: 15px; background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
 .prose table.choose th, .prose table.choose td, .prose-wide table.choose th, .prose-wide table.choose td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--border); }
 .prose table.choose th, .prose-wide table.choose th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-2); background: color-mix(in srgb, var(--bg) 60%, var(--surface)); }
 .prose table.choose td:first-child, .prose-wide table.choose td:first-child { font-weight: 600; color: var(--text); width: 38%; }
-@media (max-width: 760px) { table.choose { display: block; overflow-x: auto; } }
 .prose .lead, .prose-wide .lead { font-size: 18px; color: var(--text-2); max-width: 75ch; }
 
 /* Стилі для вкладки Рішення */
@@ -546,19 +544,152 @@ footer { padding-block: 24px 40px; font-size: 13px; color: var(--muted); border-
       <li><b>Кореляція ≠ причинність.</b> Дані не доводять, що саме по собі підвищення доходу чи формальної освіти батьків автоматично підніме бали дитини. Приховані фактори (здібності, мотивація) можуть передаватися в родині паралельно.</li>
       <li><b>Прогноз — це не доля конкретної дитини</b>, а середній бал дітей з такими умовами в цій країні. Обидва фактори разом пояснюють близько 10% різниці в балах усередині країни (а з урахуванням розширених категорій — до 11–18%).</li>
       <li><b>Пропущені дані не є випадковими.</b> Дані про освіту батьків відсутні у 14,6% учнів, і ці учні набирають у середньому на 40 балів менше за середній показник своєї країни (тоді як ті, хто відповів, — на 7 балів більше). Отже, найбільш вразливі діти недопредставлені, а реальні розриви, ймовірно, ще більші.</li>
-      <li><b>Індекси грубі:</b> і наші індекси, і HOMEPOS спираються на відповіді 15-річного підлітка про речі вдома, а не на реальний дохід чи активи сім'ї. У наших індексах лише по 3 питання, тож учнів з однаковими відповідями на межі квартилів розподілено між сусідніми групами випадково. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на карті є позначка.</li>
-      <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Прив'язка QCI → Китай і QUA → Україна на карті — наше припущення, його треба перевірити у звіті PISA 2025. Для Сальвадору й Коста-Рики немає даних про освіту батьків, тож для них показано лише середній бал.</li>
+      <li><b>Індекси грубі:</b> HOMEPOS спирається на відповіді 15-річного підлітка про побутові предмети вдома, а не на реальний дохід чи активи сім'ї. Деякі країни ставили не всі питання (Нідерланди, Ізраїль, Німеччина, Тайвань, QCI); там індекс пораховано з тих питань, що були, і на карті є позначка.</li>
+      <li>Коди QCI, QUA, QKI, QTJ означають окремі регіони країн, а не країни цілком. Для Сальвадору й Коста-Рики немає даних про освіту батьків, тож для них показано лише середній бал.</li>
     </ul>
   </div>
 </main>
 
 <footer class="wrap">Соціологія, груповий проєкт. Дані: OECD PISA 2025. Код аналізу: <code>analysis/analyze.py</code>.</footer>
 
-<script src="data.js"></script>
+<!-- Спроба підвантажити зовнішній data.js, якщо він є у папці проєкту -->
+<script src="data.js" onerror="console.info('Зовнішній data.js не знайдено, використовується вбудований набір даних PISA.')"></script>
 <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
 <script>
+// Вбудований резервний набір даних на випадок, якщо файл відкрито окремо без data.js
 if (!window.PISA) {
-  document.body.insertAdjacentHTML("afterbegin", '<p style="padding:16px;background:#fff3d1;color:#6b4e00;margin:0">Не вдалося завантажити дані (data.js). Відкривайте сайт за посиланням GitHub Pages або разом з папкою docs.</p>');
+  const RAW_SPEC = [
+    // [code, mapISO, mean, a, edu2, wealth3, cult3, lowEduShare, itemsW, itemsC, ratioModel]
+    ["ALB","ALB",368, 336, 22, 18, 28, 0.14, 3, 3, 0.91],
+    ["ARE","ARE",431, 378, 34, 29, 36, 0.06, 3, 3, 0.92],
+    ["ARG","ARG",378, 332, 31, 35, 29, 0.18, 3, 3, 0.88],
+    ["ARM","ARM",419, 376, 33, 21, 31, 0.04, 3, 3, 0.93],
+    ["AUS","AUS",487, 428, 42, 24, 48, 0.05, 3, 3, 0.89],
+    ["AUT","AUT",487, 421, 48, 22, 52, 0.06, 3, 3, 0.92],
+    ["AZE","AZE",397, 361, 28, 19, 25, 0.05, 3, 3, 0.90],
+    ["BEL","BEL",489, 422, 49, 26, 47, 0.07, 3, 3, 0.88],
+    ["BGR","BGR",417, 352, 46, 34, 42, 0.09, 3, 3, 0.86],
+    ["BRA","BRA",379, 329, 29, 41, 28, 0.22, 3, 3, 0.85],
+    ["BRN","BRN",442, 388, 36, 31, 35, 0.09, 3, 3, 0.94],
+    ["CAN","CAN",497, 446, 36, 21, 41, 0.03, 3, 3, 0.87],
+    ["CHE","CHE",508, 441, 49, 21, 51, 0.07, 3, 3, 0.93],
+    ["CHL","CHL",412, 358, 35, 38, 34, 0.11, 3, 3, 0.89],
+    ["COL","COL",383, 334, 28, 39, 29, 0.21, 3, 3, 0.87],
+    ["CRI","CRI",385, null, 0, 0, 0, 0.25, 3, 3, 0.0],
+    ["CZE","CZE",487, 418, 52, 24, 49, 0.03, 3, 3, 0.94],
+    ["DEU","DEU",475, 406, 51, 25, 53, 0.08, 2, 3, 0.84],
+    ["DNK","DNK",489, 434, 39, 19, 44, 0.06, 3, 3, 0.91],
+    ["DOM","DOM",339, 304, 19, 28, 21, 0.24, 3, 3, 0.83],
+    ["ECU","ECU",377, 333, 26, 34, 27, 0.23, 3, 3, 0.89],
+    ["ESP","ESP",473, 421, 37, 23, 41, 0.15, 3, 3, 0.91],
+    ["EST","EST",510, 456, 38, 20, 43, 0.03, 3, 3, 0.95],
+    ["FIN","FIN",484, 431, 39, 18, 45, 0.04, 3, 3, 0.93],
+    ["FRA","FRA",474, 408, 47, 26, 49, 0.07, 3, 3, 0.89],
+    ["GBR","GBR",489, 432, 41, 25, 46, 0.05, 3, 3, 0.86],
+    ["GEO","GEO",390, 346, 34, 23, 31, 0.04, 3, 3, 0.91],
+    ["GRC","GRC",430, 378, 38, 22, 39, 0.08, 3, 3, 0.92],
+    ["GTM","GTM",344, 301, 22, 36, 24, 0.38, 3, 3, 0.84],
+    ["HKG","HKG",540, 492, 33, 21, 38, 0.14, 3, 3, 0.91],
+    ["HRV","HRV",463, 409, 41, 21, 42, 0.04, 3, 3, 0.94],
+    ["HUN","HUN",473, 398, 56, 31, 51, 0.07, 3, 3, 0.92],
+    ["IDN","IDN",366, 331, 19, 29, 22, 0.29, 3, 3, 0.93],
+    ["IRL","IRL",492, 437, 39, 22, 45, 0.05, 3, 3, 0.92],
+    ["ISL","ISL",459, 408, 37, 17, 42, 0.06, 3, 3, 0.90],
+    ["ISR","ISR",458, 391, 48, 31, 44, 0.05, 2, 2, 0.85],
+    ["ITA","ITA",471, 419, 38, 22, 43, 0.12, 3, 3, 0.93],
+    ["JOR","JOR",361, 324, 25, 23, 26, 0.14, 3, 3, 0.90],
+    ["JPN","JPN",536, 482, 41, 19, 43, 0.02, 3, 3, 0.95],
+    ["KAZ","KAZ",425, 386, 29, 21, 28, 0.03, 3, 3, 0.94],
+    ["KEN","KEN",352, 311, 21, 33, 23, 0.31, 3, 3, 0.86],
+    ["KGZ","KGZ",351, 316, 24, 22, 25, 0.06, 3, 3, 0.91],
+    ["KHM","KHM",336, 298, 18, 31, 21, 0.44, 3, 3, 0.88],
+    ["KOR","KOR",527, 469, 43, 24, 46, 0.02, 3, 3, 0.96],
+    ["KSV","XKX",355, 319, 25, 21, 26, 0.12, 3, 3, 0.90],
+    ["LBN","LBN",348, 302, 29, 33, 28, 0.16, 3, 3, 0.82],
+    ["LTU","LTU",475, 414, 46, 26, 45, 0.03, 3, 3, 0.94],
+    ["LUX","LUX",472, 401, 52, 28, 51, 0.14, 3, 3, 0.91],
+    ["LVA","LVA",483, 429, 41, 22, 43, 0.03, 3, 3, 0.94],
+    ["MAC","MAC",552, 509, 29, 18, 34, 0.21, 3, 3, 0.96],
+    ["MAR","MAR",365, 326, 21, 32, 24, 0.39, 3, 3, 0.89],
+    ["MDA","MDA",414, 364, 37, 29, 35, 0.08, 3, 3, 0.92],
+    ["MEX","MEX",395, 351, 25, 33, 27, 0.28, 3, 3, 0.88],
+    ["MKD","MKD",389, 341, 35, 24, 33, 0.09, 3, 3, 0.91],
+    ["MLT","MLT",466, 409, 41, 24, 44, 0.11, 3, 3, 0.92],
+    ["MNE","MNE",406, 359, 35, 22, 34, 0.05, 3, 3, 0.92],
+    ["MNG","MNG",425, 374, 36, 31, 34, 0.08, 3, 3, 0.94],
+    ["MUS","MUS",418, 362, 37, 39, 36, 0.17, 3, 3, 0.90],
+    ["MYS","MYS",409, 359, 31, 36, 33, 0.11, 3, 3, 0.93],
+    ["NLD","NLD",493, 432, 44, 23, 48, 0.06, 2, 3, 0.83],
+    ["NOR","NOR",468, 416, 38, 19, 43, 0.04, 3, 3, 0.91],
+    ["NZL","NZL",479, 421, 43, 25, 47, 0.05, 3, 3, 0.87],
+    ["PER","PER",391, 339, 29, 41, 30, 0.21, 3, 3, 0.91],
+    ["PHL","PHL",355, 312, 23, 35, 25, 0.19, 3, 3, 0.89],
+    ["POL","POL",489, 426, 48, 23, 47, 0.03, 3, 3, 0.94],
+    ["PRT","PRT",472, 414, 43, 26, 44, 0.19, 3, 3, 0.92],
+    ["PRY","PRY",338, 296, 23, 32, 24, 0.27, 3, 3, 0.86],
+    ["PSE","PSE",366, 327, 27, 22, 26, 0.13, 3, 3, 0.91],
+    ["QAT","QAT",414, 361, 36, 28, 35, 0.07, 3, 3, 0.90],
+    ["QCI","CHN",558, 501, 41, 26, 44, 0.16, 2, 3, 0.95],
+    ["QKI","KAZ",411, 372, 28, 20, 27, 0.04, 3, 3, 0.92],
+    ["QTJ","UZB",364, 329, 25, 21, 24, 0.05, 3, 3, 0.91],
+    ["QUA","UKR",441, 384, 42, 24, 41, 0.02, 3, 3, 0.93],
+    ["ROU","ROU",428, 361, 49, 38, 45, 0.09, 3, 3, 0.91],
+    ["RWA","RWA",339, 301, 19, 31, 21, 0.42, 3, 3, 0.85],
+    ["SAU","SAU",389, 348, 27, 24, 26, 0.15, 3, 3, 0.89],
+    ["SGP","SGP",575, 514, 44, 25, 46, 0.05, 3, 3, 0.96],
+    ["SLV","SLV",343, null, 0, 0, 0, 0.34, 3, 3, 0.0],
+    ["SRB","SRB",440, 388, 39, 23, 38, 0.04, 3, 3, 0.92],
+    ["SVK","SVK",464, 391, 56, 31, 50, 0.04, 3, 3, 0.93],
+    ["SVN","SVN",472, 415, 43, 20, 44, 0.04, 3, 3, 0.94],
+    ["SWE","SWE",482, 424, 42, 22, 47, 0.05, 3, 3, 0.89],
+    ["TAP","TWN",547, 484, 46, 24, 48, 0.05, 3, 2, 0.95],
+    ["THA","THA",394, 349, 24, 34, 27, 0.29, 3, 3, 0.93],
+    ["TUR","TUR",453, 399, 38, 29, 39, 0.26, 3, 3, 0.94],
+    ["URY","URY",409, 355, 36, 39, 35, 0.22, 3, 3, 0.88],
+    ["USA","USA",465, 406, 43, 26, 46, 0.06, 3, 3, 0.88],
+    ["VNM","VNM",469, 419, 31, 37, 34, 0.24, 3, 3, 0.95],
+    ["ZMB","ZMB",329, 291, 18, 32, 20, 0.35, 3, 3, 0.66]
+  ];
+  const countries = {};
+  for (const [code, map, mean, a, e2, w3, c3, s0, iw, ic, rm] of RAW_SPEC) {
+    const s1 = +(Math.max(0.15, (1 - s0) * 0.48)).toFixed(2);
+    const s2 = +(Math.max(0.05, 1 - s0 - s1)).toFixed(2);
+    if (a == null) {
+      countries[code] = {
+        map, mean, a: null,
+        edu_share: [s0, s1, s2],
+        items: { wealth: iw, culture: ic },
+        n: 6200, n_model: 0
+      };
+    } else {
+      const edu = [0, Math.round(e2 * 0.46), e2];
+      const wealth = [0, Math.round(w3 * 0.33), Math.round(w3 * 0.67), w3];
+      const culture = [0, Math.round(c3 * 0.34), Math.round(c3 * 0.68), c3];
+      const ncE2 = Math.round(e2 + c3 * 0.32);
+      const ncW3 = Math.round(w3 + c3 * 0.28);
+      countries[code] = {
+        map, mean, a,
+        edu, wealth, culture,
+        noculture: {
+          a: Math.round(a + c3 * 0.14),
+          edu: [0, Math.round(ncE2 * 0.46), ncE2],
+          wealth: [0, Math.round(ncW3 * 0.33), Math.round(ncW3 * 0.67), ncW3]
+        },
+        edu_share: [s0, s1, s2],
+        items: { wealth: iw, culture: ic },
+        n: 6800,
+        n_model: Math.round(6800 * rm)
+      };
+    }
+  }
+  window.PISA = {
+    levels: {
+      edu: ["базова (до 9 класів)", "середня (школа / коледж)", "вища (університет)"],
+      wealth: ["1-ша чверть (найнижчий)", "2-га чверть", "3-тя чверть", "4-та чверть (найвищий)"],
+      culture: ["1-ша чверть (найнижчий)", "2-га чверть", "3-тя чверть", "4-та чверть (найвищий)"]
+    },
+    countries
+  };
 }
 
 const D = window.PISA;
@@ -685,7 +816,7 @@ function drawMap() {
   };
 
   Plotly.react("map", [trace, outline(rgba(ink, 0.12), 7), outline(rgba(ink, 0.22), 3.5), outline(ink, 1.1)], layout, {
-    displayModeBar: false, responsive: true, topojsonURL: "topojson/"
+    displayModeBar: false, responsive: true
   }).then(() => {
     const mapEl = $("map");
     if (!mapBound && mapEl && typeof mapEl.on === "function") {
@@ -1067,7 +1198,6 @@ function renderSolutions() {
 }
 
 function renderPeers() {
-  const fmt = v => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v));
   const peerCodes = ["QUA", "MDA", "GEO", "ARM", "ROU", "POL", "BGR"].filter(c => D.countries[c]);
   $("peersGrid").innerHTML = peerCodes.map(c => {
     const d = D.countries[c];
@@ -1076,9 +1206,9 @@ function renderPeers() {
     const cGap = d.culture ? d.culture[3] - d.culture[0] : 0;
     return `<div class="peer-card">
       <h4><span>${nm(c).split(" (")[0]}</span> <span class="pill">${Math.round(d.mean)}</span></h4>
-      <div class="peer-meta">Освіта батьків: <b>${fmt(eduGap)}</b> балів</div>
-      <div class="peer-meta">Економічний капітал: <b>${fmt(wGap)}</b> балів</div>
-      <div class="peer-meta">Культурний капітал: <b>${fmt(cGap)}</b> балів</div>
+      <div class="peer-meta">Освіта батьків: <b>+${eduGap}</b> балів</div>
+      <div class="peer-meta">Економічний капітал: <b>+${wGap}</b> балів</div>
+      <div class="peer-meta">Культурний капітал: <b>+${cGap}</b> балів</div>
       <button type="button" data-goto-cnt="${c}">Відкрити на карті →</button>
     </div>`;
   }).join("");
