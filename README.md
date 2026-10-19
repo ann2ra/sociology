@@ -47,6 +47,7 @@ An interactive map: choose parental education, the family's economic capital (ca
 | `docs/data.js` | Analysis output (coefficients for all countries), read by the website |
 | `docs/index.html` | The website: map, sliders, heatmap, findings, solutions, methods |
 | `English_version_1.pdf` | The group's report |
+| `Money_or_Education_presentation.pdf` | The group's presentation slides |
 
 ## How to re-run the analysis
 
